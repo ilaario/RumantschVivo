@@ -149,7 +149,11 @@ body {
 }
 
 .title {
-  color: #9c3d2b;
+  height: 100px;      /* prova 48–56 */
+  width: auto;
+  padding-left: 20px;
+  padding-top: 5px;
+  display: block;
 }
 
 /* ===== OVERLAY ===== */
@@ -165,6 +169,49 @@ body {
 .nav-links a[aria-current='page'] {
   color: #9c3d2b;
   font-weight: 600;
+}
+
+@media (max-width: 900px) {
+  /* nascondi bottoni a destra */
+  .button-container {
+    display: none;
+  }
+
+  /* la barra deve permettere centratura reale */
+  .nav {
+    justify-content: center; /* non fondamentale, ma aiuta */
+  }
+
+  /* il contenitore sinistro prende tutta la larghezza */
+  .navName {
+    position: relative;
+    width: 100%;
+  }
+
+  /* hamburger resta a sinistra */
+  .navOpenBtn {
+    position: relative;
+    z-index: 2;
+  }
+
+  /* CENTRA IL LOGO DAVVERO */
+  .container-name {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+  }
+
+  /* ridimensiona logo */
+  .title {
+    display: block;
+  }
+
+  /* evita che il menu desktop “sposti” layout in mobile */
+  .nav-links {
+    position: fixed; /* come già hai in mobile */
+  }
 }
 
 /* ===== DESKTOP ADJUST ===== */

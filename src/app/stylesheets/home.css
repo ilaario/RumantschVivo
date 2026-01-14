@@ -240,4 +240,19 @@
     .hero__imgFrame img {
       padding: 26px;
     }
+
+    .about_us {
+      grid-template-columns: 1fr;
+      padding: 40px 0;
+      gap: 28px;
+    }
+  
+    .about__subtitle {
+      order: 1;
+      max-width: none;
+    }
+  
+    .about__left{
+      order: 2;
+    }
   }

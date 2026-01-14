@@ -46,7 +46,7 @@ export default function Home() {
         </div>
 
         <div className="about__right">
-          <h1 className="about__title">ABOUT US - PREVIEW</h1>
+          <h1 className="about__title">ABOUT US</h1>
           <p className="about__subtitle">
             <strong>RumantschVivo</strong> è uno spazio dedicato al <strong>romancio</strong>, una lingua viva, ricca e spesso sottovalutata.
             Qui puoi impararla in modo semplice e pratico, <strong>anche partendo da zero</strong>.

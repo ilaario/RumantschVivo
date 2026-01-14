@@ -45,7 +45,11 @@ export default function Header() {
 
         <div className="container-name" onClick={() => setOpen(false)}>
           <Link href="/" className="name">
-            <span className="title">RumantschVivo</span>
+            <img 
+              className="title"
+              src="/images/logo2.png"
+              alt="RumantschVivo"
+            />
           </Link>
         </div>
 
