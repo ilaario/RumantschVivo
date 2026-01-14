@@ -1,0 +1,35 @@
+{
+  "id": "a0-001",
+  "variant": "sursilvan",
+  "level": "A0",
+  "slug": "salids",
+  "title": "Salids: cuntegnas e salidaziuns",
+  "goals": ["Salutare in modo semplice", "Presentarsi con frasi brevi"],
+  "content": [
+    {
+      "type": "explain",
+      "title": "Salutaziuns",
+      "text": "En Sursilvan, ins po duvrar quessas frasas per salidar. (In Sursilvan si possono usare queste frasi come saluti.)"
+    },
+    {
+      "type": "examples",
+      "items": [
+        { "rm": "Allegra!", "it": "Ciao! (informale)" },
+        { "rm": "Bun di!", "it": "Buongiorno!" },
+        { "rm": "Buna sera!", "it": "Buonasera!" },
+        { "rm": "A revair!", "it": "Arrivederci!" }
+      ]
+    },
+    {
+      "type": "exercises",
+      "items": [
+        {
+          "kind": "mcq",
+          "question": "Come dici “Buongiorno”?",
+          "options": ["Buna sera", "Bun di", "A revair"],
+          "answerIndex": 1
+        }
+      ]
+    }
+  ]
+}

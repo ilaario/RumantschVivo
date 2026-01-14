@@ -1,0 +1,223 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
+
+/* ===== RESET BASE ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Montserrat', sans-serif;
+  padding-top: 130px; /* spazio sotto header */
+}
+
+/* ===== NAV BAR (stile pill) ===== */
+.nav {
+  position: fixed;
+  top: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(1500px, calc(100% - 64px));
+  height: 86px;
+  z-index: 9999;
+
+  background-color: #fff;
+  border-radius: 999px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+
+  padding: 0 34px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* ===== LEFT AREA ===== */
+.navName {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+/* hamburger button */
+.navOpenBtn {
+  background: transparent;
+  border: none;
+  font-size: 26px;
+  cursor: pointer;
+}
+
+/* logo / nome */
+.container-name {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.name {
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-decoration: none;
+  color: #222;
+}
+
+/* ===== RIGHT BUTTONS ===== */
+.button-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.top-right-button {
+  background: #fff;
+  border: 2px solid #6b6b6b;
+  border-radius: 4px;
+  cursor: pointer;
+
+  padding: 14px 28px;
+  height: auto;
+  width: auto;
+
+  color: #6b6b6b;
+  font-size: 16px;
+  font-weight: 600;
+
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    transform 0.05s ease;
+}
+
+.top-right-button:hover {
+  background: #6b6b6b;
+  color: #fff;
+}
+
+.top-right-button:active {
+  transform: translateY(1px);
+}
+
+/* ===== SIDE MENU (mobile) ===== */
+.nav-links {
+  position: fixed;
+  top: 0;
+  left: -100%;
+  height: 100vh;
+  width: 260px;
+  padding-top: 90px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+
+  background-color: #f2f4ff;
+  transition: left 0.3s ease;
+  list-style: none;
+  z-index: 10000;
+}
+
+/* menu aperto */
+.nav.openNav .nav-links {
+  left: 0;
+}
+
+/* link menu */
+.nav-links li a {
+  padding-left: 24px;
+  font-size: 18px;
+  text-decoration: none;
+  color: #000;
+}
+
+.nav-links li a:hover {
+  font-weight: 600;
+  color: #111;
+}
+
+/* close button */
+.navCloseBtn {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  background: transparent;
+  border: none;
+  font-size: 22px;
+  cursor: pointer;
+}
+
+.title {
+  color: #9c3d2b;
+}
+
+/* ===== OVERLAY ===== */
+.nav-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.25);
+  z-index: 9998;
+}
+
+/* ===== ACTIVE LINK (vale ovunque, non solo desktop) ===== */
+.nav-links a.active,
+.nav-links a[aria-current='page'] {
+  color: #9c3d2b;
+  font-weight: 600;
+}
+
+/* ===== DESKTOP ADJUST ===== */
+@media (min-width: 900px) {
+  .navOpenBtn {
+    display: none;
+  }
+
+  .nav-links {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    height: auto;
+    width: auto;
+    padding-top: 0;
+
+    flex-direction: row;
+    gap: 54px;
+
+    background: none;
+  }
+
+  .nav-links li a {
+    padding: 0;
+    font-size: 18px;
+    font-weight: 500;
+    color: #6b6b6b;
+    transition: color 0.2s ease;
+  }
+
+  .nav-links li a:hover {
+    color: #111;
+    font-weight: 500;
+  }
+
+  .nav-links a.active,
+  .nav-links a[aria-current='page'] {
+    color: #9c3d2b; /* rosa/magenta */
+    font-weight: 600;
+  }
+
+  .nav-links a.active:hover,
+  .nav-links a[aria-current='page']:hover {
+    color: #9c3d2b; /* stesso colore dell'active */
+    font-weight: 800;
+  }
+
+  .navCloseBtn {
+    display: none;
+  }
+  .nav-overlay {
+    display: none;
+  }
+}

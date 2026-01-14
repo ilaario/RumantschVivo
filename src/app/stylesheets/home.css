@@ -1,0 +1,243 @@
+/* layout base pagina */
+.home {
+    width: 100%;
+  }
+  
+  /* HERO */
+  .hero {
+    width: min(1200px, calc(100% - 64px));
+    margin: 0 auto;
+    padding: 64px 0;
+  
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    align-items: center;
+    gap: 56px;
+  }
+  
+  /* LEFT */
+  .hero__title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: clamp(44px, 5vw, 84px);
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    font-weight: 800;
+    color: #111;
+    text-transform: uppercase;
+  }
+  
+  .hero__subtitle {
+    margin-top: 22px;
+    padding-left: 18px;
+    border-left: 2px solid rgba(17, 17, 17, 0.35);
+  
+    font-family: 'Montserrat', sans-serif;
+    font-size: 18px;
+    line-height: 1.7;
+    color: #444;
+    max-width: 52ch;
+  }
+  
+  /* CTA buttons */
+  .hero__actions {
+    margin-top: 34px;
+    display: flex;
+    gap: 18px;
+    flex-wrap: wrap;
+  }
+  
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  
+    padding: 14px 26px;
+    border-radius: 4px;
+  
+    font-family: 'Montserrat', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    text-decoration: none;
+  
+    transition:
+      background-color 0.18s ease,
+      color 0.18s ease,
+      border-color 0.18s ease,
+      transform 0.05s ease;
+  }
+  
+  .btn:active {
+    transform: translateY(1px);
+  }
+  
+  /* Primary: accento "Grigioni" (rosso spento) */
+  .btn--primary {
+    background: #9c3d2b;
+    color: #fff;
+    border: 2px solid #9c3d2b;
+  }
+  
+  .btn--primary:hover {
+    background: #7f2f22;
+    border-color: #7f2f22;
+  }
+  
+  /* Outline */
+  .btn--outline {
+    background: transparent;
+    color: #111;
+    border: 2px solid #111;
+  }
+  
+  .btn--outline:hover {
+    background: #111;
+    color: #fff;
+  }
+  
+  /* RIGHT */
+  .hero__right {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  /* CARD MAPPA (paper + glow controllato) */
+  .hero__imgFrame {
+    width: min(440px, 100%);
+    aspect-ratio: 1 / 1;
+    border-radius: 28px;
+  
+    background: #f7f4ef; /* più pulito del beige “sporco” */
+    border: 1px solid rgba(17, 17, 17, 0.10);
+  
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.08);
+  }
+  
+  /* glow SOLO nella card, molto leggero */
+  .hero__imgFrame::before {
+    content: "";
+    position: absolute;
+    inset: -40%;
+    background: radial-gradient(
+      circle at 70% 35%,
+      rgba(156, 61, 43, 0.10),
+      transparent 65%
+    );
+    pointer-events: none;
+    z-index: 0;
+  }
+  
+  /* bordino interno */
+  .hero__imgFrame::after {
+    content: "";
+    position: absolute;
+    inset: 18px;
+    border: 2px solid rgba(17, 17, 17, 0.12);
+    border-radius: 22px;
+    pointer-events: none;
+    z-index: 2;
+  }
+  
+  /* SVG inline o IMG (niente cover, niente zoom brutto) */
+  .hero__imgFrame svg,
+  .hero__imgFrame img {
+    position: relative;
+    z-index: 1;
+  
+    width: 120%;
+    height: 120%;
+    padding: 34px;
+    display: block;
+  }
+  
+  /* se usi <img src="...svg"> */
+  .hero__imgFrame img {
+    object-fit: contain;
+  }
+  
+  /* stile mappa (se SVG inline con path class="gr-shape") */
+  .hero__imgFrame .gr-shape {
+    fill: rgba(156, 61, 43, 0.10);     /* tinta leggera */
+    stroke: rgba(156, 61, 43, 0.60);   /* contorno elegante */
+    stroke-width: 2.5;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+  }
+
+
+  /* HERO */
+  .about_us {
+    width: min(1200px, calc(100% - 64px));
+    margin: 0 auto;
+    padding: 64px 0;
+  
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    align-items: center;
+    gap: 56px;
+  }
+
+  /* RIGHT */
+  .about__left {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  /* stile mappa (se SVG inline con path class="gr-shape") */
+  .about__img .gr-shape {
+    size: 50%;
+    fill: rgba(156, 61, 43, 0.10);     /* tinta leggera */
+    stroke: rgba(156, 61, 43, 0.60);   /* contorno elegante */
+    stroke-width: 2.5;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+  }
+  
+    /* RIGHT */
+    .about__title {
+      font-family: 'Montserrat', sans-serif;
+      font-size: clamp(44px, 5vw, 60px);
+      line-height: 0.70;
+      letter-spacing: -0.02em;
+      font-weight: 500;
+      color: #111;
+      text-transform: uppercase;
+    }
+    
+    .about__subtitle {
+      margin-top: 22px;
+      padding-left: 18px;
+      border-left: 2px solid rgba(17, 17, 17, 0.35);
+    
+      font-family: 'Montserrat', sans-serif;
+      font-size: 18px;
+      line-height: 1.7;
+      color: #444;
+      max-width: 52ch;
+    }
+
+  /* responsive */
+  @media (max-width: 900px) {
+    .hero {
+      grid-template-columns: 1fr;
+      padding: 40px 0;
+      gap: 28px;
+    }
+  
+    .hero__subtitle {
+      max-width: none;
+    }
+  
+    .hero__imgFrame {
+      width: min(520px, 100%);
+      aspect-ratio: 16 / 12;
+    }
+  
+    .hero__imgFrame svg,
+    .hero__imgFrame img {
+      padding: 26px;
+    }
+  }
