@@ -3,24 +3,303 @@
 :root {
   --background: #f4f1ec;
   --foreground: #171717;
+
+  --rv-forest: #2f4f3e;
+  --rv-stone: #f4f1ec;
+  --rv-rock: #6b6b6b;
+  --rv-snow: #ffffff;
+  --rv-rust: #9c3d2b;
+  --rv-border: rgba(47, 79, 62, 0.18);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #6b6b6b;
-    --foreground: #f4f1ec;
-  }
+html,
+body {
+  height: 100%;
 }
 
 body {
-  background: var(--background);
+  margin: 0;
+  background: var(--rv-stone);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Montserrat', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+}
+
+/* layout */
+.app-shell {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-main {
+  flex: 1;
+  padding-top: 130px; /* header fixed */
+}
+
+/* ===== DRAWER PILL EXPAND ===== */
+.drawer-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(1px);
+  z-index: 20000;
+
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+.drawer-overlay.is-open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* ===== DRAWER "PILL CHE SI ALLARGA" ===== */
+.drawer {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 18px;
+
+  width: min(1500px, calc(100% - 64px));
+  height: 70px;
+  border-radius: 43px;
+
+  background: var(--rv-snow);
+  border: 1px solid var(--rv-border);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+
+  z-index: 20010;
+
+  overflow: hidden;
+
+  /* CHIUSO DI DEFAULT */
+  opacity: 0;
+  pointer-events: none;
+
+  transition: height 0.28s ease, opacity 0.18s ease;
+}
+
+/* stato aperto */
+.drawer.is-open {
+  height: min(470px, calc(100dvh - 70px));
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Top row del drawer: contiene X + logo */
+.drawer-top {
+  height: 86px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding-left: 27px;
+  padding-right: 18px;
+
+  position: sticky;
+  top: 0;
+  background: var(--rv-snow);
+  z-index: 1;
+  border-bottom: 1px solid rgba(47, 79, 62, 0.12);
+}
+
+/* Logo nel drawer */
+.drawer-brand {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.drawer-brand img {
+  height: 56px;
+  width: auto;
+  display: block;
+}
+
+/* Toggle button (X) */
+.drawer-toggle {
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+
+  background: var(--rv-stone);
+  border: 1px solid var(--rv-border);
+  cursor: pointer;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  transition: transform 160ms ease, background 160ms ease;
+}
+
+.drawer-toggle:hover {
+  transform: scale(1.03);
+}
+
+.drawer-toggle:active {
+  transform: scale(0.98);
+}
+
+.drawer-toggle:focus-visible {
+  outline: 3px solid rgba(156, 61, 43, 0.35);
+  outline-offset: 4px;
+}
+
+/* Icon X */
+.drawer-icon {
+  position: relative;
+  width: 18px;
+  height: 18px;
+}
+
+.drawer-icon::before,
+.drawer-icon::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 18px;
+  height: 2px;
+  background: var(--rv-rock);
+  border-radius: 999px;
+  transform-origin: center;
+}
+
+.drawer-icon::before {
+  transform: translateY(-50%) rotate(45deg);
+}
+
+.drawer-icon::after {
+  transform: translateY(-50%) rotate(-45deg);
+}
+
+/* NAV dentro drawer */
+.drawer-nav {
+  padding: 14px 18px 0;
+  display: grid;
+  gap: 10px;
+}
+
+.drawer-nav a {
+  display: block;
+  width: 100%;
+  padding: 12px 12px;
+  border-radius: 12px;
+  text-decoration: none;
+
+  color: var(--rv-rock);
+  font-weight: 800;
+  font-size: 16px;
+
+  transition: background 0.15s ease, color 0.15s ease, transform 0.12s ease;
+}
+
+.drawer-nav a:hover {
+  background: rgba(255, 255, 255, 0.65);
+  color: var(--rv-forest);
+  transform: translateY(-1px);
+}
+
+.drawer-nav a.active,
+.drawer-nav a[aria-current='page'] {
+  background: var(--rv-stone);
+  color: var(--rv-rust);
+  font-weight: 900;
+}
+
+/* Actions bottom */
+/* Actions bottom */
+.drawer-actions {
+  margin-top: auto;
+  padding: 14px 18px 18px;
+
+  display: grid;
+  gap: 10px;
+}
+
+/* Bottoni drawer: funzionano sia per <a> che <button> */
+.drawer-actions .drawer-btn {
+  -webkit-appearance: none;
+  appearance: none;
+
+  width: 100%;
+  min-height: 44px;
+  padding: 12px 14px;
+  border-radius: 14px;
+
+  font-size: 14px;
+  font-weight: 900;
+  line-height: 1;
+
+  cursor: pointer;
+  text-decoration: none;
+
+  border: 1px solid transparent;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  /* IMPORTANT: se qualche reset rompe i link */
+  color: inherit;
+}
+
+.drawer-actions .drawer-btn:focus-visible {
+  outline: 3px solid rgba(156, 61, 43, 0.35);
+  outline-offset: 4px;
+}
+
+/* Varianti */
+.drawer-actions .drawer-btn--primary {
+  margin-top: 60px;
+  background: var(--rv-forest);
+  color: var(--rv-snow);
+}
+
+.drawer-actions .drawer-btn--secondary {
+  background: var(--rv-snow);
+  color: var(--rv-forest);
+  border-color: var(--rv-border);
+}
+
+.drawer-actions .drawer-btn--danger {
+  background: var(--rv-rust);
+  color: var(--rv-snow);
+}
+
+/* Hover */
+.drawer-actions .drawer-btn--primary:hover {
+  filter: brightness(0.95);
+}
+
+.drawer-actions .drawer-btn--secondary:hover {
+  background: rgba(255, 255, 255, 0.75);
+}
+
+.drawer-actions .drawer-btn--danger:hover {
+  filter: brightness(0.95);
+}
+
+/* Drawer solo sotto 1200 */
+@media (min-width: 1200px) {
+  .drawer,
+  .drawer-overlay {
+    display: none !important;
+  }
+}
+
+/* Accessibilità: riduci animazioni se richiesto */
+@media (prefers-reduced-motion: reduce) {
+  .drawer,
+  .drawer-overlay,
+  .drawer-toggle,
+  .drawer-nav a {
+    transition: none !important;
+  }
 }

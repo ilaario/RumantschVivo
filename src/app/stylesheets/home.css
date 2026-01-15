@@ -46,7 +46,7 @@
     flex-wrap: wrap;
   }
   
-  .btn {
+  .hero__bnt {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -66,30 +66,30 @@
       transform 0.05s ease;
   }
   
-  .btn:active {
+  .hero__bnt:active {
     transform: translateY(1px);
   }
   
   /* Primary: accento "Grigioni" (rosso spento) */
-  .btn--primary {
+  .hero__primary {
     background: #9c3d2b;
     color: #fff;
     border: 2px solid #9c3d2b;
   }
   
-  .btn--primary:hover {
+  .hero__primary:hover {
     background: #7f2f22;
     border-color: #7f2f22;
   }
   
   /* Outline */
-  .btn--outline {
+  .hero__outline {
     background: transparent;
     color: #111;
     border: 2px solid #111;
   }
   
-  .btn--outline:hover {
+  .hero__outline:hover {
     background: #111;
     color: #fff;
   }

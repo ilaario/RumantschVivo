@@ -16,10 +16,10 @@ export default function Home() {
           </p>
 
           <div className="hero__actions">
-            <Link href="/learn" className="btn btn--primary">
+            <Link href="/learn" className="hero__bnt hero__primary">
               Inizia da zero
             </Link>
-            <Link href="/about" className="btn btn--outline">
+            <Link href="/about" className="hero__bnt hero__outline">
               Scopri il progetto
             </Link>
           </div>

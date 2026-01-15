@@ -1,18 +1,15 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
+:root {
+  --rv-forest: #2f4f3e;
+  --rv-stone: #f4f1ec;
+  --rv-rock: #6b6b6b;
+  --rv-snow: #ffffff;
+  --rv-rust: #9c3d2b;
 
-/* ===== RESET BASE ===== */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+  --rv-border: rgba(47, 79, 62, 0.18);
+  --rv-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
 }
 
-body {
-  font-family: 'Montserrat', sans-serif;
-  padding-top: 130px; /* spazio sotto header */
-}
-
-/* ===== NAV BAR (stile pill) ===== */
+/* ===== NAV BAR (pill) ===== */
 .nav {
   position: fixed;
   top: 18px;
@@ -22,249 +19,178 @@ body {
   height: 86px;
   z-index: 9999;
 
-  background-color: #fff;
+  background: var(--rv-snow);
   border-radius: 999px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  box-shadow: var(--rv-shadow);
 
-  padding: 0 34px;
+  padding: 0 28px;
 
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
-/* ===== LEFT AREA ===== */
-.navName {
+/* Sinistra: hamburger + logo */
+.navLeft {
   display: flex;
   align-items: center;
   gap: 14px;
+  min-width: 0;
 }
 
-/* hamburger button */
-.navOpenBtn {
-  background: transparent;
-  border: none;
-  font-size: 26px;
-  cursor: pointer;
-}
-
-/* logo / nome */
 .container-name {
   display: flex;
   align-items: center;
-  gap: 10px;
   cursor: pointer;
 }
 
-.name {
-  font-size: 26px;
-  font-weight: 700;
-  letter-spacing: 0.5px;
-  text-decoration: none;
-  color: #222;
+.title {
+  height: 56px;
+  width: auto;
+  display: block;
 }
 
-/* ===== RIGHT BUTTONS ===== */
+/* Hamburger (visibile <1200) */
+.navOpenBtn {
+  width: 44px;
+  height: 44px;
+  display: inline-grid;
+  place-items: center;
+
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--rv-rock);
+  border-radius: 12px;
+}
+
+.navOpenBtn:focus-visible {
+  outline: 3px solid rgba(156, 61, 43, 0.35);
+  outline-offset: 4px;
+}
+
+.navIcon {
+  position: relative;
+  width: 22px;
+  height: 2px;
+  background: var(--rv-rock);
+  border-radius: 999px;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.navIcon::before,
+.navIcon::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  width: 22px;
+  height: 2px;
+  background: var(--rv-rock);
+  border-radius: 999px;
+  transition: transform 0.2s ease, top 0.2s ease, opacity 0.2s ease;
+}
+
+.navIcon::before {
+  top: -7px;
+}
+
+.navIcon::after {
+  top: 7px;
+}
+
+/* Quando drawer aperto: hamburger -> X */
+.navOpenBtn.is-open .navIcon {
+  background: transparent;
+}
+
+.navOpenBtn.is-open .navIcon::before {
+  top: 0;
+  transform: rotate(45deg);
+}
+
+.navOpenBtn.is-open .navIcon::after {
+  top: 0;
+  transform: rotate(-45deg);
+}
+
+/* ===== MENU DESKTOP (>= 1200) ===== */
+.nav-menu {
+  display: none;
+  gap: 48px;
+  align-items: center;
+}
+
+.nav-menu a {
+  text-decoration: none;
+  color: var(--rv-rock);
+  font-weight: 700;
+  font-size: 16px;
+  transition: color 0.2s ease;
+}
+
+.nav-menu a:hover {
+  color: var(--rv-forest);
+}
+
+.nav-menu a.active,
+.nav-menu a[aria-current='page'] {
+  color: var(--rv-rust);
+  font-weight: 900;
+}
+
+/* ===== RIGHT BUTTONS (>= 900) ===== */
 .button-container {
-  display: flex;
+  display: none;
   align-items: center;
   gap: 10px;
 }
 
 .top-right-button {
-  background: #fff;
-  border: 2px solid #6b6b6b;
-  border-radius: 4px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  background: var(--rv-snow);
+  border: 2px solid var(--rv-rock);
+  border-radius: 10px;
   cursor: pointer;
 
-  padding: 14px 28px;
-  height: auto;
-  width: auto;
+  padding: 12px 18px;
 
-  color: #6b6b6b;
-  font-size: 16px;
-  font-weight: 600;
+  color: var(--rv-rock);
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
 
-  transition:
-    background-color 0.2s ease,
-    color 0.2s ease,
-    transform 0.05s ease;
+  transition: background-color 0.2s ease, color 0.2s ease, transform 0.05s ease;
 }
 
 .top-right-button:hover {
-  background: #6b6b6b;
-  color: #fff;
+  background: var(--rv-rock);
+  color: var(--rv-snow);
 }
 
 .top-right-button:active {
   transform: translateY(1px);
 }
 
-/* ===== SIDE MENU (mobile) ===== */
-.nav-links {
-  position: fixed;
-  top: 0;
-  left: -100%;
-  height: 100vh;
-  width: 260px;
-  padding-top: 90px;
-
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-
-  background-color: #f2f4ff;
-  transition: left 0.3s ease;
-  list-style: none;
-  z-index: 10000;
+.top-right-button:focus-visible {
+  outline: 3px solid rgba(156, 61, 43, 0.35);
+  outline-offset: 4px;
 }
 
-/* menu aperto */
-.nav.openNav .nav-links {
-  left: 0;
-}
-
-/* link menu */
-.nav-links li a {
-  padding-left: 24px;
-  font-size: 18px;
-  text-decoration: none;
-  color: #000;
-}
-
-.nav-links li a:hover {
-  font-weight: 600;
-  color: #111;
-}
-
-/* close button */
-.navCloseBtn {
-  position: absolute;
-  top: 18px;
-  right: 18px;
-  background: transparent;
-  border: none;
-  font-size: 22px;
-  cursor: pointer;
-}
-
-.title {
-  height: 100px;      /* prova 48–56 */
-  width: auto;
-  padding-left: 20px;
-  padding-top: 5px;
-  display: block;
-}
-
-/* ===== OVERLAY ===== */
-.nav-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.25);
-  z-index: 9998;
-}
-
-/* ===== ACTIVE LINK (vale ovunque, non solo desktop) ===== */
-.nav-links a.active,
-.nav-links a[aria-current='page'] {
-  color: #9c3d2b;
-  font-weight: 600;
-}
-
-@media (max-width: 900px) {
-  /* nascondi bottoni a destra */
-  .button-container {
-    display: none;
-  }
-
-  /* la barra deve permettere centratura reale */
-  .nav {
-    justify-content: center; /* non fondamentale, ma aiuta */
-  }
-
-  /* il contenitore sinistro prende tutta la larghezza */
-  .navName {
-    position: relative;
-    width: 100%;
-  }
-
-  /* hamburger resta a sinistra */
-  .navOpenBtn {
-    position: relative;
-    z-index: 2;
-  }
-
-  /* CENTRA IL LOGO DAVVERO */
-  .container-name {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 1;
-  }
-
-  /* ridimensiona logo */
-  .title {
-    display: block;
-  }
-
-  /* evita che il menu desktop “sposti” layout in mobile */
-  .nav-links {
-    position: fixed; /* come già hai in mobile */
-  }
-}
-
-/* ===== DESKTOP ADJUST ===== */
+/* BREAKPOINTS */
 @media (min-width: 900px) {
+  .button-container {
+    display: flex;
+  }
+}
+
+@media (min-width: 1200px) {
   .navOpenBtn {
     display: none;
   }
-
-  .nav-links {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-
-    height: auto;
-    width: auto;
-    padding-top: 0;
-
-    flex-direction: row;
-    gap: 54px;
-
-    background: none;
-  }
-
-  .nav-links li a {
-    padding: 0;
-    font-size: 18px;
-    font-weight: 500;
-    color: #6b6b6b;
-    transition: color 0.2s ease;
-  }
-
-  .nav-links li a:hover {
-    color: #111;
-    font-weight: 500;
-  }
-
-  .nav-links a.active,
-  .nav-links a[aria-current='page'] {
-    color: #9c3d2b; /* rosa/magenta */
-    font-weight: 600;
-  }
-
-  .nav-links a.active:hover,
-  .nav-links a[aria-current='page']:hover {
-    color: #9c3d2b; /* stesso colore dell'active */
-    font-weight: 800;
-  }
-
-  .navCloseBtn {
-    display: none;
-  }
-  .nav-overlay {
-    display: none;
+  .nav-menu {
+    display: flex;
   }
 }
