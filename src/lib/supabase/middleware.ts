@@ -2,28 +2,34 @@ import { createServerClient } from '@supabase/ssr';
 import { NextResponse, type NextRequest } from 'next/server';
 
 export async function updateSession(request: NextRequest) {
-  let response = NextResponse.next({ request });
+  try {
+    let response = NextResponse.next({ request });
 
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        getAll() {
-          return request.cookies.getAll();
-        },
-        setAll(cookiesToSet) {
-          cookiesToSet.forEach(({ name, value, options }) => {
-            request.cookies.set(name, value);
-            response.cookies.set(name, value, options);
-          });
+    const supabase = createServerClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+      {
+        cookies: {
+          getAll() {
+            return request.cookies.getAll();
+          },
+          setAll(cookiesToSet) {
+            cookiesToSet.forEach(({ name, value, options }) => {
+              request.cookies.set(name, value);
+              response.cookies.set(name, value, options);
+            });
+          },
         },
       },
-    },
-  );
+    );
 
-  // IMPORTANT: questo refresha la sessione se serve
-  await supabase.auth.getUser();
+    // refresha session se serve
+    await supabase.auth.getUser();
 
-  return response;
+    return response;
+  } catch (err) {
+    // IMPORTANT: non buttare giù tutto il sito per un refresh session fallito
+    console.error('proxy/updateSession failed:', err);
+    return NextResponse.next({ request });
+  }
 }
