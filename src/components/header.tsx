@@ -2,22 +2,27 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
+import type { Session } from '@supabase/supabase-js';
+import { createClient } from '@/lib/supabase/client';
 
 export default function Header() {
   const [open, setOpen] = useState(false);
+  const [session, setSession] = useState<Session | null>(null);
+
   const pathname = usePathname();
+  const router = useRouter();
 
   // Chiudi menu con ESC
   useEffect(() => {
-    function onKeyDown(e: { key: string }) {
+    function onKeyDown(e: KeyboardEvent) {
       if (e.key === 'Escape') setOpen(false);
     }
     document.addEventListener('keydown', onKeyDown);
     return () => document.removeEventListener('keydown', onKeyDown);
   }, []);
 
-  // (Opzionale) Blocca scroll pagina quando menu è aperto
+  // Blocca scroll pagina quando menu è aperto
   useEffect(() => {
     document.body.style.overflow = open ? 'hidden' : '';
     return () => {
@@ -25,13 +30,37 @@ export default function Header() {
     };
   }, [open]);
 
-  // helper per active
+  // Sessione Supabase (client)
+  useEffect(() => {
+    const supabase = createClient();
+
+    supabase.auth.getSession().then(({ data }) => {
+      setSession(data.session ?? null);
+    });
+
+    const { data: sub } = supabase.auth.onAuthStateChange((_event, newSession) => {
+      setSession(newSession);
+    });
+
+    return () => {
+      sub.subscription.unsubscribe();
+    };
+  }, []);
+
   const isActive = (href: string) => pathname === href;
+
+  async function handleLogout() {
+    const supabase = createClient();
+    await supabase.auth.signOut();
+    setSession(null);
+    setOpen(false);
+    router.push('/');
+    router.refresh();
+  }
 
   return (
     <header className={`nav ${open ? 'openNav' : ''}`} id="navbar-container">
       <div className="navName">
-        {/* Bottone hamburger */}
         <button
           type="button"
           className="navOpenBtn"
@@ -45,16 +74,11 @@ export default function Header() {
 
         <div className="container-name" onClick={() => setOpen(false)}>
           <Link href="/" className="name">
-            <img 
-              className="title"
-              src="/images/logo2.png"
-              alt="RumantschVivo"
-            />
+            <img className="title" src="/images/logo2.png" alt="RumantschVivo" />
           </Link>
         </div>
 
         <ul className="nav-links" id="nav-links">
-          {/* Bottone chiusura */}
           <button
             type="button"
             className="navCloseBtn"
@@ -111,15 +135,23 @@ export default function Header() {
       </div>
 
       <div className="button-container">
-        <Link href="/wip" className="top-right-button" id="RightAccedi">
-          Sign Up
-        </Link>
-        <Link href="/wip" className="top-right-button" id="RightEsci" style={{ display: 'none' }}>
-          Exit
-        </Link>
+        {session ? (
+          <>
+            <Link href="/account" className="top-right-button" onClick={() => setOpen(false)}>
+              Account
+            </Link>
+
+            <button type="button" className="top-right-button" onClick={handleLogout}>
+              Logout
+            </button>
+          </>
+        ) : (
+          <Link href="/login" className="top-right-button" onClick={() => setOpen(false)}>
+            Login / Sign Up
+          </Link>
+        )}
       </div>
 
-      {/* Overlay (clic fuori = chiudi) */}
       {open && <div className="nav-overlay" onClick={() => setOpen(false)} aria-hidden="true" />}
     </header>
   );

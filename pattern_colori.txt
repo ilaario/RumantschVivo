@@ -1,0 +1,12 @@
+Verde abete: #2F4F3E
+Beige pietra: #F4F1EC
+Grigio roccia: #6B6B6B
+Bianco neve: #FFFFFF
+Accento rosso spento: #9C3D2B
+
+Uso
+	•	Background: beige / bianco
+	•	Header pill: bianco
+	•	Testo: grigio roccia
+	•	Link attivi / progressi: rosso spento
+	•	Elementi secondari: verde abete
