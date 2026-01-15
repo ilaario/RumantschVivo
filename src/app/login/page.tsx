@@ -10,7 +10,7 @@ import { createClient } from '@/lib/supabase/client';
 import '../stylesheets/login.css';
 
 export default function LoginPage() {
-  const supabase = createClient();
+  // const supabase = createClient();
   const router = useRouter();
 
   const [email, setEmail] = useState('');
@@ -25,6 +25,8 @@ export default function LoginPage() {
     setError(null);
     setInfo(null);
     setLoading(true);
+
+    const supabase = createClient();
 
     const res =
       mode === 'login'
