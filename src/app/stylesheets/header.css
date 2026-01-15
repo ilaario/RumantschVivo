@@ -194,3 +194,30 @@
     display: flex;
   }
 }
+
+.lang-switch {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.lang-btn {
+  border: 1px solid transparent;
+  background: transparent;
+  cursor: pointer;
+  font-size: 18px;
+  line-height: 1;
+  padding: 4px 6px;
+  border-radius: 999px;
+  transition: background 0.15s ease, transform 0.05s ease, border-color 0.15s ease;
+}
+
+.lang-btn:hover {
+  background: rgba(0, 0, 0, 0.04);
+  transform: translateY(1px);
+}
+
+.lang-btn--active {
+  border-color: var(--rv-border);
+  background: var(--rv-snow);
+}

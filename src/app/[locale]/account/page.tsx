@@ -1,12 +1,23 @@
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
-import '../stylesheets/account.css';
+import { getMessages } from '@/lib/i18n/messages';
+import { isLocale, DEFAULT_LOCALE, type Locale } from '@/lib/i18n/config';
+import '../../stylesheets/account.css';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
-export default async function AccountPage() {
+export default async function AccountPage({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  // params è una Promise, quindi va awaited
+  const { locale: rawLocale } = await params;
+  const locale: Locale = isLocale(rawLocale) ? (rawLocale as Locale) : DEFAULT_LOCALE;
+  const t = getMessages(locale);
+
   const supabase = await createClient();
 
   const {
@@ -14,7 +25,7 @@ export default async function AccountPage() {
     error: userErr,
   } = await supabase.auth.getUser();
 
-  if (userErr || !user) redirect('/login');
+  if (userErr || !user) redirect(`/${locale}/login`);
 
   const { data: profile } = await supabase
     .from('profiles')
@@ -37,36 +48,36 @@ export default async function AccountPage() {
   return (
     <main className="account-page">
       <div className="account-container">
-        <h1 className="account-title">Account</h1>
+        <h1 className="account-title">{t.account.overview.title}</h1>
         <p className="account-subtitle">
-          Gestisci il tuo profilo e monitora i progressi
+          {t.account.overview.subtitle}
         </p>
 
         <div className="account-grid">
           {/* PROFILO */}
           <section className="account-card">
-            <h2 className="card-title">Profilo</h2>
+            <h2 className="card-title">{t.account.overview.profile_title}</h2>
 
             <div className="kv">
-              <div className="k">Email</div>
+              <div className="k">{t.account.overview.email}</div>
               <div className="v">{user.email}</div>
 
-              <div className="k">Nome</div>
+              <div className="k">{t.account.overview.name}</div>
               <div className="v">
                 {profile?.display_name || (
-                  <span className="v muted">Non impostato</span>
+                  <span className="v muted">{t.account.overview.name_missing}</span>
                 )}
               </div>
             </div>
 
             <div className="account-actions">
-              <Link href="/account/edit" className="btn">
-                Modifica profilo
+              <Link href={`/${locale}/account/edit`} className="btn">
+                {t.account.overview.edit_profile}
               </Link>
 
               <form action="/auth/signout" method="post">
                 <button type="submit" className="btn btn-danger">
-                  Logout
+                  {t.account.overview.logout}
                 </button>
               </form>
             </div>
@@ -74,11 +85,11 @@ export default async function AccountPage() {
 
           {/* PROGRESSI */}
           <section className="account-card">
-            <h2 className="card-title">Progressi</h2>
+            <h2 className="card-title">{t.account.overview.progress_title}</h2>
 
             <div className="progress-row">
               <div className="progress-meta">
-                Completate{' '}
+                {t.account.overview.progress_completed}{' '}
                 <strong>
                   {completed} / {total}
                 </strong>
@@ -91,12 +102,12 @@ export default async function AccountPage() {
             </div>
 
             <h3 className="card-title" style={{ marginTop: '18px' }}>
-              Attività recente
+              {t.account.overview.recent_activity}
             </h3>
 
             {recent.length === 0 ? (
               <p className="empty">
-                Ancora zero progressi. Tempo di iniziare.
+                {t.account.overview.recent_empty}
               </p>
             ) : (
               <ul className="recent-list">
@@ -111,10 +122,10 @@ export default async function AccountPage() {
                       </div>
 
                       <Link
-                        href={`/learn/${p.lesson_key}`}
+                        href={`/${locale}/learn/${p.lesson_key}`}
                         className="recent-link"
                       >
-                        Apri
+                        {t.account.overview.open_lesson}
                       </Link>
                     </div>
                   </li>

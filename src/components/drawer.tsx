@@ -5,6 +5,9 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import type { Session } from '@supabase/supabase-js';
 import { createClient } from '@/lib/supabase/client';
+import { withLocale } from '@/lib/i18n/path';
+import { useI18n } from '@/lib/i18n/i18nprovider';
+import { isLocale, type Locale } from '@/lib/i18n/config';
 
 export default function Drawer({
   open,
@@ -17,7 +20,15 @@ export default function Drawer({
   const router = useRouter();
   const [session, setSession] = useState<Session | null>(null);
 
-  const isActive = (href: string) => pathname === href;
+  const t = useI18n();
+
+  // locale dall'URL tipo /it/qualcosa
+  const segments = pathname.split('/');
+  const locale = segments[1] || 'it';
+
+  const hrefWithLocale = (path: string) => withLocale(locale, path);
+
+  const isActive = (path: string) => pathname === hrefWithLocale(path);
 
   // chiudi con ESC
   useEffect(() => {
@@ -50,7 +61,8 @@ export default function Drawer({
     } finally {
       setSession(null);
       onClose();
-      router.push('/');
+      // torna alla home localizzata
+      router.push(hrefWithLocale('/'));
       router.refresh();
     }
   }
@@ -81,39 +93,76 @@ export default function Drawer({
             <span className="drawer-icon" aria-hidden="true" />
           </button>
 
-          <Link href="/" className="drawer-brand" onClick={onClose} aria-label="Home">
+        {/* Home locale */}
+          <Link
+            href={hrefWithLocale('/')}
+            className="drawer-brand"
+            onClick={onClose}
+            aria-label="Home"
+          >
             <img src="/images/logo2.png" alt="RumantschVivo" />
           </Link>
         </div>
 
         <nav className="drawer-nav" aria-label="Link menu">
-          <Link href="/" onClick={onClose} className={isActive('/') ? 'active' : ''}>
-            HOME
+          <Link
+            href={hrefWithLocale('/')}
+            onClick={onClose}
+            className={isActive('/') ? 'active' : ''}
+          >
+            {t.nav.home}
           </Link>
-          <Link href="/learn" onClick={onClose} className={isActive('/learn') ? 'active' : ''}>
-            IMPARA
+
+          <Link
+            href={hrefWithLocale('/learn')}
+            onClick={onClose}
+            className={isActive('/learn') ? 'active' : ''}
+          >
+            {t.nav.learn}
           </Link>
-          <Link href="/wip" onClick={onClose} className={isActive('/wip') ? 'active' : ''}>
-            VOCABOLARIO
+
+          <Link
+            href={hrefWithLocale('/wip')}
+            onClick={onClose}
+            className={isActive('/wip') ? 'active' : ''}
+          >
+            {t.nav.vocab}
           </Link>
-          <Link href="/wip" onClick={onClose} className={isActive('/wip') ? 'active' : ''}>
-            STORIE
+
+          <Link
+            href={hrefWithLocale('/wip')}
+            onClick={onClose}
+            className={isActive('/wip') ? 'active' : ''}
+          >
+            {t.nav.stories}
           </Link>
         </nav>
 
         <div className="drawer-actions">
           {session ? (
             <>
-              <Link href="/account" className="drawer-btn drawer-btn--secondary" onClick={onClose}>
-                Account
+              <Link
+                href={hrefWithLocale('/account')}
+                className="drawer-btn drawer-btn--secondary"
+                onClick={onClose}
+              >
+                {t.nav.account}
               </Link>
-              <button type="button" className="drawer-btn drawer-btn--danger" onClick={handleLogout}>
-                Logout
+              <button
+                type="button"
+                className="drawer-btn drawer-btn--danger"
+                onClick={handleLogout}
+              >
+                {t.nav.logout}
               </button>
             </>
           ) : (
-            <Link href="/login" className="drawer-btn drawer-btn--primary" onClick={onClose}>
-              Login / Sign Up
+            <Link
+              href={hrefWithLocale('/login')}
+              className="drawer-btn drawer-btn--primary"
+              onClick={onClose}
+            >
+              {t.nav.login}
             </Link>
           )}
         </div>
