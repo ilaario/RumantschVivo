@@ -1,30 +1,50 @@
 import Link from 'next/link';
+import type { Locale } from '@/lib/i18n/config';
 import { listLessons } from '@/lib/content/lessons';
+import '../../stylesheets/learn.css';
 
-export default async function LearnPage() {
-  const variant = 'sursilvan';
-  const level = 'a0';
+type LearnPageParams = {
+  locale: Locale;
+};
 
-  const lessons = await listLessons({ variant, level });
+type Props = {
+  params: Promise<LearnPageParams>;
+};
+
+export default async function LearnPage({ params }: Props) {
+  // params è UNA PROMISE, quindi:
+  const { locale } = await params;
+  const level = 'A0';
+
+  const lessons = await listLessons({ level, locale });
 
   return (
-    <main className="mx-auto max-w-3xl p-6">
-      <h1 className="text-3xl font-semibold">Impara (Sursilvan)</h1>
-      <p className="mt-2 text-gray-700">Livello A0</p>
+    <main className="learn-page">
+      <header className="learn-header">
+        <h1>Impara (Sursilvan)</h1>
+        <p>Livello A0</p>
+      </header>
 
-      <ul className="mt-6 space-y-3">
-        {lessons.map((l) => (
-          <li key={l.id} className="rounded-lg border p-4">
-            <Link
-              className="text-lg font-medium underline"
-              href={`/learn/${variant}/${level}/${l.slug}`}
-            >
-              {l.title}
+      {lessons.length === 0 ? (
+        <div className="learn-empty">
+          Nessuna lezione ancora disponibile per questo livello.
+        </div>
+      ) : (
+        <ul className="learn-list">
+          {lessons.map((l) => (
+            <Link key={l.id} className="learn-card" href={`/${locale}/learn/${l.slug}`}>
+              <p
+                className="learn-link"
+              >
+                {l.title}
+              </p>
+              {l.goals && l.goals.length > 0 && (
+                <div className="learn-meta">{l.goals.join(' · ')}</div>
+              )}
             </Link>
-            <div className="mt-2 text-sm text-gray-700">{l.goals.join(' · ')}</div>
-          </li>
-        ))}
-      </ul>
+          ))}
+        </ul>
+      )}
     </main>
   );
 }

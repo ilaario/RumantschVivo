@@ -1,34 +1,74 @@
-import 'server-only';
-import fs from 'node:fs/promises';
-import path from 'node:path';
-import { Lesson } from '@/types/lesson';
+// src/lib/content/lessons.ts
 
-const lessonsRoot = path.join(process.cwd(), 'src', 'content', 'lessons');
+import { sanityClient } from '@/sanity/lib/client';
+import { lessonsListQuery, lessonBySlugQuery } from '@/sanity/lib/queries';
+import type { Locale } from '@/lib/i18n/config';
+import { resolveLocalizedString, resolveLocalizedBlocks  } from './sanityUtils';
 
-export async function listLessons(params: { variant: string; level: string }) {
-  if (!params?.variant || !params?.level) {
-    throw new Error(
-      `listLessons: missing params (variant=${params?.variant}, level=${params?.level})`,
-    );
-  }
+type ListLessonsParams = {
+  level: string;
+  locale: Locale;
+};
 
-  const dir = path.join(lessonsRoot, params.variant, params.level.toLowerCase());
-  const files = await fs.readdir(dir);
-  const lessons: Lesson[] = [];
+export async function listLessons({ level, locale }: ListLessonsParams) {
+  const lessons = await sanityClient.fetch(lessonsListQuery, {
+    level,
+  });
 
-  for (const file of files.filter((f) => f.endsWith('.json'))) {
-    const full = path.join(dir, file);
-    const raw = await fs.readFile(full, 'utf8');
-    lessons.push(JSON.parse(raw));
-  }
-
-  // ordina per id (a0-001, a0-002, ...)
-  lessons.sort((a, b) => a.id.localeCompare(b.id, undefined, { numeric: true }));
-  return lessons;
+  return lessons.map((l: any) => ({
+    id: l._id,
+    slug: l.slug,
+    title: resolveLocalizedString(l.title, locale) ?? 'Untitled',
+    goals: l.goals ?? [],
+    variant: l.variant,
+    level: l.level,
+  }));
 }
 
-export async function getLesson(params: { variant: string; level: string; slug: string }) {
-  console.log('LessonPage params:', await params);
-  const lessons = await listLessons(params);
-  return lessons.find((l) => l.slug === params.slug) ?? null;
+type GetLessonParams = {
+  slug: string;
+  locale: Locale;
+};
+
+export type Lesson = {
+  id: string;
+  slug: string;
+  lessonKey: string;
+  title: string;
+  intro: any[];
+  body: any[];
+  variant?: string | null;
+  level?: string | null;
+  exercises: LessonExercise[];
+};
+
+export type LessonExercise = {
+  id: string;
+  kind: 'mcq' | 'open';
+  prompt: any[];          // <-- IMPORTANT: se prompt è Portable Text
+  options: string[];
+  answer: string | null;
+};
+
+export async function getLesson({ slug, locale }: GetLessonParams): Promise<Lesson | null> {
+  const data = await sanityClient.fetch(lessonBySlugQuery, { slug, locale });
+  if (!data) return null;
+
+  return {
+    id: data._id,
+    slug: data.slug,
+    lessonKey: data.lessonKey,
+    title: resolveLocalizedString(data.title, locale) ?? 'Untitled',
+    intro: resolveLocalizedBlocks(data.intro, locale), // ✅ FIX
+    body: resolveLocalizedBlocks(data.body, locale),   // ✅ FIX
+    variant: data.variant ?? null,
+    level: data.level ?? null,
+    exercises: (data.exercises ?? []).map((ex: any) => ({
+      id: ex._id,
+      kind: ex.kind ?? 'open',
+      prompt: resolveLocalizedBlocks(ex.prompt, locale),      // <-- array blocks
+      options: ex.options ?? [],
+      answer: resolveLocalizedString(ex.answer, locale) ?? null,
+    }))
+  };
 }

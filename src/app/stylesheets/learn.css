@@ -1,0 +1,79 @@
+/* ===== LEARN PAGE ===== */
+
+.learn-page {
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 48px 20px 64px;
+  }
+  
+  /* Header */
+  .learn-header {
+    margin-bottom: 36px;
+  }
+  
+  .learn-header h1 {
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--rv-forest);
+    margin: 0;
+  }
+  
+  .learn-header p {
+    margin-top: 6px;
+    font-size: 16px;
+    color: var(--rv-rock);
+  }
+  
+  /* Lista lezioni */
+  .learn-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 16px;
+  }
+  
+  /* Card lezione */
+  .learn-card {
+    background: var(--rv-snow);
+    border: 1px solid var(--rv-border);
+    border-radius: 16px;
+    padding: 18px 20px;
+    transition:
+      transform 0.15s ease,
+      box-shadow 0.15s ease,
+      border-color 0.15s ease;
+  }
+  
+  .learn-card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(47, 79, 62, 0.35);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+  }
+  
+  /* Link titolo */
+  .learn-link {
+    display: inline-block;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--rv-forest);
+    text-decoration: none;
+  }
+  
+  /* Meta sotto al titolo */
+  .learn-meta {
+    margin-top: 8px;
+    font-size: 14px;
+    color: var(--rv-rock);
+    line-height: 1.4;
+  }
+  
+  /* Stato vuoto */
+  .learn-empty {
+    padding: 32px;
+    border-radius: 16px;
+    background: var(--rv-stone);
+    text-align: center;
+    color: var(--rv-rock);
+    font-size: 15px;
+  }
