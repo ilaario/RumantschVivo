@@ -335,3 +335,55 @@
     font-size: 0.95rem;
     background: #fff;
   }
+
+  .lesson-ex-open {
+    margin-top: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .lesson-ex-open-hint {
+    font-size: 0.9rem;
+    color: var(--rv-rock);
+  }
+  
+  .lesson-ex-open-input {
+    width: 100%;
+    min-height: 120px;
+    resize: vertical;
+    padding: 10px 12px;
+    border-radius: 12px;
+    border: 1px solid rgba(56, 92, 64, 0.25);
+    font-size: 0.95rem;
+    font-family: inherit;
+    line-height: 1.5;
+    background: #fffefa;
+    outline: none;
+    transition: border-color 120ms ease, box-shadow 120ms ease, background-color 120ms ease;
+  }
+  
+  .lesson-ex-open-input::placeholder {
+    color: rgba(0, 0, 0, 0.35);
+  }
+  
+  .lesson-ex-open-input:focus {
+    border-color: var(--rv-rust);
+    box-shadow: 0 0 0 2px rgba(223, 92, 56, 0.18);
+    background: #ffffff;
+  }
+  
+  .lesson-ex-answer-text {
+    margin-top: 8px;
+    font-size: 0.95rem;
+  }
+  
+  .lesson-ex-expected {
+    margin-top: 6px;
+    font-size: 0.9rem;
+    color: var(--rv-rock);
+  }
+  
+  .lesson-ex-expected-label {
+    font-weight: 600;
+  }

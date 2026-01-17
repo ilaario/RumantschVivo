@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { PortableText, type PortableTextComponents } from '@portabletext/react';
 import type { Exercise } from '@/lib/content/exercises';
+import type { Locale } from '@/lib/i18n/config';
 
 const components: PortableTextComponents = {
   block: {
@@ -29,32 +30,92 @@ const components: PortableTextComponents = {
   },
 };
 
+// Mini dizionario UI
+const ui = {
+  it: {
+    exercisesLabel: 'ESERCIZI',
+    exerciseOf: (i: number, total: number) => `Esercizio ${i} di ${total}`,
+    openHint:
+      'Scrivi la tua risposta, poi premi "Conferma" per vedere se coincide con la soluzione prevista.',
+    openCorrectTitle: 'Corretto!',
+    openCorrectBody: 'La tua risposta coincide con quella attesa.',
+    openWrongTitle: 'Risposta diversa.',
+    openWrongBody: 'Qui sotto trovi una possibile soluzione.',
+    expectedLabel: 'Risposta attesa:',
+    mcqCorrectTitle: 'Corretto!',
+    mcqCorrectBody: 'Ottimo lavoro.',
+    mcqWrongTitle: 'Risposta sbagliata.',
+    mcqWrongBody: 'Prova a riguardare la lezione o gli esempi sopra.',
+    confirm: 'Conferma',
+    next: 'Avanti',
+    finish: 'Fine',
+    textareaPlaceholder: 'Scrivi qui la tua risposta…',
+  },
+  en: {
+    exercisesLabel: 'EXERCISES',
+    exerciseOf: (i: number, total: number) => `Exercise ${i} of ${total}`,
+    openHint:
+      'Write your answer, then press "Confirm" to see if it matches the expected solution.',
+    openCorrectTitle: 'Correct!',
+    openCorrectBody: 'Your answer matches the expected one.',
+    openWrongTitle: 'Different answer.',
+    openWrongBody: 'Below you can see a suggested solution.',
+    expectedLabel: 'Expected answer:',
+    mcqCorrectTitle: 'Correct!',
+    mcqCorrectBody: 'Nice job.',
+    mcqWrongTitle: 'Wrong answer.',
+    mcqWrongBody: 'Try reviewing the lesson or the examples above.',
+    confirm: 'Confirm',
+    next: 'Next',
+    finish: 'Finish',
+    textareaPlaceholder: 'Write your answer here…',
+  },
+} as const;
+
 type Props = {
   exercises: Exercise[];
+  locale: Locale;
 };
 
-export function LessonExercises({ exercises }: Props) {
+function normalizeAnswer(s: string) {
+  return s
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+export function LessonExercises({ exercises, locale }: Props) {
   const [index, setIndex] = useState(0);
   const [selectedId, setSelectedId] = useState<string | null>(null);
-  const [openAnswer, setOpenAnswer] = useState(''); // testo scritto dall'utente negli open
+  const [openAnswer, setOpenAnswer] = useState('');
   const [status, setStatus] = useState<'idle' | 'correct' | 'wrong'>('idle');
 
   if (!exercises || exercises.length === 0) return null;
 
+  // fallback: se esiste solo it/en, usa it come default
+  const L = locale in ui ? ui[locale as 'it' | 'en'] : ui.it;
+
   const current = exercises[index];
   const isLast = index === exercises.length - 1;
   const isMcq = current.type === 'mcq';
+  const isOpen = current.type === 'open';
 
-  // MCQ: scelta selezionata
   const selectedChoice =
     isMcq && current.choices
       ? current.choices.find((c) => c.id === selectedId) ?? null
       : null;
 
-  // Quando posso premere "Conferma"?
-  const canConfirm = isMcq
-    ? selectedId !== null && status === 'idle'
-    : status === 'idle';
+  const canConfirm = (() => {
+    if (isMcq) {
+      return selectedId !== null && status === 'idle';
+    }
+    if (isOpen) {
+      return openAnswer.trim().length > 0 && status === 'idle';
+    }
+    return status === 'idle';
+  })();
 
   function handleSelect(choiceId: string) {
     if (!isMcq) return;
@@ -70,8 +131,21 @@ export function LessonExercises({ exercises }: Props) {
       return;
     }
 
-    // OPEN / ORDERING:
-    // per ora "Conferma" serve solo a mostrare una soluzione / spiegazione
+    if (isOpen) {
+      if (!current.expectedAnswer) {
+        // niente expectedAnswer: non rompiamo
+        setStatus('correct');
+        return;
+      }
+
+      const expected = normalizeAnswer(current.expectedAnswer);
+      const given = normalizeAnswer(openAnswer);
+
+      const ok = given.length > 0 && given === expected;
+      setStatus(ok ? 'correct' : 'wrong');
+      return;
+    }
+
     setStatus('correct');
   }
 
@@ -86,19 +160,17 @@ export function LessonExercises({ exercises }: Props) {
   return (
     <section className="lesson-exercises">
       <header className="lesson-ex-header">
-        <div className="lesson-ex-label">ESERCIZI</div>
+        <div className="lesson-ex-label">{L.exercisesLabel}</div>
         <div className="lesson-ex-progress">
-          Esercizio {index + 1} di {exercises.length}
+          {L.exerciseOf(index + 1, exercises.length)}
         </div>
       </header>
 
       <div className="lesson-ex-body">
-        {/* Titolo breve / chiave esercizio */}
         <p className="lesson-ex-prompt-title">
           <strong>{current.title}</strong>
         </p>
 
-        {/* Testo prompt (PortableText) */}
         {current.promptBlocks && current.promptBlocks.length > 0 && (
           <div className="lesson-ex-prompt">
             <PortableText value={current.promptBlocks} components={components} />
@@ -110,8 +182,7 @@ export function LessonExercises({ exercises }: Props) {
           <ul className="lesson-ex-options">
             {current.choices.map((choice) => {
               const isSelected = choice.id === selectedId;
-              const isCorrect =
-                status !== 'idle' && choice.correct;
+              const isCorrect = status !== 'idle' && choice.correct;
               const isWrongSelected =
                 status === 'wrong' && isSelected && !choice.correct;
 
@@ -134,49 +205,56 @@ export function LessonExercises({ exercises }: Props) {
         )}
 
         {/* ========= OPEN ========= */}
-        {current.type === 'open' && (
+        {isOpen && (
           <div className="lesson-ex-open">
-            <p className="lesson-ex-open-hint">
-              Scrivi la tua risposta, poi premi &quot;Conferma&quot; per vedere una soluzione suggerita.
-            </p>
+            <p className="lesson-ex-open-hint">{L.openHint}</p>
 
             <textarea
               className="lesson-ex-open-input"
               rows={4}
-              placeholder="Scrivi qui la tua risposta…"
+              placeholder={L.textareaPlaceholder}
               value={openAnswer}
-              onChange={(e) => setOpenAnswer(e.target.value)}
+              onChange={(e) => {
+                setOpenAnswer(e.target.value);
+                if (status !== 'idle') setStatus('idle');
+              }}
             />
 
-            {status !== 'idle' && current.solutionBlocks.length > 0 && (
+            {status !== 'idle' && (
               <div className="lesson-ex-answer">
-                <span className="lesson-ex-answer-label">
-                  Soluzione suggerita:
-                </span>
-                <div className="lesson-ex-answer-text">
-                  <PortableText value={current.solutionBlocks} components={components} />
-                </div>
-              </div>
-            )}
-          </div>
-        )}
+                {status === 'correct' ? (
+                  <>
+                    <span className="lesson-ex-answer-label">
+                      {L.openCorrectTitle}
+                    </span>
+                    <span> {L.openCorrectBody}</span>
+                  </>
+                ) : (
+                  <>
+                    <span className="lesson-ex-answer-label">
+                      {L.openWrongTitle}
+                    </span>
+                    <span> {L.openWrongBody}</span>
+                  </>
+                )}
 
-        {/* ========= ORDERING ========= */}
-        {current.type === 'order' && (
-          <div className="lesson-ex-order">
-            <p className="lesson-ex-open-hint">
-              Prova a mettere mentalmente in ordine / abbinare gli elementi. In futuro diventerà
-              un esercizio interattivo, per ora usa &quot;Conferma&quot; per vedere una soluzione.
-            </p>
+                {current.solutionBlocks && current.solutionBlocks.length > 0 && (
+                  <div className="lesson-ex-answer-text">
+                    <PortableText
+                      value={current.solutionBlocks}
+                      components={components}
+                    />
+                  </div>
+                )}
 
-            {status !== 'idle' && current.solutionBlocks.length > 0 && (
-              <div className="lesson-ex-answer">
-                <span className="lesson-ex-answer-label">
-                  Soluzione suggerita:
-                </span>
-                <div className="lesson-ex-answer-text">
-                  <PortableText value={current.solutionBlocks} components={components} />
-                </div>
+                {current.expectedAnswer && (
+                  <p className="lesson-ex-expected">
+                    <span className="lesson-ex-expected-label">
+                      {L.expectedLabel}
+                    </span>{' '}
+                    {current.expectedAnswer}
+                  </p>
+                )}
               </div>
             )}
           </div>
@@ -187,15 +265,17 @@ export function LessonExercises({ exercises }: Props) {
           <div className="lesson-ex-answer">
             {status === 'correct' ? (
               <>
-                <span className="lesson-ex-answer-label">Corretto!</span>
-                <span> Ottimo lavoro.</span>
+                <span className="lesson-ex-answer-label">
+                  {L.mcqCorrectTitle}
+                </span>
+                <span> {L.mcqCorrectBody}</span>
               </>
             ) : (
               <>
                 <span className="lesson-ex-answer-label">
-                  Risposta sbagliata.
+                  {L.mcqWrongTitle}
                 </span>
-                <span> Prova a riguardare la lezione o gli esempi sopra.</span>
+                <span> {L.mcqWrongBody}</span>
               </>
             )}
           </div>
@@ -209,7 +289,7 @@ export function LessonExercises({ exercises }: Props) {
           disabled={!canConfirm}
           onClick={handleConfirm}
         >
-          Conferma
+          {L.confirm}
         </button>
 
         <button
@@ -218,7 +298,7 @@ export function LessonExercises({ exercises }: Props) {
           disabled={status === 'idle' || isLast}
           onClick={handleNext}
         >
-          {isLast ? 'Fine' : 'Avanti'}
+          {isLast ? L.finish : L.next}
         </button>
       </footer>
     </section>

@@ -29,18 +29,25 @@ export const lessonBySlugQuery = groq`
 
 
 export const exercisesByLessonQuery = groq`
-  *[_type == "exercise" && lesson->lessonKey == $lessonKey] | order(order asc) {
-    _id,
-    exerciseKey,
-    order,
-    exerciseType,
-    titleShort,
-    title,
-    prompt,
-    choices[]{
-      _key,
-      correct,
-      text
+  *[_type == "exercise" && lesson->lessonKey == $lessonKey]
+    | order(order asc) {
+      _id,
+      exerciseKey,
+      order,
+      type,
+      title,
+      // portable text localizzato (lo risolviamo in TS)
+      prompt,
+
+      // --- MCQ ---
+      choices[]{
+        _key,
+        text,
+        correct
+      },
+
+      // --- OPEN ---
+      expectedAnswer,
+      solution
     }
-  }
 `;
