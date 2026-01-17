@@ -1,13 +1,13 @@
 import { createClient } from 'next-sanity';
-import { apiVersion, dataset, projectId } from '../env';
+import { projectId, dataset, apiVersion } from '../env';
 
-if (!projectId || !dataset) {
-  throw new Error('Missing Sanity projectId or dataset. Check src/sanity/env.ts');
+if (!projectId) {
+  throw new Error('Missing NEXT_PUBLIC_SANITY_PROJECT_ID');
 }
 
 export const sanityClient = createClient({
   projectId,
   dataset,
   apiVersion,
-  useCdn: false, // metti true in prod se i dati possono essere cached
+  useCdn: true,
 });
