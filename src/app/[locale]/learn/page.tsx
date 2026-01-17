@@ -11,37 +11,69 @@ type Props = {
   params: Promise<LearnPageParams>;
 };
 
+type LessonListItem = {
+  id: string;
+  slug: string;
+  title: string;
+  goals: string[];
+  variant?: string | null;
+  level?: string | null;
+};
+
+const UI_TEXT: Record<
+  Locale | 'default',
+  {
+    title: string;
+    subtitle: string;
+    empty: string;
+  }
+> = {
+  it: {
+    title: 'Impara (Sursilvan)',
+    subtitle: 'Livello A0',
+    empty: 'Nessuna lezione ancora disponibile per questo livello.',
+  },
+  en: {
+    title: 'Learn (Sursilvan)',
+    subtitle: 'Level A0',
+    empty: 'No lessons available for this level yet.',
+  },
+  // fallback generico se mai arrivasse un locale strano
+  default: {
+    title: 'Impara (Sursilvan)',
+    subtitle: 'Livello A0',
+    empty: 'Nessuna lezione ancora disponibile per questo livello.',
+  },
+};
+
 export default async function LearnPage({ params }: Props) {
-  // params è UNA PROMISE, quindi:
   const { locale } = await params;
   const level = 'A0';
 
-  const lessons = await listLessons({ level, locale });
+  const lessons = (await listLessons({ level, locale })) as LessonListItem[];
+
+  const text = UI_TEXT[locale] ?? UI_TEXT.default;
 
   return (
     <main className="learn-page">
       <header className="learn-header">
-        <h1>Impara (Sursilvan)</h1>
-        <p>Livello A0</p>
+        <h1>{text.title}</h1>
+        <p>{text.subtitle}</p>
       </header>
 
       {lessons.length === 0 ? (
-        <div className="learn-empty">
-          Nessuna lezione ancora disponibile per questo livello.
-        </div>
+        <div className="learn-empty">{text.empty}</div>
       ) : (
         <ul className="learn-list">
-          {lessons.map((l) => (
-            <Link key={l.id} className="learn-card" href={`/${locale}/learn/${l.slug}`}>
-              <p
-                className="learn-link"
-              >
-                {l.title}
-              </p>
-              {l.goals && l.goals.length > 0 && (
-                <div className="learn-meta">{l.goals.join(' · ')}</div>
-              )}
-            </Link>
+          {lessons.map((l: LessonListItem) => (
+            <li key={l.id} className="learn-card">
+              <Link href={`/${locale}/learn/${l.slug}`} className="learn-link">
+                <p>{l.title}</p>
+                {Array.isArray(l.goals) && l.goals.length > 0 && (
+                  <div className="learn-meta">{l.goals.join(' · ')}</div>
+                )}
+              </Link>
+            </li>
           ))}
         </ul>
       )}
