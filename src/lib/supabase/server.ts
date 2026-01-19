@@ -32,3 +32,5 @@ export async function createSupabaseServerClient() {
 
   return supabase;
 }
+
+export { createSupabaseServerClient as createClient };
