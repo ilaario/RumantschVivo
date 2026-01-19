@@ -190,13 +190,15 @@ export function LessonExercises({
           {
             user_id: user.id,
             lesson_key: lessonKey,
+            // locale viene comunque aggiornato all'ultimo usato
             locale,
             current_index: newIndex,
             completed: isCompleted,
             updated_at: new Date().toISOString(),
           },
           {
-            onConflict: 'user_id,lesson_key,locale',
+            // <<< QUI LA PARTE IMPORTANTE
+            onConflict: 'user_id,lesson_key',
           },
         );
 

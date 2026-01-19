@@ -12,6 +12,7 @@
   "dependencies": {
     "@portabletext/react": "^6.0.2",
     "@portabletext/types": "^4.0.1",
+    "@sanity/client": "^7.14.0",
     "@sanity/image-url": "^1.2.0",
     "@sanity/vision": "^4.22.0",
     "@supabase/ssr": "^0.8.0",
@@ -36,6 +37,8 @@
     "prettier": "^3.7.4",
     "prettier-plugin-tailwindcss": "^0.7.2",
     "tailwindcss": "^4",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.21.0",
     "typescript": "^5"
   },
   "packageManager": "pnpm@10.28.1+sha512.7d7dbbca9e99447b7c3bf7a73286afaaf6be99251eb9498baefa7d406892f67b879adb3a1d7e687fc4ccc1a388c7175fbaae567a26ab44d1067b54fcb0d6a316"
