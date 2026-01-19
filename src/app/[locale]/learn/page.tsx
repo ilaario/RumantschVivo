@@ -127,7 +127,7 @@ export default async function LearnPage({ params }: Props) {
                 : 'learn-card--new';
 
             return (
-              <li key={l.id} className={`learn-card ${statusClass}`}>
+              <Link href={`/${locale}/learn/${l.slug}`} key={l.id} className={`learn-card ${statusClass}`}>
                 <Link href={`/${locale}/learn/${l.slug}`} className="learn-link">
                   <p className="learn-card-title">{l.title}</p>
 
@@ -135,7 +135,7 @@ export default async function LearnPage({ params }: Props) {
                     <div className="learn-meta">{l.goals.join(' · ')}</div>
                   )}
                 </Link>
-              </li>
+              </Link>
             );
           })}
         </ul>

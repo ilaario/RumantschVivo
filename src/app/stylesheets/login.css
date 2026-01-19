@@ -235,3 +235,76 @@
       font-size: 28px;
     }
   }
+
+  /* ===== Separatore "oppure" ===== */
+
+.login-separator {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 18px 0;
+  color: #6b7280;
+  font-size: 0.85rem;
+}
+
+.login-separator::before,
+.login-separator::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: #e5e7eb;
+}
+
+.login-separator span {
+  white-space: nowrap;
+  font-weight: 500;
+}
+
+/* ===== Google button ===== */
+
+.google-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+
+  width: 100%;
+  padding: 10px 14px;
+
+  border-radius: 999px;
+  border: 1px solid #e5e7eb;
+  background: #ffffff;
+
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #111827;
+
+  cursor: pointer;
+  transition:
+    background-color 120ms ease,
+    box-shadow 120ms ease,
+    transform 80ms ease;
+}
+
+.google-btn:hover {
+  background: #f9fafb;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+}
+
+.google-btn:active {
+  transform: translateY(1px);
+}
+
+.google-btn:disabled {
+  opacity: 0.6;
+  cursor: default;
+  box-shadow: none;
+}
+
+/* Icona Google */
+
+.google-icon {
+  width: 18px;
+  height: 18px;
+  display: block;
+}

@@ -27,6 +27,7 @@ export default function LoginPage() {
   const [error, setError] = useState<string | null>(null);
   const [info, setInfo] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [oauthLoading, setOauthLoading] = useState(false);
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -58,6 +59,31 @@ export default function LoginPage() {
     router.refresh();
   }
 
+  async function handleGoogleLogin() {
+    setError(null);
+    setInfo(null);
+    setOauthLoading(true);
+  
+    const supabase = createClient();
+  
+    const origin = window.location.origin;
+  
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo: `${origin}/auth/callback?redirectTo=/${currentLocale}/account`,
+      },
+    });
+  
+    // in caso normale non arriva mai qui, perché fa redirect full-page.
+    if (error) {
+      setOauthLoading(false);
+      setError(error.message);
+    }
+  }
+
+  const isAnyLoading = loading || oauthLoading;
+
   return (
     <main className="login-page">
       <section className="login-card">
@@ -72,6 +98,27 @@ export default function LoginPage() {
           <p className="login-subtitle">
             {mode === 'login' ? t.login.subtitle_login : t.login.subtitle_signup}
           </p>
+
+          {/* ==== LOGIN CON GOOGLE ==== */}
+          <button
+            type="button"
+            className="google-btn"
+            onClick={handleGoogleLogin}
+            disabled={loading}
+          >
+            <img
+              src="/images/google.svg"
+              alt=""
+              className="google-icon"
+            />
+            {t.login.google_button ?? 'Accedi con Google'}
+          </button>
+
+          <div className="login-divider">
+            <span className="login-divider-line" />
+            <span className="login-divider-text">{t.login.or ?? 'oppure'}</span>
+            <span className="login-divider-line" />
+          </div>
 
           <form onSubmit={onSubmit} className="login-form">
             <div className="field">
@@ -103,8 +150,12 @@ export default function LoginPage() {
             {error && <p className="alert alert-error">{error}</p>}
             {info && <p className="alert alert-info">{info}</p>}
 
-            <button className="primary-btn" disabled={loading}>
-              {loading ? t.login.loading : mode === 'login' ? t.login.submit_login : t.login.submit_signup}
+            <button className="primary-btn" disabled={isAnyLoading}>
+              {loading
+                ? t.login.loading
+                : mode === 'login'
+                ? t.login.submit_login
+                : t.login.submit_signup}
             </button>
 
             <div className="login-row">
@@ -112,7 +163,7 @@ export default function LoginPage() {
                 type="button"
                 className="secondary-btn"
                 onClick={() => setMode(mode === 'login' ? 'signup' : 'login')}
-                disabled={loading}
+                disabled={isAnyLoading}
               >
                 {mode === 'login' ? t.login.switch_to_signup : t.login.switch_to_login}
               </button>

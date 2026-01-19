@@ -129,5 +129,7 @@ export const messages = {
       bullet_1: 'Save progress',
       bullet_2: 'Personal vocabulary',
       bullet_3: 'Content for variants (Sursilvan…)',
+      google_button: "Continue with Google",
+      or: "or"
     },
   } as const;

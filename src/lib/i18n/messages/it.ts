@@ -129,5 +129,7 @@ export const messages = {
       bullet_1: 'Salva progressi',
       bullet_2: 'Vocabolario personale',
       bullet_3: 'Contenuti per varianti (Sursilvan…)',
+      google_button: "Accedi con Google",
+      or: "oppure"
     },
   } as const;
