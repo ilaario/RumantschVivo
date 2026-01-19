@@ -8,6 +8,7 @@ function isPublicFile(pathname: string) {
     pathname.startsWith('/icons/') ||
     pathname.startsWith('/fonts/') ||
     pathname.startsWith('/studio') ||
+    pathname.startsWith('/auth') ||
     pathname === '/robots.txt' ||
     pathname === '/sitemap.xml' ||
     pathname === '/manifest.json' ||

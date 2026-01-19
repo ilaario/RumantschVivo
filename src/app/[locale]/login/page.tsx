@@ -170,7 +170,7 @@ export default function LoginPage() {
             </div>
 
             <div className="login-links">
-              <Link className="link" href={linkHref('/wip')}>
+              <Link className="link" href={linkHref('/forgot-password')}>
                 {t.login.forgot_password}
               </Link>
               <span className="dot">·</span>
