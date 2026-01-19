@@ -14,14 +14,13 @@ export async function listLessons({ level, locale }: ListLessonsParams) {
   const lessons = await sanityClient.fetch(lessonsListQuery, {
     level,
   });
-
+  
   return lessons.map((l: any) => ({
     id: l._id,
+    lesson_key: l.lessonKey,
     slug: l.slug,
-    title: resolveLocalizedString(l.title, locale) ?? 'Untitled',
-    goals: l.goals ?? [],
-    variant: l.variant,
     level: l.level,
+    title: resolveLocalizedString(l.title, locale) ?? 'Untitled',
   }));
 }
 

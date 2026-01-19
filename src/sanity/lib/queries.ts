@@ -4,11 +4,10 @@ import { groq } from 'next-sanity';
 export const lessonsListQuery = groq`
   *[_type == "lesson" && level == $level] | order(lessonKey asc) {
     _id,
+    lessonKey,
     "slug": slug.current,
     level,
-    // qui prendiamo l'oggetto intero, NON risolto
     title,
-    goals
   }
 `;
 

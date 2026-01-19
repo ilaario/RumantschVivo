@@ -1,10 +1,11 @@
 // src/app/[locale]/learn/[slug]/page.tsx
 import type { Locale } from '@/lib/i18n/config';
-import { getLesson } from '@/lib/content/lessons';
+import { getLesson, listLessons } from '@/lib/content/lessons';
 import { getExercisesForLesson } from '@/lib/content/exercises';
 import { PortableBlocks } from '@/lib/content/portableComponents';
 import { LessonExercises } from '@/components/lesson-exercises';
 import { notFound } from 'next/navigation';
+import { createSupabaseServerClient } from '@/lib/supabase/server';
 import '@/app/stylesheets/lesson.css';
 
 type PageProps = {
@@ -22,11 +23,56 @@ export default async function LessonPage({ params }: PageProps) {
     return notFound();
   }
 
-  // 👇 forza sempre un array
-  const exercises = (await getExercisesForLesson({
-    lessonKey: lesson.lessonKey,
-    locale,
-  })) ?? [];
+  const exercises =
+    (await getExercisesForLesson({
+      lessonKey: lesson.lessonKey,
+      locale,
+    })) ?? [];
+
+  // ====== PROGRESSO INIZIALE (per riprendere da dove hai lasciato) ======
+  const supabase = await createSupabaseServerClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  let initialIndex = 0;
+
+  if (user) {
+    const { data, error } = await supabase
+      .from('lesson_progress')
+      .select('last_index, completed')
+      .eq('user_id', user.id)
+      .eq('lesson_key', lesson.lessonKey)
+      .eq('locale', locale)
+      .maybeSingle();
+
+    if (!error && data && !data.completed && typeof data.last_index === 'number') {
+      initialIndex = Math.max(0, data.last_index);
+    }
+  }
+
+  // ====== Calcolo "prossima lezione" nello stesso livello ======
+  let nextLessonHref: string | undefined;
+  try {
+    if (lesson.level) {
+      const lessonsInLevel = await listLessons({
+        level: lesson.level,
+        locale,
+      });
+
+      const idx = lessonsInLevel.findIndex((l: any) => l.slug === slug);
+
+      if (idx >= 0 && idx < lessonsInLevel.length - 1) {
+        const next = lessonsInLevel[idx + 1];
+        if (next?.slug) {
+          nextLessonHref = `/${locale}/learn/${next.slug}`;
+        }
+      }
+    }
+  } catch (err) {
+    // non esplodiamo se listLessons fallisce, semplicemente niente "prossima lezione"
+    console.error('[LessonPage] errore calcolo nextLessonHref', err);
+  }
 
   return (
     <main className="lesson-page">
@@ -49,7 +95,13 @@ export default async function LessonPage({ params }: PageProps) {
       )}
 
       {exercises.length > 0 && (
-        <LessonExercises exercises={exercises} locale={locale} />
+        <LessonExercises
+          exercises={exercises}
+          locale={locale}
+          lessonKey={lesson.lessonKey}
+          nextLessonHref={nextLessonHref}
+          initialIndex={initialIndex}
+        />
       )}
     </main>
   );

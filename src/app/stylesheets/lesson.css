@@ -387,3 +387,64 @@
   .lesson-ex-expected-label {
     font-weight: 600;
   }
+
+  .lesson-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 40;
+  }
+  
+  .lesson-modal {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 24px 20px;
+    max-width: 420px;
+    width: 100%;
+    box-shadow: 0 18px 45px rgba(15, 23, 42, 0.25);
+  }
+  
+  .lesson-modal-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  
+  .lesson-modal-body {
+    font-size: 0.95rem;
+    color: #4b5563;
+    margin-bottom: 20px;
+  }
+  
+  .lesson-modal-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: flex-end;
+  }
+  
+  .lesson-modal-btn {
+    border-radius: 999px;
+    padding: 8px 16px;
+    font-size: 0.9rem;
+    border: 1px solid transparent;
+    cursor: pointer;
+  }
+  
+  .lesson-modal-btn--primary {
+    background: #111827;
+    color: #ffffff;
+  }
+  
+  .lesson-modal-btn--secondary {
+    background: #f3f4f6;
+    color: #111827;
+    border-color: #e5e7eb;
+  }
+
+  .lesson-ex-btn--back {
+    margin-right: auto;
+  }

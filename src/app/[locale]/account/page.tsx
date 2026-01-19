@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
-import { createClient } from '@/lib/supabase/server';
+import { createSupabaseServerClient } from '@/lib/supabase/server';
 import { getMessages } from '@/lib/i18n/messages';
 import { isLocale, DEFAULT_LOCALE, type Locale } from '@/lib/i18n/config';
 import '../../stylesheets/account.css';
@@ -18,7 +18,7 @@ export default async function AccountPage({
   const locale: Locale = isLocale(rawLocale) ? (rawLocale as Locale) : DEFAULT_LOCALE;
   const t = getMessages(locale);
 
-  const supabase = await createClient();
+  const supabase = await createSupabaseServerClient();
 
   const {
     data: { user },
