@@ -20,7 +20,9 @@ const components: PortableTextComponents = {
     h2: ({ children }) => <h2 className="lesson-h2">{children}</h2>,
     h3: ({ children }) => <h3 className="lesson-h3">{children}</h3>,
     normal: ({ children }) => <p className="lesson-p">{children}</p>,
-    blockquote: ({ children }) => <blockquote className="lesson-quote">{children}</blockquote>,
+    blockquote: ({ children }) => (
+      <blockquote className="lesson-quote">{children}</blockquote>
+    ),
   },
   list: {
     bullet: ({ children }) => <ul className="lesson-ul">{children}</ul>,
@@ -65,6 +67,8 @@ export function LessonExercises({
   const t = useI18n();
   const L = t.lesson_exercises;
 
+  if (!exercises || exercises.length === 0) return null;
+
   const safeInitialIndex = Math.max(
     0,
     Math.min(initialIndex ?? 0, Math.max(exercises.length - 1, 0)),
@@ -78,8 +82,6 @@ export function LessonExercises({
   const [showModal, setShowModal] = useState(false);
   const [hasSavedExit, setHasSavedExit] = useState(false);
 
-  if (!exercises || exercises.length === 0) return null;
-
   const current = exercises[index];
   const isLast = index === exercises.length - 1;
   const isMcq = current.type === 'mcq';
@@ -87,10 +89,13 @@ export function LessonExercises({
 
   const supabase: SupabaseClient | null = useMemo(() => {
     const url = process.env.NEXT_PUBLIC_SUPABASE_URL ?? process.env.SUPABASE_URL;
-    const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? process.env.SUPABASE_ANON_KEY;
+    const key =
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? process.env.SUPABASE_ANON_KEY;
 
     if (!url || !key) {
-      console.warn('[LessonExercises] Missing Supabase env vars. Progress will not be saved.');
+      console.warn(
+        '[LessonExercises] Missing Supabase env vars. Progress will not be saved.',
+      );
       return null;
     }
 
@@ -126,6 +131,7 @@ export function LessonExercises({
           {
             user_id: user.id,
             lesson_key: lessonKey,
+            // locale la teniamo come “ultimo usato”, ma NON fa parte della chiave
             locale,
             current_index: newIndex,
             completed: isCompleted,
@@ -143,13 +149,6 @@ export function LessonExercises({
             hint: (error as any).hint,
             code: (error as any).code,
           });
-        } else {
-          console.log('[LessonExercises] progress saved', {
-            newIndex,
-            isCompleted,
-            lessonKey,
-            locale,
-          });
         }
       } catch (err: any) {
         console.error('[LessonExercises] saveProgress exception', {
@@ -161,16 +160,16 @@ export function LessonExercises({
   );
 
   const selectedChoice =
-    isMcq && current.choices ? (current.choices.find((c) => c.id === selectedId) ?? null) : null;
+    isMcq && current.choices
+      ? current.choices.find((c) => c.id === selectedId) ?? null
+      : null;
 
   const canConfirm = (() => {
     if (completed) return false;
-    if (isMcq) {
-      return selectedId !== null && status === 'idle';
-    }
-    if (isOpen) {
-      return openAnswer.trim().length > 0 && status === 'idle';
-    }
+
+    if (isMcq) return selectedId !== null && status === 'idle';
+    if (isOpen) return openAnswer.trim().length > 0 && status === 'idle';
+
     return status === 'idle';
   })();
 
@@ -178,8 +177,10 @@ export function LessonExercises({
 
   function handleSelect(choiceId: string) {
     if (!isMcq) return;
-    if (status !== 'idle' || completed) return;
+    if (completed) return;
+
     setSelectedId(choiceId);
+    if (status !== 'idle') setStatus('idle'); // se cambi scelta dopo un tentativo
   }
 
   async function handleConfirm() {
@@ -200,8 +201,8 @@ export function LessonExercises({
 
       const expected = normalizeAnswer(current.expectedAnswer);
       const given = normalizeAnswer(openAnswer);
-
       const ok = given.length > 0 && given === expected;
+
       setStatus(ok ? 'correct' : 'wrong');
       return;
     }
@@ -244,9 +245,7 @@ export function LessonExercises({
     };
 
     window.addEventListener('beforeunload', handler);
-    return () => {
-      window.removeEventListener('beforeunload', handler);
-    };
+    return () => window.removeEventListener('beforeunload', handler);
   }, [index, completed, saveProgress]);
 
   return (
@@ -264,18 +263,19 @@ export function LessonExercises({
             <strong>{current.title}</strong>
           </p>
 
-          {current.promptBlocks && current.promptBlocks.length > 0 && (
+          {current.promptBlocks?.length > 0 && (
             <div className="lesson-ex-prompt">
               <PortableText value={current.promptBlocks} components={components} />
             </div>
           )}
 
-          {isMcq && current.choices.length > 0 && (
+          {isMcq && current.choices?.length > 0 && (
             <ul className="lesson-ex-options">
               {current.choices.map((choice) => {
                 const isSelected = choice.id === selectedId;
                 const isCorrect = status !== 'idle' && choice.correct;
-                const isWrongSelected = status === 'wrong' && isSelected && !choice.correct;
+                const isWrongSelected =
+                  status === 'wrong' && isSelected && !choice.correct;
 
                 let className = 'lesson-ex-option';
                 if (isSelected) className += ' is-selected';
@@ -283,7 +283,11 @@ export function LessonExercises({
                 if (isWrongSelected) className += ' is-wrong';
 
                 return (
-                  <li key={choice.id} className={className} onClick={() => handleSelect(choice.id)}>
+                  <li
+                    key={choice.id}
+                    className={className}
+                    onClick={() => handleSelect(choice.id)}
+                  >
                     {choice.text}
                   </li>
                 );
@@ -311,17 +315,21 @@ export function LessonExercises({
                 <div className="lesson-ex-answer">
                   {status === 'correct' ? (
                     <>
-                      <span className="lesson-ex-answer-label">{L.open_correct_title}</span>
+                      <span className="lesson-ex-answer-label">
+                        {L.open_correct_title}
+                      </span>
                       <span> {L.open_correct_body}</span>
                     </>
                   ) : (
                     <>
-                      <span className="lesson-ex-answer-label">{L.open_wrong_title}</span>
+                      <span className="lesson-ex-answer-label">
+                        {L.open_wrong_title}
+                      </span>
                       <span> {L.open_wrong_body}</span>
                     </>
                   )}
 
-                  {current.solutionBlocks && current.solutionBlocks.length > 0 && (
+                  {current.solutionBlocks?.length > 0 && (
                     <div className="lesson-ex-answer-text">
                       <PortableText value={current.solutionBlocks} components={components} />
                     </div>
@@ -329,7 +337,9 @@ export function LessonExercises({
 
                   {current.expectedAnswer && (
                     <p className="lesson-ex-expected">
-                      <span className="lesson-ex-expected-label">{L.expected_label}</span>{' '}
+                      <span className="lesson-ex-expected-label">
+                        {L.expected_label}
+                      </span>{' '}
                       {current.expectedAnswer}
                     </p>
                   )}
@@ -399,7 +409,7 @@ export function LessonExercises({
                 {L.modal_back_to_list}
               </button>
 
-              {nextLessonHref && (
+              {nextLessonHref ? (
                 <button
                   type="button"
                   className="lesson-modal-btn lesson-modal-btn--primary"
@@ -407,9 +417,7 @@ export function LessonExercises({
                 >
                   {L.modal_next_lesson}
                 </button>
-              )}
-
-              {!nextLessonHref && (
+              ) : (
                 <button
                   type="button"
                   className="lesson-modal-btn"

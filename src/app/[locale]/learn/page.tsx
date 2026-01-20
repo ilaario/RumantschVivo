@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import type { Locale } from '@/lib/i18n/config';
-import { listLessons } from '@/lib/content/lessons';
+import { listLessons, type LessonListItem } from '@/lib/content/lessons';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
 import { getMessages } from '@/lib/i18n/messages';
 import '../../stylesheets/learn.css';
@@ -16,24 +16,15 @@ type Props = {
   params: Promise<LearnPageParams>;
 };
 
-type LessonListItem = {
-  id: string;
-  slug: string;
-  lesson_key: string;
-  title: string;
-  goals: string[];
-  variant?: string | null;
-  level?: string | null;
-};
-
 type LessonStatus = 'new' | 'started' | 'completed';
 
 export default async function LearnPage({ params }: Props) {
   const { locale } = await params;
   const level = 'A0';
 
+  // i18n
   const t = getMessages(locale);
-  const text = t.learn_page; // <-- usa i18n
+  const text = t.learn_page;
 
   // ====== CHECK LOGIN VIA SUPABASE ======
   const supabase = await createSupabaseServerClient();
@@ -45,8 +36,8 @@ export default async function LearnPage({ params }: Props) {
     redirect(`/${locale}/login?redirectTo=/${locale}/learn`);
   }
 
-  // ====== LEZIONI ======
-  const lessons = (await listLessons({ level, locale })) as LessonListItem[];
+  // ====== LEZIONI (da Sanity) ======
+  const lessons: LessonListItem[] = await listLessons({ level, locale });
 
   // ====== PROGRESSO DA SUPABASE ======
   const { data: rows, error } = await supabase
@@ -85,14 +76,15 @@ export default async function LearnPage({ params }: Props) {
       ) : (
         <ul className="learn-list">
           {lessons.map((l) => {
-            const status: LessonStatus = progressByLessonKey.get(l.lesson_key) ?? 'new';
+            const status: LessonStatus =
+              progressByLessonKey.get(l.lesson_key) ?? 'new';
 
             const statusClass =
               status === 'completed'
                 ? 'learn-card--completed'
                 : status === 'started'
-                  ? 'learn-card--started'
-                  : 'learn-card--new';
+                ? 'learn-card--started'
+                : 'learn-card--new';
 
             return (
               <li key={l.id}>

@@ -1,8 +1,9 @@
 // src/lib/content/exercises.ts
+
 import { sanityClient } from '@/sanity/lib/client';
-import { exercisesByLessonQuery } from '@/sanity/lib/queries';
 import type { Locale } from '@/lib/i18n/config';
-import { resolveLocalizedString } from './sanityUtils';
+import { resolveLocalizedString, resolveLocalizedBlocks } from './sanityUtils';
+import { groq } from 'next-sanity';
 
 // ====== TYPES ======
 
@@ -19,7 +20,7 @@ export type Exercise = {
   type: 'mcq' | 'open';
   title: string;
 
-  // comune a tutti: consegna / testo
+  // consegna / testo (Portable Text)
   promptBlocks: any[];
 
   // MCQ
@@ -27,11 +28,73 @@ export type Exercise = {
 
   // OPEN
   expectedAnswer: string | null;
-  // soluzione / spiegazione (per open, e in futuro se vuoi per altro)
   solutionBlocks: any[];
 };
 
-// ====== FETCH ======
+// ====== HELPERS ======
+
+function safeArray<T>(v: unknown): T[] {
+  return Array.isArray(v) ? (v as T[]) : [];
+}
+
+function safeNumber(v: unknown, fallback = 0): number {
+  return typeof v === 'number' ? v : fallback;
+}
+
+function safeString(v: unknown): string | null {
+  return typeof v === 'string' && v.trim().length ? v : null;
+}
+
+// pick traduzione se presente, altrimenti base
+function pick<T>(baseVal: T, trVal: T | undefined | null): T {
+  return (trVal ?? baseVal) as T;
+}
+
+// ====== GROQ ======
+
+/**
+ * Prende tutti gli exerciseBase collegati a una lezione
+ * (via reference: lesson->lessonKey == $lessonKey)
+ * e per ognuno attacca la traduzione corrispondente al locale.
+ *
+ * Assunzioni sullo schema:
+ * - exerciseBase:
+ *    _type == "exerciseBase"
+ *    fields: exerciseKey (string), order (number), type ("mcq" | "open"),
+ *            lesson (ref a lessonBase),
+ *            title, prompt, choices, expectedAnswer, solution
+ * - exerciseTranslation:
+ *    _type == "exerciseTranslation"
+ *    fields: exercise (ref a exerciseBase), locale (string),
+ *            title, prompt, choices, expectedAnswer, solution
+ */
+const exercisesByLessonQuery = groq`
+  *[_type == "exerciseBase" && lesson->lessonKey == $lessonKey]
+  | order(order asc, exerciseKey asc) {
+    _id,
+    exerciseKey,
+    order,
+    type,
+    title,
+    prompt,
+    choices,
+    expectedAnswer,
+    solution,
+    "translation": *[
+      _type == "exerciseTranslation" &&
+      exercise._ref == ^._id &&
+      locale == $locale
+    ][0]{
+      title,
+      prompt,
+      choices,
+      expectedAnswer,
+      solution
+    }
+  }
+`;
+
+// ====== API ======
 
 type GetExercisesParams = {
   lessonKey: string;
@@ -42,41 +105,64 @@ export async function getExercisesForLesson({
   lessonKey,
   locale,
 }: GetExercisesParams): Promise<Exercise[]> {
-  const raw = await sanityClient.fetch(exercisesByLessonQuery, { lessonKey });
+  const raw = await sanityClient.fetch<any[]>(exercisesByLessonQuery, {
+    lessonKey,
+    locale,
+  });
 
-  // forza sempre un array, anche se Sanity torna null / oggetto singolo
-  const list = Array.isArray(raw) ? raw : [];
+  const list = safeArray<any>(raw);
 
-  return list.map((ex: any): Exercise => {
-    // solo 'mcq' o 'open', default mcq se manca / sbagliato
-    const type: 'mcq' | 'open' = ex.type === 'open' ? 'open' : 'mcq';
+  return list.map((ex): Exercise => {
+    const baseType = safeString(ex.type);
+    const type: 'mcq' | 'open' = baseType === 'open' ? 'open' : 'mcq';
 
-    // prompt (portable text localizzato)
-    const promptBlocks = ex.prompt?.[locale] ?? ex.prompt?.it ?? ex.prompt?.en ?? [];
+    const tr = ex.translation ?? {};
 
-    // soluzione (solo per open, ma la normalizziamo sempre come array)
-    const solutionBlocks = ex.solution?.[locale] ?? ex.solution?.it ?? ex.solution?.en ?? [];
+    // ===== title =====
+    const titleRaw = pick(ex.title, tr.title);
+    const title =
+      resolveLocalizedString(titleRaw, locale) ??
+      safeString(titleRaw) ??
+      'Untitled exercise';
 
-    // MCQ choices
+    // ===== prompt / solution (Portable Text) =====
+    const promptRaw = pick(ex.prompt, tr.prompt);
+    const solutionRaw = pick(ex.solution, tr.solution);
+
+    const promptBlocks = resolveLocalizedBlocks(promptRaw, locale);
+    const solutionBlocks = resolveLocalizedBlocks(solutionRaw, locale);
+
+    // ===== choices (MCQ) =====
+    const choicesSource = pick(ex.choices, tr.choices);
     const choices: ExerciseChoice[] =
       type === 'mcq'
-        ? (ex.choices ?? []).map((c: any) => ({
-            id: c._key,
-            text: resolveLocalizedString(c.text, locale) ?? '',
-            correct: !!c.correct,
-          }))
+        ? safeArray<any>(choicesSource).map((c): ExerciseChoice => {
+            const textRaw = c.text;
+            const text =
+              resolveLocalizedString(textRaw, locale) ??
+              safeString(textRaw) ??
+              '';
+            return {
+              id: safeString(c.id) ?? safeString(c._key) ?? '',
+              text,
+              correct: !!c.correct,
+            };
+          })
         : [];
 
-    // OPEN expected answer
+    // ===== expectedAnswer (OPEN) =====
+    const expectedRaw = pick(ex.expectedAnswer, tr.expectedAnswer);
+    const expectedResolved =
+      resolveLocalizedString(expectedRaw, locale) ?? safeString(expectedRaw);
     const expectedAnswer: string | null =
-      type === 'open' ? (resolveLocalizedString(ex.expectedAnswer, locale) ?? null) : null;
+      type === 'open' ? expectedResolved ?? null : null;
 
     return {
       id: ex._id,
-      exerciseKey: ex.exerciseKey,
-      order: ex.order ?? 0,
+      exerciseKey: safeString(ex.exerciseKey) ?? 'unknown',
+      order: safeNumber(ex.order, 0),
       type,
-      title: resolveLocalizedString(ex.title, locale) ?? ex.exerciseKey,
+      title,
       promptBlocks,
       choices,
       expectedAnswer,

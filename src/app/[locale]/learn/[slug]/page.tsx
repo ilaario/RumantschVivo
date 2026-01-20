@@ -1,6 +1,11 @@
 // src/app/[locale]/learn/[slug]/page.tsx
+
 import type { Locale } from '@/lib/i18n/config';
-import { getLesson, listLessons } from '@/lib/content/lessons';
+import {
+  getLesson,
+  listLessons,
+  type LessonListItem,
+} from '@/lib/content/lessons';
 import { getExercisesForLesson } from '@/lib/content/exercises';
 import { PortableBlocks } from '@/lib/content/portableComponents';
 import { LessonExercises } from '@/components/lesson-exercises';
@@ -18,11 +23,14 @@ type PageProps = {
 export default async function LessonPage({ params }: PageProps) {
   const { locale, slug } = await params;
 
+  // ====== LEZIONE ======
   const lesson = await getLesson({ slug, locale });
   if (!lesson) {
+    console.error("Lesson not found")
     return notFound();
   }
 
+  // ====== ESERCIZI (localizzati) ======
   const exercises =
     (await getExercisesForLesson({
       lessonKey: lesson.lessonKey,
@@ -40,27 +48,28 @@ export default async function LessonPage({ params }: PageProps) {
   if (user) {
     const { data, error } = await supabase
       .from('lesson_progress')
-      .select('last_index, completed')
+      .select('current_index, completed')
       .eq('user_id', user.id)
       .eq('lesson_key', lesson.lessonKey)
-      .eq('locale', locale)
+      // niente .eq('locale', locale) perché ora il progresso è condiviso tra lingue
       .maybeSingle();
 
-    if (!error && data && !data.completed && typeof data.last_index === 'number') {
-      initialIndex = Math.max(0, data.last_index);
+    if (!error && data && !data.completed && typeof data.current_index === 'number') {
+      initialIndex = Math.max(0, data.current_index);
     }
   }
 
   // ====== Calcolo "prossima lezione" nello stesso livello ======
   let nextLessonHref: string | undefined;
+
   try {
     if (lesson.level) {
-      const lessonsInLevel = await listLessons({
+      const lessonsInLevel: LessonListItem[] = await listLessons({
         level: lesson.level,
         locale,
       });
 
-      const idx = lessonsInLevel.findIndex((l: any) => l.slug === slug);
+      const idx = lessonsInLevel.findIndex((l) => l.slug === slug);
 
       if (idx >= 0 && idx < lessonsInLevel.length - 1) {
         const next = lessonsInLevel[idx + 1];
