@@ -9,26 +9,56 @@ export const messages = {
       logout: 'Logout',
     },
     home: {
-      hero_title: 'LEARN ROMANSH',
+      hero_title:
+        'LEARNING ROMANSH, '
+        + 'WITH RESPECT AND COMPETENCE.',
+      
       hero_subtitle:
-        'Learn the historical language of the **Canton of Grisons**, '
-        + 'still spoken today by around **60,000 people** in Switzerland. '
-        + 'A clear and structured learning path, focused on **Sursilvan**, '
-        + 'with short lessons, themed vocabulary and guided review.',
+        'RumantschVivo is an educational platform dedicated to Romansh, '
+        + 'designed for learners who want to approach a living language '
+        + 'in an authentic and thoughtful way.',
       hero_b1: 'Start from scratch',
       hero_b2: 'Discover the project',
     
       about_title: 'ABOUT US',
       about_t1:
-        '**RumantschVivo** is a space dedicated to **Romansh**, '
-        + 'a living, rich and often underestimated language. '
-        + 'Here you can learn it in a simple and practical way, '
-        + '**even starting from zero**.',
-      about_t2:
-        'RumantschVivo was created to make Romansh accessible, '
-        + 'understandable and usable, without unnecessary complications.',
-      about_t3:
-        '**Because a language only lives if someone speaks it.**',
+      '**RumantschVivo** was created with a clear goal: '
+      + 'to make Romansh accessible to those who want to learn it '
+      + 'in a serious, authentic, and respectful way.',
+    
+    about_t2:
+      'Romansh is a living language with a strong cultural identity, '
+      + 'yet there are very few learning resources designed for non-native speakers. '
+      + 'RumantschVivo was born from this very gap: '
+      + 'to create a modern platform for learning Romansh, '
+      + 'without artificial simplifications '
+      + 'and without turning it into a folkloristic curiosity.',
+    
+    about_t3:
+      'The content on RumantschVivo is designed for learners of Romansh '
+      + 'as a second language and is written and reviewed by people '
+      + 'who genuinely know the language, '
+      + 'with the support of explanations in Italian, English, and German.',
+    
+    about_t4:
+      'The goal is not just to translate, '
+      + 'but to explain how the language works, '
+      + 'how it is used in real life, '
+      + 'and what makes it unique.',
+    
+    about_t5:
+      'The project grows in a gradual and thoughtful way: '
+      + 'one variety at a time, carefully curated content, '
+      + 'structured exercises, and strong attention to linguistic quality. '
+      + 'RumantschVivo is also an open space for collaboration '
+      + 'with speakers, researchers, and enthusiasts of the Romansh language, '
+      + 'with full respect for its varieties and its history.',
+    
+    about_t6:
+      'RumantschVivo is not a game, nor a simple experiment.',
+    
+    about_t7:
+      '**It is an educational and cultural project built to last.**',
     },
     footer: {
       tagline: 'Learn Romansh. Preserve stories, words and pronunciation.',
@@ -131,5 +161,39 @@ export const messages = {
       bullet_3: 'Content for variants (Sursilvan…)',
       google_button: "Continue with Google",
       or: "or"
+    },
+
+    about: {
+      hero_badge_main: 'RumantschVivo',
+      hero_badge_secondary: 'Independent educational project',
+    
+      hero_card_title: 'For learners who take it seriously.',
+      hero_card_text:
+        'Materials designed for second-language learners, with clear explanations ' +
+        'and a focus on real language use, not just postcard phrases.',
+    
+      hero_pill_1: 'Level A0–A2',
+      hero_pill_2: 'Variant: Sursilvan',
+      hero_pill_3: 'Focus: real usage',
+    
+      mini_language_label: 'Language',
+      mini_language_value: 'Romansh',
+      mini_language_caption:
+        'One of Switzerland’s national languages.',
+    
+      mini_approach_label: 'Approach',
+      mini_approach_value: 'Educational',
+      mini_approach_caption:
+        'Structured, gradual, without artificial gamification.',
+    
+      values_block_1_title: 'What RumantschVivo is not',
+      values_block_1_text:
+        'It is not a five-minute toy, not a random phrasebook, ' +
+        'and it does not reduce Romansh to a folkloric curiosity.',
+    
+      values_block_2_title: 'What it aims to be',
+      values_block_2_text:
+        'A stable, accurate resource that respects the Romansh community, ' +
+        'built over time together with speakers, learners, and researchers.',
     },
   } as const;

@@ -9,26 +9,56 @@ export const messages = {
       logout: 'Logout',
     },
     home: {
-      hero_title: 'IMPARA IL ROMANCIO',
+      hero_title:
+        'IMPARARE IL ROMANCIO, '
+        + 'CON RISPETTO E COMPETENZA',
+    
       hero_subtitle:
-        'Impara la lingua storica del **Canton Grigioni**, '
-        + 'parlata ancora oggi da circa **60.000 persone** in Svizzera. '
-        + 'Un percorso chiaro e strutturato, con focus sul **Sursilvan**, '
-        + 'tra lezioni brevi, vocabolario tematico e ripasso guidato.',
+        'RumantschVivo è una piattaforma educativa dedicata al romancio, '
+        + 'pensata per chi vuole imparare una lingua viva '
+        + 'in modo autentico e consapevole.',
       hero_b1: 'Inizia da zero',
       hero_b2: 'Scopri il progetto',
     
       about_title: 'ABOUT US',
       about_t1:
-        '**RumantschVivo** è uno spazio dedicato al **romancio**, '
-        + 'una lingua viva, ricca e spesso sottovalutata. '
-        + 'Qui puoi impararla in modo semplice e pratico, '
-        + '**anche partendo da zero**.',
+        '**RumantschVivo** nasce con un obiettivo chiaro: '
+        + 'rendere il romancio accessibile a chi vuole impararlo '
+        + 'in modo serio, autentico e rispettoso.',
+      
       about_t2:
-        'RumantschVivo nasce per rendere il romancio accessibile, '
-        + 'comprensibile e usabile, senza complicazioni inutili.',
+        'Il romancio è una lingua viva, con una forte identità culturale, '
+        + 'ma con pochissime risorse didattiche pensate per chi non è madrelingua. '
+        + 'RumantschVivo nasce proprio da questa mancanza: '
+        + 'creare una piattaforma moderna per l’apprendimento del romancio, '
+        + 'senza semplificazioni artificiali '
+        + 'e senza trasformarlo in una curiosità folkloristica.',
+      
       about_t3:
-        '**Perché una lingua vive solo se qualcuno la parla.**',
+        'I contenuti di RumantschVivo sono progettati per chi studia il romancio '
+        + 'come seconda lingua e sono scritti e revisionati da persone '
+        + 'che il romancio lo conoscono davvero, '
+        + 'con il supporto di spiegazioni in italiano, inglese e tedesco.',
+      
+      about_t4:
+        'L’obiettivo non è solo tradurre, '
+        + 'ma spiegare come funziona la lingua, '
+        + 'come viene usata nella vita reale '
+        + 'e quali sono le sue particolarità.',
+      
+      about_t5:
+        'Il progetto cresce in modo graduale e consapevole: '
+        + 'una variante alla volta, contenuti curati, '
+        + 'esercizi strutturati e attenzione alla qualità linguistica. '
+        + 'RumantschVivo è anche uno spazio aperto alla collaborazione '
+        + 'con parlanti, studiosi e appassionati della lingua romancia, '
+        + 'nel rispetto delle sue varianti e della sua storia.',
+      
+      about_t6:
+        'RumantschVivo non è un gioco, né un semplice esperimento.',
+      
+      about_t7:
+        '**È un progetto educativo e culturale pensato per durare.**',                  
     },
     footer: {
       tagline: 'Impara romancio. Preserva storie, parole e pronunce.',
@@ -131,5 +161,38 @@ export const messages = {
       bullet_3: 'Contenuti per varianti (Sursilvan…)',
       google_button: "Accedi con Google",
       or: "oppure"
+    },
+
+    about: {
+      hero_badge_main: 'RumantschVivo',
+      hero_badge_secondary: 'Progetto educativo indipendente',
+    
+      hero_card_title: 'Per chi vuole prenderlo sul serio.',
+      hero_card_text:
+        'Materiali pensati per chi studia il romancio come seconda lingua, ' +
+        'con spiegazioni chiare e un focus sulla lingua reale, non da cartolina.',
+    
+      hero_pill_1: 'Livello A0–A2',
+      hero_pill_2: 'Variante: Sursilvan',
+      hero_pill_3: 'Focus: uso reale',
+    
+      mini_language_label: 'Lingua',
+      mini_language_value: 'Romancio',
+      mini_language_caption: 'Una delle lingue nazionali della Svizzera.',
+    
+      mini_approach_label: 'Approccio',
+      mini_approach_value: 'Educativo',
+      mini_approach_caption:
+        'Strutturato, graduale, senza gamification forzata.',
+    
+      values_block_1_title: 'Cosa non è RumantschVivo',
+      values_block_1_text:
+        'Non è un giochino da cinque minuti, non è una collezione di frasi fatte ' +
+        'e non riduce il romancio a curiosità folkloristica.',
+    
+      values_block_2_title: 'Cosa vuole diventare',
+      values_block_2_text:
+        'Una risorsa stabile, accurata e rispettosa della comunità romancia, ' +
+        'costruita nel tempo insieme a chi la lingua la parla, la studia e la usa.',
     },
   } as const;

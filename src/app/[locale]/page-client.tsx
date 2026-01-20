@@ -52,30 +52,6 @@ export default function Home() {
             />
         </div>
       </section>
-
-      <section className="about_us">
-        <div className="about__left" aria-hidden="true">
-          {/* Sostituisci src con la tua mappa */}
-          <img
-              className="about__svg"
-              src="/images/graubuenden-map.svg"
-              alt="Mappa del Canton Grigioni"
-            />
-        </div>
-
-        <div className="about__right">
-          <h1 className="about__title">{t.home.about_title}</h1>
-          <p className="about__subtitle">
-            {renderRich(t.home.about_t1)}
-          </p>
-          <p className="about__subtitle">
-            {renderRich(t.home.about_t2)}
-          </p>
-          <p className="about__subtitle">
-            {renderRich(t.home.about_t3)}
-          </p>
-        </div>
-      </section>
     </main>
   );
 }
