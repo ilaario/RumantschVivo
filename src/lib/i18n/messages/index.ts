@@ -1,8 +1,10 @@
 import type { Locale } from '../config';
 import { messages as it } from './it';
 import { messages as en } from './en';
+import { messages as de } from './de';
+import { messages as fr } from './fr';
 
-const all = { it, en } as const;
+const all = { it, en, de, fr } as const;
 
 export type Messages = (typeof all)[Locale];
 

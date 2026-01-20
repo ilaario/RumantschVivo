@@ -39,8 +39,12 @@ export default function ContributePage() {
                 <p className="contributors__panel-text">{t.contributors.panel_text}</p>
 
                 <div className="contributors__panel-note">
-                  <div className="contributors__panel-note-title">{t.contributors.panel_note_title}</div>
-                  <div className="contributors__panel-note-text">{t.contributors.panel_note_text}</div>
+                  <div className="contributors__panel-note-title">
+                    {t.contributors.panel_note_title}
+                  </div>
+                  <div className="contributors__panel-note-text">
+                    {t.contributors.panel_note_text}
+                  </div>
                 </div>
               </div>
             </aside>

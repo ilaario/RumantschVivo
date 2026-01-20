@@ -2,43 +2,42 @@
    WIP PAGE
    ========================= */
 
-   .wip-page {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: #f4f1ec; /* beige pietra */
-    padding: 24px;
-  }
-  
+.wip-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f4f1ec; /* beige pietra */
+  padding: 24px;
+}
+
+.wip-text {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #2f4f3e; /* verde abete */
+  text-align: center;
+  position: relative;
+}
+
+/* sottolineatura elegante, non anni 90 */
+.wip-text::after {
+  content: '';
+  display: block;
+  width: 64px;
+  height: 3px;
+  margin: 14px auto 0;
+  border-radius: 999px;
+  background: #9c3d2b; /* rosso spento */
+  opacity: 0.85;
+}
+
+/* piccolo respiro su mobile */
+@media (max-width: 480px) {
   .wip-text {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
-      Roboto, Arial, sans-serif;
-    font-size: 1.4rem;
-    font-weight: 700;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: #2f4f3e; /* verde abete */
-    text-align: center;
-    position: relative;
+    font-size: 1.2rem;
+    letter-spacing: 0.1em;
   }
-  
-  /* sottolineatura elegante, non anni 90 */
-  .wip-text::after {
-    content: "";
-    display: block;
-    width: 64px;
-    height: 3px;
-    margin: 14px auto 0;
-    border-radius: 999px;
-    background: #9c3d2b; /* rosso spento */
-    opacity: 0.85;
-  }
-  
-  /* piccolo respiro su mobile */
-  @media (max-width: 480px) {
-    .wip-text {
-      font-size: 1.2rem;
-      letter-spacing: 0.1em;
-    }
-  }
+}

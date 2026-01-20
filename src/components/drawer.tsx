@@ -9,13 +9,7 @@ import { withLocale } from '@/lib/i18n/path';
 import { useI18n } from '@/lib/i18n/i18nprovider';
 import { isLocale, type Locale } from '@/lib/i18n/config';
 
-export default function Drawer({
-  open,
-  onClose,
-}: {
-  open: boolean;
-  onClose: () => void;
-}) {
+export default function Drawer({ open, onClose }: { open: boolean; onClose: () => void }) {
   const pathname = usePathname();
   const router = useRouter();
   const [session, setSession] = useState<Session | null>(null);
@@ -93,7 +87,7 @@ export default function Drawer({
             <span className="drawer-icon" aria-hidden="true" />
           </button>
 
-        {/* Home locale */}
+          {/* Home locale */}
           <Link
             href={hrefWithLocale('/')}
             className="drawer-brand"

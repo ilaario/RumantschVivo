@@ -39,11 +39,7 @@ const TOTAL_LESSONS_QUERY = groq`
   count(*[_type == "lesson"])
 `;
 
-export default async function AccountPage({
-  params,
-}: {
-  params: Promise<{ locale: string }>;
-}) {
+export default async function AccountPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale: rawLocale } = await params;
   const locale: Locale = isLocale(rawLocale) ? (rawLocale as Locale) : DEFAULT_LOCALE;
   const t = getMessages(locale);
@@ -73,9 +69,7 @@ export default async function AccountPage({
   const progress = (progressRows ?? []) as LessonProgressRow[];
 
   // ===== METADATI LEZIONI DA SANITY =====
-  const uniqueKeys = Array.from(
-    new Set(progress.map((p) => p.lesson_key).filter(Boolean)),
-  );
+  const uniqueKeys = Array.from(new Set(progress.map((p) => p.lesson_key).filter(Boolean)));
 
   let totalLessons = 0;
   const lessonMetaMap = new Map<
@@ -91,10 +85,9 @@ export default async function AccountPage({
     totalLessons = await sanityClient.fetch<number>(TOTAL_LESSONS_QUERY);
 
     if (uniqueKeys.length > 0) {
-      const sanityLessons = await sanityClient.fetch<LessonMeta[]>(
-        LESSONS_BY_KEYS_QUERY,
-        { keys: uniqueKeys },
-      );
+      const sanityLessons = await sanityClient.fetch<LessonMeta[]>(LESSONS_BY_KEYS_QUERY, {
+        keys: uniqueKeys,
+      });
 
       for (const l of sanityLessons) {
         const localizedTitle =
@@ -157,9 +150,7 @@ export default async function AccountPage({
               <div className="k">{t.account.overview.name}</div>
               <div className="v">
                 {profile?.display_name || (
-                  <span className="v muted">
-                    {t.account.overview.name_missing}
-                  </span>
+                  <span className="v muted">{t.account.overview.name_missing}</span>
                 )}
               </div>
             </div>
@@ -223,9 +214,9 @@ export default async function AccountPage({
                           </div>
                         </div>
 
-                          <Link href={href} className="recent-link">
-                            {t.account.overview.open_lesson}
-                          </Link>
+                        <Link href={href} className="recent-link">
+                          {t.account.overview.open_lesson}
+                        </Link>
                       </div>
                     </li>
                   );

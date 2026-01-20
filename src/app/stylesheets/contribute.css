@@ -1,162 +1,162 @@
 .contribute {
-    --c-bg: #F4F1EC;
-    --c-card: #FFFFFF;
-    --c-ink: var(--foreground);
-    --c-muted: var(--rv-rock);
-    --c-border: var(--rv-border);
-    --c-accent: var(--rv-rust);
-    --c-accent-2: var(--rv-forest);
-  
-    background: var(--c-bg);
-    color: var(--c-ink);
-    min-height: 100vh;
-  }
-  
-  .contribute__container {
-    max-width: 960px;
-    margin: 0 auto;
-    padding: 0 16px;
-  }
-  
-  /* HERO */
-  
-  .contribute__hero {
-    padding: 44px 0 20px;
-  }
-  
-  .contribute__badge {
-    display: inline-flex;
-    align-items: center;
-    padding: 6px 12px;
-    border-radius: 999px;
-    background: rgba(255, 255, 255, 0.8);
-    border: 1px solid rgba(0, 0, 0, 0.08);
-    font-size: 12px;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--c-muted);
-    margin-bottom: 12px;
-  }
-  
-  .contribute__title {
-    margin: 0 0 8px 0;
-    font-size: 2.1rem;
-    line-height: 1.2;
-    font-weight: 900;
-    color: var(--c-ink);
-  }
-  
-  .contribute__lead {
-    margin: 0;
-    max-width: 60ch;
-    font-size: 1.02rem;
-    line-height: 1.7;
-    color: var(--c-muted);
-  }
-  
-  /* SEZIONE PRINCIPALE */
-  
-  .contribute__section {
-    padding: 10px 0 40px;
-  }
-  
+  --c-bg: #f4f1ec;
+  --c-card: #ffffff;
+  --c-ink: var(--foreground);
+  --c-muted: var(--rv-rock);
+  --c-border: var(--rv-border);
+  --c-accent: var(--rv-rust);
+  --c-accent-2: var(--rv-forest);
+
+  background: var(--c-bg);
+  color: var(--c-ink);
+  min-height: 100vh;
+}
+
+.contribute__container {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+/* HERO */
+
+.contribute__hero {
+  padding: 44px 0 20px;
+}
+
+.contribute__badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--c-muted);
+  margin-bottom: 12px;
+}
+
+.contribute__title {
+  margin: 0 0 8px 0;
+  font-size: 2.1rem;
+  line-height: 1.2;
+  font-weight: 900;
+  color: var(--c-ink);
+}
+
+.contribute__lead {
+  margin: 0;
+  max-width: 60ch;
+  font-size: 1.02rem;
+  line-height: 1.7;
+  color: var(--c-muted);
+}
+
+/* SEZIONE PRINCIPALE */
+
+.contribute__section {
+  padding: 10px 0 40px;
+}
+
+.contribute__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.contribute__card {
+  background: var(--c-card);
+  border-radius: 18px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  padding: 18px 16px 18px;
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.05);
+}
+
+.contribute__lang-heading {
+  margin: 0 0 10px 0;
+  font-size: 0.95rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--c-muted);
+}
+
+.contribute__p {
+  margin: 0 0 10px 0;
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: var(--c-muted);
+}
+
+/* LISTA PUNTI */
+
+.contribute__list {
+  list-style: none;
+  margin: 6px 0 12px 0;
+  padding: 0;
+  display: grid;
+  gap: 6px;
+}
+
+.contribute__list-item {
+  display: grid;
+  grid-template-columns: 10px 1fr;
+  gap: 8px;
+  align-items: flex-start;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--c-ink);
+}
+
+.contribute__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  margin-top: 7px;
+  background: var(--c-accent);
+}
+
+/* EMAIL BOX */
+
+.contribute__email {
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.contribute__email-label {
+  font-size: 0.9rem;
+  color: var(--c-muted);
+  margin-bottom: 4px;
+}
+
+.contribute__email-link {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--c-accent-2);
+  text-decoration: none;
+  word-break: break-all;
+}
+
+.contribute__email-link:hover {
+  text-decoration: underline;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 840px) {
   .contribute__grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 16px;
+    grid-template-columns: 1fr;
   }
-  
-  .contribute__card {
-    background: var(--c-card);
-    border-radius: 18px;
-    border: 1px solid rgba(0, 0, 0, 0.08);
-    padding: 18px 16px 18px;
-    box-shadow: 0 10px 26px rgba(0, 0, 0, 0.05);
+
+  .contribute__hero {
+    padding-top: 32px;
   }
-  
-  .contribute__lang-heading {
-    margin: 0 0 10px 0;
-    font-size: 0.95rem;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--c-muted);
+
+  .contribute__title {
+    font-size: 1.8rem;
   }
-  
-  .contribute__p {
-    margin: 0 0 10px 0;
-    font-size: 0.95rem;
-    line-height: 1.7;
-    color: var(--c-muted);
-  }
-  
-  /* LISTA PUNTI */
-  
-  .contribute__list {
-    list-style: none;
-    margin: 6px 0 12px 0;
-    padding: 0;
-    display: grid;
-    gap: 6px;
-  }
-  
-  .contribute__list-item {
-    display: grid;
-    grid-template-columns: 10px 1fr;
-    gap: 8px;
-    align-items: flex-start;
-    font-size: 0.95rem;
-    line-height: 1.6;
-    color: var(--c-ink);
-  }
-  
-  .contribute__dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 999px;
-    margin-top: 7px;
-    background: var(--c-accent);
-  }
-  
-  /* EMAIL BOX */
-  
-  .contribute__email {
-    margin-top: 12px;
-    padding-top: 10px;
-    border-top: 1px solid rgba(0, 0, 0, 0.06);
-  }
-  
-  .contribute__email-label {
-    font-size: 0.9rem;
-    color: var(--c-muted);
-    margin-bottom: 4px;
-  }
-  
-  .contribute__email-link {
-    display: inline-flex;
-    align-items: center;
-    font-size: 0.95rem;
-    font-weight: 600;
-    color: var(--c-accent-2);
-    text-decoration: none;
-    word-break: break-all;
-  }
-  
-  .contribute__email-link:hover {
-    text-decoration: underline;
-  }
-  
-  /* RESPONSIVE */
-  
-  @media (max-width: 840px) {
-    .contribute__grid {
-      grid-template-columns: 1fr;
-    }
-  
-    .contribute__hero {
-      padding-top: 32px;
-    }
-  
-    .contribute__title {
-      font-size: 1.8rem;
-    }
-  }
+}

@@ -75,7 +75,9 @@
   height: 2px;
   background: var(--rv-rock);
   border-radius: 999px;
-  transition: transform 0.2s ease, background 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease;
 }
 
 .navIcon::before,
@@ -87,7 +89,10 @@
   height: 2px;
   background: var(--rv-rock);
   border-radius: 999px;
-  transition: transform 0.2s ease, top 0.2s ease, opacity 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    top 0.2s ease,
+    opacity 0.2s ease;
 }
 
 .navIcon::before {
@@ -162,7 +167,10 @@
   font-weight: 700;
   text-decoration: none;
 
-  transition: background-color 0.2s ease, color 0.2s ease, transform 0.05s ease;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    transform 0.05s ease;
 }
 
 .top-right-button:hover {
@@ -209,7 +217,10 @@
   line-height: 1;
   padding: 4px 6px;
   border-radius: 999px;
-  transition: background 0.15s ease, transform 0.05s ease, border-color 0.15s ease;
+  transition:
+    background 0.15s ease,
+    transform 0.05s ease,
+    border-color 0.15s ease;
 }
 
 .lang-btn:hover {
@@ -220,4 +231,184 @@
 .lang-btn--active {
   border-color: var(--rv-border);
   background: var(--rv-snow);
+}
+
+/* --- Right side wrapper (language + account buttons) --- */
+.navRight {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Desktop shows 4 flags */
+.lang-switch--desktop {
+  display: flex;
+  gap: 6px;
+}
+
+/* Mobile dropdown hidden on desktop */
+.lang-switch--mobile {
+  display: none;
+  position: relative;
+}
+
+/* Existing lang button can stay; here’s a mild improvement */
+.lang-btn {
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  background: #fff;
+  border-radius: 10px;
+  padding: 6px 8px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.lang-btn--active {
+  border-color: rgba(47, 79, 62, 0.45);
+  box-shadow: 0 0 0 3px rgba(47, 79, 62, 0.12);
+}
+
+/* --- Mobile dropdown trigger --- */
+.lang-current {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border-radius: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  background: #fff;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.lang-current.is-open {
+  border-color: rgba(47, 79, 62, 0.45);
+  box-shadow: 0 0 0 3px rgba(47, 79, 62, 0.12);
+}
+
+.lang-flag {
+  font-size: 16px;
+}
+
+/* caret (pure css triangle-ish) */
+.lang-caret {
+  width: 10px;
+  height: 10px;
+  display: inline-block;
+  border-right: 2px solid rgba(0, 0, 0, 0.45);
+  border-bottom: 2px solid rgba(0, 0, 0, 0.45);
+  transform: rotate(45deg);
+  transition: transform 180ms ease;
+  margin-top: -2px;
+}
+
+.lang-current.is-open .lang-caret {
+  transform: rotate(225deg);
+}
+
+/* --- Dropdown menu with animation --- */
+.lang-menu {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  min-width: 190px;
+
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 16px;
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.12);
+
+  overflow: hidden;
+
+  opacity: 0;
+  transform: translateY(-8px) scale(0.98);
+  pointer-events: none;
+
+  transition:
+    opacity 180ms ease,
+    transform 220ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.lang-menu.is-open {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+
+/* Menu items */
+.lang-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  padding: 10px 12px;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  text-align: left;
+
+  font-size: 14px;
+  color: #2b2b2b;
+}
+
+.lang-item:hover {
+  background: rgba(244, 241, 236, 0.85);
+}
+
+.lang-item.is-active {
+  background: rgba(47, 79, 62, 0.08);
+}
+
+.lang-item-flag {
+  font-size: 16px;
+}
+
+.lang-item-label {
+  flex: 1;
+}
+
+.lang-item-pill {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: rgba(47, 79, 62, 0.14);
+  color: #2f4f3e;
+}
+
+/* --- Responsive behavior --- */
+@media (max-width: 720px) {
+  .lang-switch--desktop {
+    display: none;
+  }
+  .lang-switch--mobile {
+    display: block;
+  }
+}
+
+.lang-current {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.lang-caret {
+  width: 8px;
+  height: 8px;
+
+  border-right: 2px solid rgba(0, 0, 0, 0.55);
+  border-bottom: 2px solid rgba(0, 0, 0, 0.55);
+
+  transform: rotate(45deg);
+  transform-origin: 50% 50%;
+  transition: transform 0.2s ease;
+
+  display: inline-block;
+  vertical-align: middle;
+  margin-top: 0; /* IMPORTANTE */
+}
+
+.lang-current.is-open .lang-caret {
+  transform: rotate(225deg);
+  top: 1px;
 }

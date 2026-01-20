@@ -1,11 +1,6 @@
 'use client';
 
-import {
-  useMemo,
-  useState,
-  useEffect,
-  useCallback,
-} from 'react';
+import { useMemo, useState, useEffect, useCallback } from 'react';
 import { PortableText, type PortableTextComponents } from '@portabletext/react';
 import type { Exercise } from '@/lib/content/exercises';
 import type { Locale } from '@/lib/i18n/config';
@@ -13,6 +8,11 @@ import type { Locale } from '@/lib/i18n/config';
 import { createBrowserClient } from '@supabase/ssr';
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { useRouter } from 'next/navigation';
+import { useI18n } from '@/lib/i18n/i18nprovider';
+
+function format(template: string, vars: Record<string, string | number>) {
+  return template.replace(/\{(\w+)\}/g, (_, k) => String(vars[k] ?? ''));
+}
 
 const components: PortableTextComponents = {
   block: {
@@ -20,9 +20,7 @@ const components: PortableTextComponents = {
     h2: ({ children }) => <h2 className="lesson-h2">{children}</h2>,
     h3: ({ children }) => <h3 className="lesson-h3">{children}</h3>,
     normal: ({ children }) => <p className="lesson-p">{children}</p>,
-    blockquote: ({ children }) => (
-      <blockquote className="lesson-quote">{children}</blockquote>
-    ),
+    blockquote: ({ children }) => <blockquote className="lesson-quote">{children}</blockquote>,
   },
   list: {
     bullet: ({ children }) => <ul className="lesson-ul">{children}</ul>,
@@ -38,63 +36,6 @@ const components: PortableTextComponents = {
     code: ({ children }) => <code className="lesson-code">{children}</code>,
   },
 };
-
-const ui = {
-  it: {
-    exercisesLabel: 'ESERCIZI',
-    exerciseOf: (i: number, total: number) => `Esercizio ${i} di ${total}`,
-    openHint:
-      'Scrivi la tua risposta, poi premi "Conferma" per vedere se coincide con la soluzione prevista.',
-    openCorrectTitle: 'Corretto!',
-    openCorrectBody: 'La tua risposta coincide con quella attesa.',
-    openWrongTitle: 'Risposta diversa.',
-    openWrongBody: 'Qui sotto trovi una possibile soluzione.',
-    expectedLabel: 'Risposta attesa:',
-    mcqCorrectTitle: 'Corretto!',
-    mcqCorrectBody: 'Ottimo lavoro.',
-    mcqWrongTitle: 'Risposta sbagliata.',
-    mcqWrongBody: 'Prova a riguardare la lezione o gli esempi sopra.',
-    confirm: 'Conferma',
-    next: 'Avanti',
-    finish: 'Fine',
-    textareaPlaceholder: 'Scrivi qui la tua risposta…',
-    completedBanner: 'Lezione completata! ✅',
-    modalTitle: 'Lezione completata 🎉',
-    modalBody:
-      'Hai completato tutti gli esercizi di questa lezione. Cosa vuoi fare adesso?',
-    modalBackToList: 'Torna alla lista delle lezioni',
-    modalNextLesson: 'Prossima lezione',
-    modalStayHere: 'Rimani su questa lezione',
-    backToListInline: 'Torna alla lista',
-  },
-  en: {
-    exercisesLabel: 'EXERCISES',
-    exerciseOf: (i: number, total: number) => `Exercise ${i} of ${total}`,
-    openHint:
-      'Write your answer, then press "Confirm" to see if it matches the expected solution.',
-    openCorrectTitle: 'Correct!',
-    openCorrectBody: 'Your answer matches the expected one.',
-    openWrongTitle: 'Different answer.',
-    openWrongBody: 'Below you can see a suggested solution.',
-    expectedLabel: 'Expected answer:',
-    mcqCorrectTitle: 'Correct!',
-    mcqCorrectBody: 'Nice job.',
-    mcqWrongTitle: 'Wrong answer.',
-    mcqWrongBody: 'Try reviewing the lesson or the examples above.',
-    confirm: 'Confirm',
-    next: 'Next',
-    finish: 'Finish',
-    textareaPlaceholder: 'Write your answer here…',
-    completedBanner: 'Lesson completed! ✅',
-    modalTitle: 'Lesson completed 🎉',
-    modalBody:
-      'You have completed all the exercises for this lesson. What would you like to do now?',
-    modalBackToList: 'Back to lesson list',
-    modalNextLesson: 'Next lesson',
-    modalStayHere: 'Stay on this lesson',
-    backToListInline: 'Back to list',
-  },
-} as const;
 
 type Props = {
   exercises: Exercise[];
@@ -121,6 +62,8 @@ export function LessonExercises({
   initialIndex,
 }: Props) {
   const router = useRouter();
+  const t = useI18n();
+  const L = t.lesson_exercises;
 
   const safeInitialIndex = Math.max(
     0,
@@ -137,22 +80,17 @@ export function LessonExercises({
 
   if (!exercises || exercises.length === 0) return null;
 
-  const L = locale in ui ? ui[locale as 'it' | 'en'] : ui.it;
   const current = exercises[index];
   const isLast = index === exercises.length - 1;
   const isMcq = current.type === 'mcq';
   const isOpen = current.type === 'open';
 
   const supabase: SupabaseClient | null = useMemo(() => {
-    const url =
-      process.env.NEXT_PUBLIC_SUPABASE_URL ?? process.env.SUPABASE_URL;
-    const key =
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? process.env.SUPABASE_ANON_KEY;
+    const url = process.env.NEXT_PUBLIC_SUPABASE_URL ?? process.env.SUPABASE_URL;
+    const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? process.env.SUPABASE_ANON_KEY;
 
     if (!url || !key) {
-      console.warn(
-        '[LessonExercises] Missing Supabase env vars. Progress will not be saved.',
-      );
+      console.warn('[LessonExercises] Missing Supabase env vars. Progress will not be saved.');
       return null;
     }
 
@@ -184,20 +122,16 @@ export function LessonExercises({
           return;
         }
 
-        const { error } = await supabase
-        .from('lesson_progress')
-        .upsert(
+        const { error } = await supabase.from('lesson_progress').upsert(
           {
             user_id: user.id,
             lesson_key: lessonKey,
-            // locale viene comunque aggiornato all'ultimo usato
             locale,
             current_index: newIndex,
             completed: isCompleted,
             updated_at: new Date().toISOString(),
           },
           {
-            // <<< QUI LA PARTE IMPORTANTE
             onConflict: 'user_id,lesson_key',
           },
         );
@@ -227,9 +161,7 @@ export function LessonExercises({
   );
 
   const selectedChoice =
-    isMcq && current.choices
-      ? current.choices.find((c) => c.id === selectedId) ?? null
-      : null;
+    isMcq && current.choices ? (current.choices.find((c) => c.id === selectedId) ?? null) : null;
 
   const canConfirm = (() => {
     if (completed) return false;
@@ -307,7 +239,6 @@ export function LessonExercises({
   useEffect(() => {
     const handler = () => {
       if (!completed) {
-        // best-effort, non aspettiamo
         void saveProgress(index, false);
       }
     };
@@ -322,29 +253,20 @@ export function LessonExercises({
     <>
       <section className="lesson-exercises">
         <header className="lesson-ex-header">
-          <div className="lesson-ex-label">{L.exercisesLabel}</div>
+          <div className="lesson-ex-label">{L.exercises_label}</div>
           <div className="lesson-ex-progress">
-            {L.exerciseOf(index + 1, exercises.length)}
+            {format(L.exercise_of, { i: index + 1, total: exercises.length })}
           </div>
         </header>
 
         <div className="lesson-ex-body">
-          {completed && (
-            <div className="lesson-ex-completed-banner">
-              {L.completedBanner}
-            </div>
-          )}
-
           <p className="lesson-ex-prompt-title">
             <strong>{current.title}</strong>
           </p>
 
           {current.promptBlocks && current.promptBlocks.length > 0 && (
             <div className="lesson-ex-prompt">
-              <PortableText
-                value={current.promptBlocks}
-                components={components}
-              />
+              <PortableText value={current.promptBlocks} components={components} />
             </div>
           )}
 
@@ -353,8 +275,7 @@ export function LessonExercises({
               {current.choices.map((choice) => {
                 const isSelected = choice.id === selectedId;
                 const isCorrect = status !== 'idle' && choice.correct;
-                const isWrongSelected =
-                  status === 'wrong' && isSelected && !choice.correct;
+                const isWrongSelected = status === 'wrong' && isSelected && !choice.correct;
 
                 let className = 'lesson-ex-option';
                 if (isSelected) className += ' is-selected';
@@ -362,11 +283,7 @@ export function LessonExercises({
                 if (isWrongSelected) className += ' is-wrong';
 
                 return (
-                  <li
-                    key={choice.id}
-                    className={className}
-                    onClick={() => handleSelect(choice.id)}
-                  >
+                  <li key={choice.id} className={className} onClick={() => handleSelect(choice.id)}>
                     {choice.text}
                   </li>
                 );
@@ -376,12 +293,12 @@ export function LessonExercises({
 
           {isOpen && (
             <div className="lesson-ex-open">
-              <p className="lesson-ex-open-hint">{L.openHint}</p>
+              <p className="lesson-ex-open-hint">{L.open_hint}</p>
 
               <textarea
                 className="lesson-ex-open-input"
                 rows={4}
-                placeholder={L.textareaPlaceholder}
+                placeholder={L.textarea_placeholder}
                 value={openAnswer}
                 onChange={(e) => {
                   setOpenAnswer(e.target.value);
@@ -394,35 +311,25 @@ export function LessonExercises({
                 <div className="lesson-ex-answer">
                   {status === 'correct' ? (
                     <>
-                      <span className="lesson-ex-answer-label">
-                        {L.openCorrectTitle}
-                      </span>
-                      <span> {L.openCorrectBody}</span>
+                      <span className="lesson-ex-answer-label">{L.open_correct_title}</span>
+                      <span> {L.open_correct_body}</span>
                     </>
                   ) : (
                     <>
-                      <span className="lesson-ex-answer-label">
-                        {L.openWrongTitle}
-                      </span>
-                      <span> {L.openWrongBody}</span>
+                      <span className="lesson-ex-answer-label">{L.open_wrong_title}</span>
+                      <span> {L.open_wrong_body}</span>
                     </>
                   )}
 
-                  {current.solutionBlocks &&
-                    current.solutionBlocks.length > 0 && (
-                      <div className="lesson-ex-answer-text">
-                        <PortableText
-                          value={current.solutionBlocks}
-                          components={components}
-                        />
-                      </div>
-                    )}
+                  {current.solutionBlocks && current.solutionBlocks.length > 0 && (
+                    <div className="lesson-ex-answer-text">
+                      <PortableText value={current.solutionBlocks} components={components} />
+                    </div>
+                  )}
 
                   {current.expectedAnswer && (
                     <p className="lesson-ex-expected">
-                      <span className="lesson-ex-expected-label">
-                        {L.expectedLabel}
-                      </span>{' '}
+                      <span className="lesson-ex-expected-label">{L.expected_label}</span>{' '}
                       {current.expectedAnswer}
                     </p>
                   )}
@@ -435,17 +342,13 @@ export function LessonExercises({
             <div className="lesson-ex-answer">
               {status === 'correct' ? (
                 <>
-                  <span className="lesson-ex-answer-label">
-                    {L.mcqCorrectTitle}
-                  </span>
-                  <span> {L.mcqCorrectBody}</span>
+                  <span className="lesson-ex-answer-label">{L.mcq_correct_title}</span>
+                  <span> {L.mcq_correct_body}</span>
                 </>
               ) : (
                 <>
-                  <span className="lesson-ex-answer-label">
-                    {L.mcqWrongTitle}
-                  </span>
-                  <span> {L.mcqWrongBody}</span>
+                  <span className="lesson-ex-answer-label">{L.mcq_wrong_title}</span>
+                  <span> {L.mcq_wrong_body}</span>
                 </>
               )}
             </div>
@@ -453,13 +356,12 @@ export function LessonExercises({
         </div>
 
         <footer className="lesson-ex-footer">
-          {/* nuovo bottone "torna alla lista" */}
           <button
             type="button"
             className="lesson-ex-btn lesson-ex-btn--ghost lesson-ex-btn--back"
             onClick={handleExitToList}
           >
-            {L.backToListInline}
+            {L.back_to_list_inline}
           </button>
 
           <button
@@ -485,8 +387,8 @@ export function LessonExercises({
       {showModal && (
         <div className="lesson-modal-backdrop">
           <div className="lesson-modal">
-            <h2 className="lesson-modal-title">{L.modalTitle}</h2>
-            <p className="lesson-modal-body">{L.modalBody}</p>
+            <h2 className="lesson-modal-title">{L.modal_title}</h2>
+            <p className="lesson-modal-body">{L.modal_body}</p>
 
             <div className="lesson-modal-actions">
               <button
@@ -494,7 +396,7 @@ export function LessonExercises({
                 className="lesson-modal-btn lesson-modal-btn--secondary"
                 onClick={handleExitToList}
               >
-                {L.modalBackToList}
+                {L.modal_back_to_list}
               </button>
 
               {nextLessonHref && (
@@ -503,7 +405,7 @@ export function LessonExercises({
                   className="lesson-modal-btn lesson-modal-btn--primary"
                   onClick={() => router.push(nextLessonHref)}
                 >
-                  {L.modalNextLesson}
+                  {L.modal_next_lesson}
                 </button>
               )}
 
@@ -513,7 +415,7 @@ export function LessonExercises({
                   className="lesson-modal-btn"
                   onClick={() => setShowModal(false)}
                 >
-                  {L.modalStayHere}
+                  {L.modal_stay_here}
                 </button>
               )}
             </div>

@@ -43,13 +43,8 @@ export default function ContributePage() {
             <p className="contribute__p">{t.contribute.it_p3}</p>
 
             <div className="contribute__email">
-              <div className="contribute__email-label">
-                {t.contribute.email_label_it}
-              </div>
-              <a
-                href="mailto:contributors@rumantschvivo.it"
-                className="contribute__email-link"
-              >
+              <div className="contribute__email-label">{t.contribute.email_label_it}</div>
+              <a href="mailto:contributors@rumantschvivo.it" className="contribute__email-link">
                 contributors@rumantschvivo.it
               </a>
             </div>
@@ -80,13 +75,8 @@ export default function ContributePage() {
             <p className="contribute__p">{t.contribute.en_p3}</p>
 
             <div className="contribute__email">
-              <div className="contribute__email-label">
-                {t.contribute.email_label_en}
-              </div>
-              <a
-                href="mailto:contributors@rumantschvivo.it"
-                className="contribute__email-link"
-              >
+              <div className="contribute__email-label">{t.contribute.email_label_en}</div>
+              <a href="mailto:contributors@rumantschvivo.it" className="contribute__email-link">
                 contributors@rumantschvivo.it
               </a>
             </div>

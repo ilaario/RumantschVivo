@@ -126,10 +126,7 @@ export default defineType({
 
       const typeLabel = type ? `Tipo: ${type}` : null;
 
-      const subtitleParts = [
-        typeLabel,
-        lessonKey ? `Lezione: ${lessonKey}` : null,
-      ].filter(Boolean);
+      const subtitleParts = [typeLabel, lessonKey ? `Lezione: ${lessonKey}` : null].filter(Boolean);
 
       return {
         title,

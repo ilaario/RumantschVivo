@@ -1,4 +1,4 @@
-import "../../stylesheets/wip.css"
+import '../../stylesheets/wip.css';
 
 export default function Wip() {
   return (

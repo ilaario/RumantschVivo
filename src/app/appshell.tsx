@@ -24,7 +24,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
 
   return (
     <>
-      <Header drawerOpen={drawerOpen} onToggleDrawer={() => setDrawerOpen(v => !v)} />
+      <Header drawerOpen={drawerOpen} onToggleDrawer={() => setDrawerOpen((v) => !v)} />
       <Drawer open={drawerOpen} onClose={() => setDrawerOpen(false)} />
       {children}
     </>

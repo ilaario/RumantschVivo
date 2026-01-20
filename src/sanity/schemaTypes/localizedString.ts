@@ -1,4 +1,4 @@
-import {defineType} from 'sanity';
+import { defineType } from 'sanity';
 
 export default defineType({
   name: 'localizedString',
@@ -17,4 +17,3 @@ export default defineType({
     },
   ],
 });
-

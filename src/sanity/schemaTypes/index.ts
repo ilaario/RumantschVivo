@@ -6,7 +6,7 @@ import exercise from './exercise';
 import blockContent from './blockContent';
 
 export const schemaTypes = [
-  blockContent,            // <-- QUESTO ti manca
+  blockContent, // <-- QUESTO ti manca
   localizedString,
   localizedBlockContent,
   lesson,

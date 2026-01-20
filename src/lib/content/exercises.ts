@@ -52,18 +52,10 @@ export async function getExercisesForLesson({
     const type: 'mcq' | 'open' = ex.type === 'open' ? 'open' : 'mcq';
 
     // prompt (portable text localizzato)
-    const promptBlocks =
-      ex.prompt?.[locale] ??
-      ex.prompt?.it ??
-      ex.prompt?.en ??
-      [];
+    const promptBlocks = ex.prompt?.[locale] ?? ex.prompt?.it ?? ex.prompt?.en ?? [];
 
     // soluzione (solo per open, ma la normalizziamo sempre come array)
-    const solutionBlocks =
-      ex.solution?.[locale] ??
-      ex.solution?.it ??
-      ex.solution?.en ??
-      [];
+    const solutionBlocks = ex.solution?.[locale] ?? ex.solution?.it ?? ex.solution?.en ?? [];
 
     // MCQ choices
     const choices: ExerciseChoice[] =
@@ -77,9 +69,7 @@ export async function getExercisesForLesson({
 
     // OPEN expected answer
     const expectedAnswer: string | null =
-      type === 'open'
-        ? resolveLocalizedString(ex.expectedAnswer, locale) ?? null
-        : null;
+      type === 'open' ? (resolveLocalizedString(ex.expectedAnswer, locale) ?? null) : null;
 
     return {
       id: ex._id,

@@ -21,11 +21,7 @@ export function I18nProvider({
   messages: Messages;
   children: React.ReactNode;
 }) {
-  return (
-    <I18nContext.Provider value={{ locale, messages }}>
-      {children}
-    </I18nContext.Provider>
-  );
+  return <I18nContext.Provider value={{ locale, messages }}>{children}</I18nContext.Provider>;
 }
 
 export function useI18n() {

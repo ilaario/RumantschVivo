@@ -124,9 +124,7 @@ export default function MethodologyPage() {
               </div>
             </div>
 
-            <p className="methodology__callout-footnote">
-              {t.methodology.callout_footnote}
-            </p>
+            <p className="methodology__callout-footnote">{t.methodology.callout_footnote}</p>
           </aside>
         </div>
       </section>

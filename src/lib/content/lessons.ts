@@ -3,7 +3,7 @@
 import { sanityClient } from '@/sanity/lib/client';
 import { lessonsListQuery, lessonBySlugQuery } from '@/sanity/lib/queries';
 import type { Locale } from '@/lib/i18n/config';
-import { resolveLocalizedString, resolveLocalizedBlocks  } from './sanityUtils';
+import { resolveLocalizedString, resolveLocalizedBlocks } from './sanityUtils';
 
 type ListLessonsParams = {
   level: string;
@@ -14,7 +14,7 @@ export async function listLessons({ level, locale }: ListLessonsParams) {
   const lessons = await sanityClient.fetch(lessonsListQuery, {
     level,
   });
-  
+
   return lessons.map((l: any) => ({
     id: l._id,
     lesson_key: l.lessonKey,
@@ -44,7 +44,7 @@ export type Lesson = {
 export type LessonExercise = {
   id: string;
   kind: 'mcq' | 'open';
-  prompt: any[];          // <-- IMPORTANT: se prompt è Portable Text
+  prompt: any[]; // <-- IMPORTANT: se prompt è Portable Text
   options: string[];
   answer: string | null;
 };
@@ -59,15 +59,15 @@ export async function getLesson({ slug, locale }: GetLessonParams): Promise<Less
     lessonKey: data.lessonKey,
     title: resolveLocalizedString(data.title, locale) ?? 'Untitled',
     intro: resolveLocalizedBlocks(data.intro, locale), // ✅ FIX
-    body: resolveLocalizedBlocks(data.body, locale),   // ✅ FIX
+    body: resolveLocalizedBlocks(data.body, locale), // ✅ FIX
     variant: data.variant ?? null,
     level: data.level ?? null,
     exercises: (data.exercises ?? []).map((ex: any) => ({
       id: ex._id,
       kind: ex.kind ?? 'open',
-      prompt: resolveLocalizedBlocks(ex.prompt, locale),      // <-- array blocks
+      prompt: resolveLocalizedBlocks(ex.prompt, locale), // <-- array blocks
       options: ex.options ?? [],
       answer: resolveLocalizedString(ex.answer, locale) ?? null,
-    }))
+    })),
   };
 }

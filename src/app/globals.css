@@ -26,7 +26,14 @@ body {
   margin: 0;
   background: var(--rv-stone);
   color: var(--foreground);
-  font-family: 'Montserrat', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  font-family:
+    'Montserrat',
+    system-ui,
+    -apple-system,
+    Segoe UI,
+    Roboto,
+    Arial,
+    sans-serif;
 }
 
 /* layout */
@@ -82,7 +89,9 @@ body {
   opacity: 0;
   pointer-events: none;
 
-  transition: height 0.28s ease, opacity 0.18s ease;
+  transition:
+    height 0.28s ease,
+    opacity 0.18s ease;
 }
 
 /* stato aperto */
@@ -135,7 +144,9 @@ body {
   align-items: center;
   justify-content: center;
 
-  transition: transform 160ms ease, background 160ms ease;
+  transition:
+    transform 160ms ease,
+    background 160ms ease;
 }
 
 .drawer-toggle:hover {
@@ -197,7 +208,10 @@ body {
   font-weight: 800;
   font-size: 16px;
 
-  transition: background 0.15s ease, color 0.15s ease, transform 0.12s ease;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease,
+    transform 0.12s ease;
 }
 
 .drawer-nav a:hover {

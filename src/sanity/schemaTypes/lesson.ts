@@ -1,4 +1,4 @@
-import {defineField, defineType} from 'sanity';
+import { defineField, defineType } from 'sanity';
 
 export default defineType({
   name: 'lesson',
@@ -15,7 +15,9 @@ export default defineType({
             name: 'slug-style',
             invert: false,
           })
-          .warning('Usa solo minuscole, numeri, - e _. Deve combaciare con il lesson_key in Supabase.'),
+          .warning(
+            'Usa solo minuscole, numeri, - e _. Deve combaciare con il lesson_key in Supabase.',
+          ),
     }),
     defineField({
       name: 'slug',

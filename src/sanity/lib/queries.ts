@@ -25,8 +25,6 @@ export const lessonBySlugQuery = groq`
   }
 `;
 
-
-
 export const exercisesByLessonQuery = groq`
   *[_type == "exercise" && lesson->lessonKey == $lessonKey]
     | order(order asc) {

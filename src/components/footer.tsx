@@ -40,10 +40,18 @@ export default function Footer() {
         <div className="rm-footer__col">
           <div className="rm-footer__title">{t.footer.learn.title}</div>
           <ul className="rm-footer__links">
-            <li><Link href={href('/learn')}>{t.footer.learn.a0}</Link></li>
-            <li><Link href={href('/learn')}>{t.footer.learn.a1}</Link></li>
-            <li><Link href={href('/learn')}>{t.footer.learn.a2}</Link></li>
-            <li><Link href={href('/wip')}>{t.footer.learn.phrases}</Link></li>
+            <li>
+              <Link href={href('/learn')}>{t.footer.learn.a0}</Link>
+            </li>
+            <li>
+              <Link href={href('/learn')}>{t.footer.learn.a1}</Link>
+            </li>
+            <li>
+              <Link href={href('/learn')}>{t.footer.learn.a2}</Link>
+            </li>
+            <li>
+              <Link href={href('/wip')}>{t.footer.learn.phrases}</Link>
+            </li>
           </ul>
         </div>
 
@@ -51,10 +59,18 @@ export default function Footer() {
         <div className="rm-footer__col">
           <div className="rm-footer__title">{t.footer.language.title}</div>
           <ul className="rm-footer__links">
-            <li><Link href={href('/wip')}>{t.footer.language.vocab}</Link></li>
-            <li><Link href={href('/wip')}>{t.footer.language.stories}</Link></li>
-            <li><Link href={href('/wip')}>{t.footer.language.audio}</Link></li>
-            <li><Link href={href('/wip')}>{t.footer.language.variants}</Link></li>
+            <li>
+              <Link href={href('/wip')}>{t.footer.language.vocab}</Link>
+            </li>
+            <li>
+              <Link href={href('/wip')}>{t.footer.language.stories}</Link>
+            </li>
+            <li>
+              <Link href={href('/wip')}>{t.footer.language.audio}</Link>
+            </li>
+            <li>
+              <Link href={href('/wip')}>{t.footer.language.variants}</Link>
+            </li>
           </ul>
         </div>
 
@@ -62,10 +78,18 @@ export default function Footer() {
         <div className="rm-footer__col">
           <div className="rm-footer__title">{t.footer.contrib.title}</div>
           <ul className="rm-footer__links">
-            <li><Link href={href('/methodology')}>{t.footer.contrib.word}</Link></li>
-            <li><Link href={href('/contributors')}>{t.footer.contrib.audio}</Link></li>
-            <li><Link href={href('/contribute')}>{t.footer.contrib.error}</Link></li>
-            <li><Link href={href('/wip')}>{t.footer.contrib.sources}</Link></li>
+            <li>
+              <Link href={href('/methodology')}>{t.footer.contrib.word}</Link>
+            </li>
+            <li>
+              <Link href={href('/contributors')}>{t.footer.contrib.audio}</Link>
+            </li>
+            <li>
+              <Link href={href('/contribute')}>{t.footer.contrib.error}</Link>
+            </li>
+            <li>
+              <Link href={href('/wip')}>{t.footer.contrib.sources}</Link>
+            </li>
           </ul>
         </div>
       </div>

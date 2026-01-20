@@ -23,4 +23,3 @@ export function resolveLocalizedBlocks(value: any, locale: Locale): any[] {
 
   return [];
 }
-

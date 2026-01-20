@@ -46,9 +46,7 @@ export async function GET(request: Request) {
   // 3) Se c'è un utente, proviamo a copiare il nome nel profilo
   if (user) {
     const displayName =
-      (user.user_metadata as any)?.full_name ||
-      (user.user_metadata as any)?.name ||
-      null;
+      (user.user_metadata as any)?.full_name || (user.user_metadata as any)?.name || null;
 
     if (displayName) {
       const { error: profileError } = await supabase

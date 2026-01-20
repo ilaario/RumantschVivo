@@ -49,18 +49,16 @@ export async function POST(req: Request) {
 
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
-  const { error } = await supabase
-    .from('lesson_progress')
-    .upsert(
-      {
-        user_id: user.id,
-        lesson_key: lessonKey,
-        locale,
-        current_index: currentIndex,
-        completed,
-      },
-      { onConflict: 'user_id,lesson_key,locale' }
-    );
+  const { error } = await supabase.from('lesson_progress').upsert(
+    {
+      user_id: user.id,
+      lesson_key: lessonKey,
+      locale,
+      current_index: currentIndex,
+      completed,
+    },
+    { onConflict: 'user_id,lesson_key,locale' },
+  );
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 

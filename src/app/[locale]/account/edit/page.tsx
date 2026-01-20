@@ -64,27 +64,17 @@ export default function EditAccountPage() {
                 onChange={(e) => setName(e.target.value)}
                 placeholder={t.account.edit.placeholder}
               />
-              <div className="help">
-                {t.account.edit.help}
-              </div>
+              <div className="help">{t.account.edit.help}</div>
             </div>
 
             {error && <div className="error">{error}</div>}
 
             <div className="form-actions">
-              <button
-                type="submit"
-                className="btn btn-primary"
-                disabled={loading}
-              >
+              <button type="submit" className="btn btn-primary" disabled={loading}>
                 {loading ? t.account.edit.saving : t.account.edit.save}
               </button>
 
-              <button
-                type="button"
-                className="btn btn-secondary"
-                onClick={cancel}
-              >
+              <button type="button" className="btn btn-secondary" onClick={cancel}>
                 {t.account.edit.cancel}
               </button>
             </div>

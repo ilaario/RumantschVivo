@@ -63,18 +63,18 @@ export default function LoginPage() {
     setError(null);
     setInfo(null);
     setOauthLoading(true);
-  
+
     const supabase = createClient();
-  
+
     const origin = window.location.origin;
-  
+
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
         redirectTo: `${origin}/auth/callback?redirectTo=/${currentLocale}/account`,
       },
     });
-  
+
     // in caso normale non arriva mai qui, perché fa redirect full-page.
     if (error) {
       setOauthLoading(false);
@@ -106,11 +106,7 @@ export default function LoginPage() {
             onClick={handleGoogleLogin}
             disabled={loading}
           >
-            <img
-              src="/images/google.svg"
-              alt=""
-              className="google-icon"
-            />
+            <img src="/images/google.svg" alt="" className="google-icon" />
             {t.login.google_button ?? 'Accedi con Google'}
           </button>
 
@@ -154,8 +150,8 @@ export default function LoginPage() {
               {loading
                 ? t.login.loading
                 : mode === 'login'
-                ? t.login.submit_login
-                : t.login.submit_signup}
+                  ? t.login.submit_login
+                  : t.login.submit_signup}
             </button>
 
             <div className="login-row">

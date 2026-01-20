@@ -1,12 +1,18 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import type { Session } from '@supabase/supabase-js';
 import { createClient } from '@/lib/supabase/client';
 import { useI18n } from '@/lib/i18n/i18nprovider';
 import { isLocale, type Locale } from '@/lib/i18n/config';
+
+type LangItem = {
+  locale: Locale;
+  label: string;
+  flag: string;
+};
 
 export default function Header({
   drawerOpen,
@@ -16,27 +22,50 @@ export default function Header({
   onToggleDrawer: () => void;
 }) {
   const [session, setSession] = useState<Session | null>(null);
+  const [langOpen, setLangOpen] = useState(false);
+
   const pathname = usePathname();
   const router = useRouter();
   const t = useI18n();
 
+  const langRef = useRef<HTMLDivElement | null>(null);
+
   // ------- LOCALE & PATH -------
   const segments = pathname.split('/').filter(Boolean);
   const currentLocale: Locale = isLocale(segments[0]) ? (segments[0] as Locale) : 'it';
-
-  // "/it" -> basePath = "/"
-  // "/it/learn" -> basePath = "/learn"
   const basePath = '/' + (segments.slice(1).join('/') || '');
 
   const linkHref = (path: string) => `/${currentLocale}${path}`;
   const isActive = (href: string) => pathname === linkHref(href);
 
+  const languages: LangItem[] = useMemo(
+    () => [
+      { locale: 'it', label: 'Italiano', flag: '🇮🇹' },
+      { locale: 'en', label: 'English', flag: '🇬🇧' },
+      { locale: 'fr', label: 'Français', flag: '🇫🇷' },
+      { locale: 'de', label: 'Deutsch', flag: '🇩🇪' },
+    ],
+    [],
+  );
+
+  const currentLang = useMemo(
+    () => languages.find((l) => l.locale === currentLocale) ?? languages[0],
+    [languages, currentLocale],
+  );
+
+  const orderedLanguages = useMemo(() => {
+    const rest = languages.filter((l) => l.locale !== currentLocale);
+    return [currentLang, ...rest];
+  }, [languages, currentLocale, currentLang]);
+
   function changeLocale(nextLocale: Locale) {
-    if (nextLocale === currentLocale) return;
+    if (nextLocale === currentLocale) {
+      setLangOpen(false);
+      return;
+    }
 
-    const newPath =
-      '/' + nextLocale + (basePath === '/' ? '' : basePath);
-
+    const newPath = '/' + nextLocale + (basePath === '/' ? '' : basePath);
+    setLangOpen(false);
     router.push(newPath);
     router.refresh();
   }
@@ -69,10 +98,31 @@ export default function Header({
     }
   }
 
+  // ------- CLOSE DROPDOWN ON OUTSIDE CLICK / ESC -------
+  useEffect(() => {
+    if (!langOpen) return;
+
+    function onDocMouseDown(e: MouseEvent) {
+      if (!langRef.current) return;
+      if (!langRef.current.contains(e.target as Node)) setLangOpen(false);
+    }
+
+    function onKeyDown(e: KeyboardEvent) {
+      if (e.key === 'Escape') setLangOpen(false);
+    }
+
+    document.addEventListener('mousedown', onDocMouseDown);
+    document.addEventListener('keydown', onKeyDown);
+
+    return () => {
+      document.removeEventListener('mousedown', onDocMouseDown);
+      document.removeEventListener('keydown', onKeyDown);
+    };
+  }, [langOpen]);
+
   return (
     <header className={`nav ${drawerOpen ? 'nav--drawerOpen' : ''}`} id="navbar-container">
       <div className="navLeft">
-        {/* Hamburger: visibile < 1200 */}
         <button
           type="button"
           className={`navOpenBtn ${drawerOpen ? 'is-open' : ''}`}
@@ -91,7 +141,6 @@ export default function Header({
         </div>
       </div>
 
-      {/* MENU DESKTOP */}
       <nav className="nav-menu" aria-label="Menu principale">
         <Link href={linkHref('/')} className={isActive('/') ? 'active' : ''}>
           {t.nav.home}
@@ -107,29 +156,57 @@ export default function Header({
         </Link>
       </nav>
 
-      {/* LANGUAGE SWITCH + BOTTONI DESTRA */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-        {/* Language switcher */}
-        <div className="lang-switch">
-          <button
-            type="button"
-            className={`lang-btn ${currentLocale === 'it' ? 'lang-btn--active' : ''}`}
-            onClick={() => changeLocale('it')}
-            aria-label="Italiano"
-          >
-            🇮🇹
-          </button>
-          <button
-            type="button"
-            className={`lang-btn ${currentLocale === 'en' ? 'lang-btn--active' : ''}`}
-            onClick={() => changeLocale('en')}
-            aria-label="English"
-          >
-            🇬🇧
-          </button>
+      <div className="navRight">
+        {/* DESKTOP: 4 bottoni come prima */}
+        <div className="lang-switch lang-switch--desktop" aria-label="Language switcher (desktop)">
+          {languages.map((l) => (
+            <button
+              key={l.locale}
+              type="button"
+              className={`lang-btn ${currentLocale === l.locale ? 'lang-btn--active' : ''}`}
+              onClick={() => changeLocale(l.locale)}
+              aria-label={l.label}
+              title={l.label}
+            >
+              {l.flag}
+            </button>
+          ))}
         </div>
 
-        {/* Bottoni account/login */}
+        {/* MOBILE: dropdown */}
+        <div className="lang-switch lang-switch--mobile" ref={langRef}>
+          <button
+            type="button"
+            className={`lang-current ${langOpen ? 'is-open' : ''}`}
+            onClick={() => setLangOpen((v) => !v)}
+            aria-expanded={langOpen}
+            aria-haspopup="menu"
+            aria-label={`Lingua: ${currentLang.label}`}
+          >
+            <span className="lang-flag">{currentLang.flag}</span>
+            <span className="lang-caret" aria-hidden="true" />
+          </button>
+
+          <div className={`lang-menu ${langOpen ? 'is-open' : ''}`} role="menu">
+            {orderedLanguages.map((l) => {
+              const active = l.locale === currentLocale;
+              return (
+                <button
+                  key={l.locale}
+                  type="button"
+                  role="menuitem"
+                  className={`lang-item ${active ? 'is-active' : ''}`}
+                  onClick={() => changeLocale(l.locale)}
+                >
+                  <span className="lang-item-flag">{l.flag}</span>
+                  <span className="lang-item-label">{l.label}</span>
+                  {active && <span className="lang-item-pill">Current</span>}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
         <div className="button-container">
           {session ? (
             <>
