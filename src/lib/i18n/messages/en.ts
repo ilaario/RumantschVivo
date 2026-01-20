@@ -122,6 +122,15 @@ export const messages = {
       recent_empty: 'No progress yet. Time to get started.',
       open_lesson: 'Open',
     },
+    checkpoints: {
+      summary_passed_label: 'Checkpoints passed',
+      summary_average_note: 'Average of best scores across all checkpoints.',
+      list_title: 'Checkpoints',
+      status_passed: 'Passed',
+      status_not_passed: 'Not passed',
+      pass_threshold: 'Pass {score}%',
+      open_checkpoint: 'Open checkpoint',
+    },
   },
   login: {
     title_login: 'Login',
@@ -354,6 +363,12 @@ export const messages = {
     title: 'Learn (Sursilvan)',
     subtitle: 'Level A0',
     empty: 'No lessons available for this level yet.',
+    checkpoints_section_title: 'Level {level} checkpoints',
+    checkpoints_todo_label: 'To do',
+    checkpoints_best_score_label: 'Best score',
+    checkpoints_pass_mark: 'Pass mark: {score}%',
+    checkpoints_lock_text:
+      'Complete the previous checkpoint to unlock this one.',
   },
 
   reset_password: {
@@ -400,4 +415,39 @@ export const messages = {
     modal_stay_here: 'Stay on this lesson',
     back_to_list_inline: 'Back to list',
   },
+  checkpoint_runner: {
+    label: 'CHECKPOINT',
+    header_finished: 'Score: {score}% · Best: {best}% · Attempts: {attempts}',
+    header_finished_passed_suffix: ' · Passed on: {datetime}',
+    header_in_progress:
+      'Question {index} / {total} · First-try score: {score}%',
+  
+    open_hint:
+      'Write your answer and confirm. Only your first attempt counts for the score.',
+    open_placeholder: 'Type your answer…',
+    open_correct_title: 'Correct!',
+    open_correct_body: 'Your answer is fine.',
+    open_wrong_title: 'Different answer.',
+    open_wrong_body: 'Here is one possible solution.',
+  
+    expected_label: 'Expected answer:',
+  
+    mcq_correct_title: 'Correct!',
+    mcq_correct_body: 'Nice.',
+    mcq_wrong_title: 'Wrong.',
+    mcq_wrong_body: 'You can try again, but the grade is already decided.',
+  
+    result_label: 'Result:',
+    result_status_passed: 'PASSED ✅',
+    result_status_failed: 'NOT PASSED ❌',
+    result_sentence: '{score}% · pass mark {minScore}% · {status}',
+  
+    redo_button: 'Retry checkpoint',
+    back_to_lessons_button: 'Back to lessons',
+  
+    confirm_button: 'Confirm',
+    next_button: 'Next',
+    finish_button: 'Finish checkpoint',
+    loading_label: 'Saving…',
+  }
 } as const;

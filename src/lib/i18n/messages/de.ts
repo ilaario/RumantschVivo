@@ -122,6 +122,15 @@ export const messages = {
       recent_empty: 'Bisher keine Fortschritte. Zeit, anzufangen.',
       open_lesson: 'Öffnen',
     },
+    checkpoints: {
+      summary_passed_label: 'Bestandene Checkpoints',
+      summary_average_note: 'Durchschnitt der besten Ergebnisse aller Checkpoints.',
+      list_title: 'Checkpoints',
+      status_passed: 'Bestanden',
+      status_not_passed: 'Nicht bestanden',
+      pass_threshold: 'Bestanden ab {score} %',
+      open_checkpoint: 'Checkpoint öffnen',
+    },
   },
   login: {
     title_login: 'Login',
@@ -360,6 +369,12 @@ export const messages = {
     title: 'Lernen (Sursilvan)',
     subtitle: 'Niveau A0',
     empty: 'Für dieses Niveau sind noch keine Lektionen verfügbar.',
+    checkpoints_section_title: 'Level-{level}-Checkpoints',
+    checkpoints_todo_label: 'Zu erledigen',
+    checkpoints_best_score_label: 'Bestes Ergebnis',
+    checkpoints_pass_mark: 'Bestanden ab {score} %',
+    checkpoints_lock_text:
+      'Schließe den vorherigen Checkpoint ab, um diesen freizuschalten.',
   },
 
   reset_password: {
@@ -406,4 +421,40 @@ export const messages = {
     modal_stay_here: 'Auf dieser Lektion bleiben',
     back_to_list_inline: 'Zurück zur Liste',
   },
+  checkpoint_runner: {
+    label: 'CHECKPOINT',
+    header_finished: 'Score: {score}% · Bestes Ergebnis: {best}% · Versuche: {attempts}',
+    header_finished_passed_suffix: ' · Bestanden am: {datetime}',
+    header_in_progress:
+      'Aufgabe {index} / {total} · Erstversuchs-Score: {score}%',
+  
+    open_hint:
+      'Schreibe deine Antwort und bestätige. Nur der erste Versuch zählt für die Note.',
+    open_placeholder: 'Antwort hier eingeben…',
+    open_correct_title: 'Richtig!',
+    open_correct_body: 'Deine Antwort passt.',
+    open_wrong_title: 'Andere Antwort.',
+    open_wrong_body: 'Hier ist eine mögliche Musterlösung.',
+  
+    expected_label: 'Erwartete Antwort:',
+  
+    mcq_correct_title: 'Richtig!',
+    mcq_correct_body: 'Gut gemacht.',
+    mcq_wrong_title: 'Falsch.',
+    mcq_wrong_body:
+      'Du kannst es erneut versuchen, aber die Note steht bereits fest.',
+  
+    result_label: 'Ergebnis:',
+    result_status_passed: 'BESTANDEN ✅',
+    result_status_failed: 'NICHT BESTANDEN ❌',
+    result_sentence: '{score}% · Bestehensgrenze {minScore}% · {status}',
+  
+    redo_button: 'Checkpoint wiederholen',
+    back_to_lessons_button: 'Zurück zu den Lektionen',
+  
+    confirm_button: 'Bestätigen',
+    next_button: 'Weiter',
+    finish_button: 'Checkpoint abschließen',
+    loading_label: 'Wird gespeichert…',
+  }
 } as const;

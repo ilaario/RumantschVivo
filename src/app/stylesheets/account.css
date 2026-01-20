@@ -259,3 +259,116 @@
   border-color: rgba(156, 61, 43, 0.25);
   color: var(--rv-rust);
 }
+
+/* ===== CHECKPOINT SUMMARY ===== */
+
+.checkpoint-summary {
+  margin-top: 18px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(47, 79, 62, 0.12);
+}
+
+.checkpoint-summary-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.checkpoint-summary-meta {
+  font-size: 14px;
+  color: var(--rv-rock);
+}
+
+.checkpoint-summary-meta strong {
+  color: var(--rv-forest);
+}
+
+.badge--checkpoint {
+  background: rgba(47, 79, 62, 0.07);
+  border-color: rgba(47, 79, 62, 0.22);
+  color: var(--rv-forest);
+}
+
+.checkpoint-bar {
+  height: 10px;
+  width: 100%;
+  border-radius: 999px;
+  background: rgba(107, 107, 107, 0.16);
+  overflow: hidden;
+  border: 1px solid rgba(47, 79, 62, 0.1);
+  margin-top: 8px;
+}
+
+.checkpoint-bar > span {
+  display: block;
+  height: 100%;
+  width: 0%;
+  background: #16a34a;
+  border-radius: 999px;
+  transition: width 250ms ease;
+}
+
+.checkpoint-summary-note {
+  margin-top: 6px;
+  font-size: 11px;
+  color: rgba(107, 107, 107, 0.8);
+}
+
+/* ===== CHECKPOINT LIST ===== */
+
+.checkpoint-list {
+  list-style: none;
+  padding: 0;
+  margin: 10px 0 0;
+  display: grid;
+  gap: 8px;
+}
+
+.checkpoint-item {
+  border: 1px solid rgba(47, 79, 62, 0.16);
+  border-radius: 14px;
+  padding: 10px 12px;
+  background: rgba(244, 241, 236, 0.6);
+}
+
+.checkpoint-item-main {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.checkpoint-name {
+  font-weight: 800;
+  color: var(--rv-forest);
+  font-size: 14px;
+}
+
+.checkpoint-sub {
+  margin-top: 2px;
+  font-size: 12px;
+  color: rgba(107, 107, 107, 0.85);
+}
+
+.checkpoint-score-pill {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+}
+
+.checkpoint-score-value {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--rv-forest);
+}
+
+.checkpoint-score-min {
+  font-size: 11px;
+  color: rgba(107, 107, 107, 0.9);
+}
+
+.checkpoint-item-actions {
+  margin-top: 6px;
+}

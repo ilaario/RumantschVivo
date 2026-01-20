@@ -170,3 +170,73 @@ export async function getExercisesForLesson({
     };
   });
 }
+
+const exercisesByKeysQuery = groq`
+  *[_type == "exerciseBase" && exerciseKey in $keys]
+  | order(order asc, exerciseKey asc) {
+    _id,
+    exerciseKey,
+    order,
+    type,
+    "translation": *[
+      _type == "exerciseTranslation" &&
+      exercise._ref == ^._id &&
+      locale == $locale
+    ][0]{
+      title,
+      prompt,
+      choices,
+      expectedAnswer,
+      solution
+    }
+  }
+`;
+
+export async function getExercisesByKeys(params: {
+  exerciseKeys: string[];
+  locale: Locale;
+}): Promise<Exercise[]> {
+  const { exerciseKeys, locale } = params;
+
+  const keys = safeArray<string>(exerciseKeys).filter(Boolean);
+  if (keys.length === 0) return [];
+
+  const raw = await sanityClient.fetch<any[]>(exercisesByKeysQuery, {
+    keys,
+    locale,
+  });
+
+  const list = safeArray<any>(raw);
+
+  return list.map((ex): Exercise => {
+    const baseType = safeString(ex.type);
+    const type: 'mcq' | 'open' = baseType === 'open' ? 'open' : 'mcq';
+    const tr = ex.translation ?? {};
+
+    const promptBlocks = safeArray<any>(tr.prompt);
+    const solutionBlocks = safeArray<any>(tr.solution);
+
+    const choices: ExerciseChoice[] =
+      type === 'mcq'
+        ? safeArray<any>(tr.choices).map((c): ExerciseChoice => ({
+            id: safeString(c.id) ?? safeString(c._key) ?? '',
+            text: safeString(c.text) ?? '',
+            correct: !!c.correct,
+          }))
+        : [];
+
+    const expectedAnswer: string | null = type === 'open' ? safeString(tr.expectedAnswer) : null;
+
+    return {
+      id: ex._id,
+      exerciseKey: safeString(ex.exerciseKey) ?? 'unknown',
+      order: safeNumber(ex.order, 0),
+      type,
+      title: safeString(tr.title) ?? safeString(ex.exerciseKey) ?? 'Exercise',
+      promptBlocks,
+      choices,
+      expectedAnswer,
+      solutionBlocks,
+    };
+  });
+}

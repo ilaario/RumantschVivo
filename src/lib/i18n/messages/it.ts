@@ -122,6 +122,15 @@ export const messages = {
       recent_empty: 'Ancora zero progressi. Tempo di iniziare.',
       open_lesson: 'Apri',
     },
+    checkpoints: {
+      summary_passed_label: 'Checkpoint superati',
+      summary_average_note: 'Media dei migliori voti di tutti i checkpoint.',
+      list_title: 'Checkpoint',
+      status_passed: 'Superato',
+      status_not_passed: 'Non superato',
+      pass_threshold: 'Soglia {score}%',
+      open_checkpoint: 'Apri checkpoint',
+    },
   },
   login: {
     title_login: 'Login',
@@ -355,6 +364,12 @@ export const messages = {
     title: 'Impara (Sursilvan)',
     subtitle: 'Livello A0',
     empty: 'Nessuna lezione ancora disponibile per questo livello.',
+    checkpoints_section_title: 'Checkpoint livello {level}',
+    checkpoints_todo_label: 'Da svolgere',
+    checkpoints_best_score_label: 'Miglior voto',
+    checkpoints_pass_mark: 'Soglia: {score}%',
+    checkpoints_lock_text:
+      'Completa il checkpoint precedente per sbloccare questo.',
   },
 
   reset_password: {
@@ -400,4 +415,38 @@ export const messages = {
     modal_stay_here: 'Rimani su questa lezione',
     back_to_list_inline: 'Torna alla lista',
   },
+  checkpoint_runner: {
+    label: 'CHECKPOINT',
+    header_finished: 'Score: {score}% · Best: {best}% · Tentativi: {attempts}',
+    header_finished_passed_suffix: ' · Superato il: {datetime}',
+    header_in_progress: 'Test {index} / {total} · Score (primo tentativo): {score}%',
+  
+    open_hint:
+      'Scrivi la tua risposta e conferma. Il voto conta solo al primo tentativo.',
+    open_placeholder: 'Scrivi qui…',
+    open_correct_title: 'Corretto!',
+    open_correct_body: 'La tua risposta va bene.',
+    open_wrong_title: 'Risposta diversa.',
+    open_wrong_body: 'Ti mostro una possibile soluzione.',
+  
+    expected_label: 'Risposta attesa:',
+  
+    mcq_correct_title: 'Corretto!',
+    mcq_correct_body: 'Bene.',
+    mcq_wrong_title: 'Sbagliato.',
+    mcq_wrong_body: 'Puoi riprovare, ma il voto è già deciso.',
+  
+    result_label: 'Risultato:',
+    result_status_passed: 'PASSATO ✅',
+    result_status_failed: 'NON PASSATO ❌',
+    result_sentence: '{score}% · soglia {minScore}% · {status}',
+  
+    redo_button: 'Rifai checkpoint',
+    back_to_lessons_button: 'Torna alle lezioni',
+  
+    confirm_button: 'Conferma',
+    next_button: 'Avanti',
+    finish_button: 'Finisci checkpoint',
+    loading_label: 'Salvo…',
+  }
 } as const;
