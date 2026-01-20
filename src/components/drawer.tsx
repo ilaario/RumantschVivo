@@ -122,17 +122,17 @@ export default function Drawer({
           </Link>
 
           <Link
-            href={hrefWithLocale('/wip')}
+            href={hrefWithLocale('/vocabulary')}
             onClick={onClose}
-            className={isActive('/wip') ? 'active' : ''}
+            className={isActive('/vocabulary') ? 'active' : ''}
           >
             {t.nav.vocab}
           </Link>
 
           <Link
-            href={hrefWithLocale('/wip')}
+            href={hrefWithLocale('/stories')}
             onClick={onClose}
-            className={isActive('/wip') ? 'active' : ''}
+            className={isActive('/stories') ? 'active' : ''}
           >
             {t.nav.stories}
           </Link>

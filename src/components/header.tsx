@@ -99,10 +99,10 @@ export default function Header({
         <Link href={linkHref('/learn')} className={isActive('/learn') ? 'active' : ''}>
           {t.nav.learn}
         </Link>
-        <Link href={linkHref('/wip')} className={isActive('/wip') ? 'active' : ''}>
+        <Link href={linkHref('/vocabulary')} className={isActive('/vocabulary') ? 'active' : ''}>
           {t.nav.vocab}
         </Link>
-        <Link href={linkHref('/wip')} className={isActive('/wip-stories') ? 'active' : ''}>
+        <Link href={linkHref('/stories')} className={isActive('/stories') ? 'active' : ''}>
           {t.nav.stories}
         </Link>
       </nav>
