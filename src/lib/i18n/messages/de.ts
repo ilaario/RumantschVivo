@@ -313,7 +313,7 @@ export const messages = {
     title: 'Zu RumantschVivo beitragen',
     lead: 'Wenn du Rätoromanisch kennst und zu einem seriösen Bildungsprojekt beitragen möchtest, ist RumantschVivo offen für Zusammenarbeit.',
 
-    it_heading: 'Italienisch',
+    it_heading: 'Deutsch',
     it_p1:
       'Wenn du Rätoromanisch kennst und zu einem seriösen Bildungsprojekt beitragen möchtest, ist RumantschVivo offen für Zusammenarbeit.',
     it_p2: 'Wir suchen Menschen, die helfen möchten:',

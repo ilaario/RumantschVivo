@@ -311,7 +311,7 @@ export const messages = {
     title: 'Contribuer à RumantschVivo',
     lead: 'Si tu connais le romanche et souhaites contribuer à un projet éducatif sérieux, RumantschVivo est ouvert à la collaboration.',
 
-    it_heading: 'Italien',
+    it_heading: 'Français',
     it_p1:
       'Si tu connais le romanche et souhaites contribuer à un projet éducatif sérieux, RumantschVivo est ouvert à la collaboration.',
     it_p2: 'Nous recherchons des personnes prêtes à :',
