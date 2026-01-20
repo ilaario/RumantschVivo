@@ -62,9 +62,9 @@ export default function Footer() {
         <div className="rm-footer__col">
           <div className="rm-footer__title">{t.footer.contrib.title}</div>
           <ul className="rm-footer__links">
-            <li><Link href={href('/wip')}>{t.footer.contrib.word}</Link></li>
-            <li><Link href={href('/wip')}>{t.footer.contrib.audio}</Link></li>
-            <li><Link href={href('/wip')}>{t.footer.contrib.error}</Link></li>
+            <li><Link href={href('/methodology')}>{t.footer.contrib.word}</Link></li>
+            <li><Link href={href('/contributors')}>{t.footer.contrib.audio}</Link></li>
+            <li><Link href={href('/contribute')}>{t.footer.contrib.error}</Link></li>
             <li><Link href={href('/wip')}>{t.footer.contrib.sources}</Link></li>
           </ul>
         </div>

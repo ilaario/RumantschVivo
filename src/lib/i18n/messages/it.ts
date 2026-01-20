@@ -87,10 +87,10 @@ export const messages = {
     
       contrib: {
         title: 'Contribuisci',
-        word: 'Aggiungi una parola',
-        audio: 'Registra un audio',
-        error: 'Segnala un errore',
-        sources: 'Fonti e licenze',
+        word: 'Metodologia',
+        audio: 'Linee guida contributors',
+        error: 'Contribuisci',
+        sources: 'Segnala un errore',
       },
     
       legal: {
@@ -194,5 +194,160 @@ export const messages = {
       values_block_2_text:
         'Una risorsa stabile, accurata e rispettosa della comunità romancia, ' +
         'costruita nel tempo insieme a chi la lingua la parla, la studia e la usa.',
+    },
+
+    methodology: {
+      badge: 'METODOLOGIA',
+      title: 'Metodo didattico',
+      lead:
+        'RumantschVivo adotta un approccio didattico basato su chiarezza, gradualità e accuratezza linguistica.',
+    
+      quick_1_k: 'Struttura',
+      quick_1_v: 'Coerente e prevedibile',
+      quick_2_k: 'Progressione',
+      quick_2_v: 'Graduale e sostenibile',
+      quick_3_k: 'Qualità',
+      quick_3_v: 'Revisione e validazione',
+    
+      panel_title: 'Principio guida',
+      panel_text:
+        'L’obiettivo non è semplificare il romancio fino a snaturarlo, ma renderlo accessibile senza perdere struttura e uso reale.',
+      panel_bullet_1: 'Una variante alla volta',
+      panel_bullet_2: 'Un concetto alla volta',
+      panel_bullet_3: 'Esempi e contesti realistici',
+    
+      principles_title: 'Cosa significa, in pratica',
+      principles_subtitle:
+        'Una metodologia utile è quella che ti fa capire cosa stai facendo. Non quella che ti fa cliccare bottoni finché “passi”.',
+    
+      card_1_title: 'Chiarezza',
+      card_1_text:
+        'Spiegazioni pensate per chi studia il romancio come seconda lingua, con attenzione alle difficoltà tipiche dei non madrelingua.',
+      card_1_meta: 'Obiettivo: comprensione, non confusione.',
+    
+      card_2_title: 'Gradualità',
+      card_2_text:
+        'Lezioni con struttura stabile e progressione controllata, senza sovraccaricare lo studente con troppe novità insieme.',
+      card_2_meta: 'Obiettivo: solide basi nel tempo.',
+    
+      card_3_title: 'Accuratezza linguistica',
+      card_3_text:
+        'Contenuti scritti, revisionati e validati prima della pubblicazione. La qualità viene prima della quantità.',
+      card_3_meta: 'Obiettivo: affidabilità.',
+    
+      card_4_title: 'Uso reale',
+      card_4_text:
+        'Esempi realistici, lingua autentica ed esercizi che aiutano a capire, non a memorizzare meccanicamente.',
+      card_4_meta: 'Obiettivo: competenza utilizzabile.',
+    
+      full_title: 'Dettaglio del metodo',
+      p1:
+        'L’obiettivo non è semplificare il romancio fino a snaturarlo, ma renderlo comprensibile e accessibile mantenendone la struttura, l’uso reale e le specificità. Ogni contenuto è pensato per chi studia il romancio come seconda lingua, con particolare attenzione alle difficoltà tipiche dei non madrelingua.',
+      p2:
+        'Le lezioni seguono una struttura coerente e prevedibile, per aiutare lo studente a orientarsi e a costruire conoscenze solide nel tempo. La progressione è graduale: una variante alla volta, un concetto alla volta, senza sovraccaricare l’apprendimento.',
+      p3:
+        'I contenuti linguistici sono accompagnati da spiegazioni in italiano, inglese e tedesco, non come semplici traduzioni, ma come strumenti per chiarire il funzionamento della lingua, il contesto d’uso e le differenze rispetto ad altre lingue.',
+      p4:
+        'La qualità linguistica è centrale: ogni lezione viene scritta, revisionata e validata prima della pubblicazione.',
+      p5:
+        'RumantschVivo privilegia esempi realistici, uso autentico della lingua ed esercizi che aiutano a capire, non a memorizzare meccanicamente.',
+    
+      callout_title: 'In sintesi',
+      callout_text:
+        'Il metodo serve a farti costruire competenza. Se ti sembra “lento”, è perché sta provando a non mentirti.',
+      check_1: 'Struttura stabile per orientarsi facilmente',
+      check_2: 'Progressione controllata e sostenibile',
+      check_3: 'Qualità linguistica prima della quantità',
+      callout_footnote:
+        'Ogni contenuto viene pubblicato solo dopo revisione e controllo di coerenza.',
+    },
+
+    contributors: {
+      badge: 'LINEE GUIDA',
+      title: 'Contributor Guidelines',
+      lead:
+        'RumantschVivo è aperto alla collaborazione con parlanti, studiosi e persone competenti nella lingua romancia.',
+    
+      h1_k: 'Focus',
+      h1_v: 'Qualità e coerenza',
+      h2_k: 'Contenuti',
+      h2_v: 'Struttura condivisa',
+      h3_k: 'Pubblicazione',
+      h3_v: 'Solo dopo validazione',
+    
+      panel_title: 'A chi è rivolto',
+      panel_text:
+        'Cerchiamo contributor interessati a un progetto educativo serio e di lungo periodo.',
+      panel_note_title: 'Nota importante',
+      panel_note_text:
+        'RumantschVivo non è una piattaforma di contenuti improvvisati: la qualità e la coerenza sono fondamentali.',
+    
+      who_title: 'Chi cerchiamo',
+      who_subtitle:
+        'I contributor ideali combinano competenza linguistica e attenzione al contesto didattico.',
+      who_1: 'Conoscenza solida del romancio (madrelingua o livello avanzato)',
+      who_2: 'Familiarità con almeno una lingua di supporto (italiano, inglese o tedesco)',
+      who_3: 'Interesse per un progetto educativo serio e di lungo periodo',
+    
+      how_title: 'Come funziona la collaborazione',
+      how_subtitle:
+        'La collaborazione segue un processo chiaro per mantenere qualità e uniformità.',
+      how_1_t: 'Scrittura',
+      how_1_p: 'I contenuti vengono scritti seguendo una struttura comune.',
+      how_2_t: 'Revisione',
+      how_2_p: 'Ogni lezione è sottoposta a revisione.',
+      how_3_t: 'Validazione',
+      how_3_p: 'La pubblicazione avviene solo dopo validazione linguistica.',
+    
+      expect_title: 'Cosa chiediamo',
+      expect_subtitle:
+        'Linee guida essenziali per garantire contenuti coerenti e utili allo studio.',
+      expect_1: 'Rispetto della variante assegnata',
+      expect_2: 'Chiarezza espositiva',
+      expect_3: 'Esempi realistici e uso autentico della lingua',
+      expect_4: 'Disponibilità a ricevere feedback',
+    
+      offer_title: 'Cosa offriamo',
+      offer_subtitle:
+        'Un contributo serio merita un contesto serio.',
+      offer_1: 'Riconoscimento pubblico come autore o revisore',
+      offer_2: 'Collaborazione in un progetto culturale ed educativo',
+      offer_3: 'Ambiente strutturato e rispettoso della lingua',
+    
+      warning_title: 'Qualità prima di tutto',
+      warning_text:
+        'RumantschVivo non è una piattaforma di contenuti improvvisati: qualità e coerenza sono requisiti, non optional.',
+    },
+    contribute: {
+      badge: 'CONTRIBUTE',
+      title: 'Contribuisci a RumantschVivo',
+      lead:
+        'Se conosci il romancio e ti interessa contribuire a un progetto educativo serio, RumantschVivo è aperto alla collaborazione.',
+    
+      it_heading: 'Italiano',
+      it_p1:
+        'Se conosci il romancio e ti interessa contribuire a un progetto educativo serio, RumantschVivo è aperto alla collaborazione.',
+      it_p2:
+        'Cerchiamo persone che vogliano aiutare a:',
+      it_b1: 'scrivere o revisionare lezioni',
+      it_b2: 'migliorare spiegazioni ed esempi',
+      it_b3: 'rendere il romancio più accessibile a chi lo studia come seconda lingua',
+      it_p3:
+        'La collaborazione è flessibile e modulabile nel tempo. Ogni contributo viene valutato e inserito in un percorso strutturato, con attenzione alla qualità linguistica e alla coerenza del materiale.',
+    
+      email_label_it: 'Per metterti in contatto con noi o proporre una collaborazione, puoi scrivere a:',
+    
+      en_heading: 'English',
+      en_p1:
+        'If you know Romansh and are interested in contributing to a serious educational project, RumantschVivo welcomes collaboration.',
+      en_p2:
+        'We are looking for people willing to:',
+      en_b1: 'write or review lessons',
+      en_b2: 'improve explanations and examples',
+      en_b3: 'help make Romansh accessible to second-language learners',
+      en_p3:
+        'Collaboration is flexible and can be adapted over time. Every contribution is reviewed and integrated into a structured workflow, with strong attention to linguistic quality and consistency.',
+    
+      email_label_en: 'To get in touch or propose a collaboration, you can write to:',
     },
   } as const;
