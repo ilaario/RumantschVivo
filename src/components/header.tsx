@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import type { Session } from '@supabase/supabase-js';
 import { createClient } from '@/lib/supabase/client';
 import { useI18n } from '@/lib/i18n/i18nprovider';
@@ -26,6 +26,7 @@ export default function Header({
 
   const pathname = usePathname();
   const router = useRouter();
+  const searchParams = useSearchParams();
   const t = useI18n();
 
   const langRef = useRef<HTMLDivElement | null>(null);
@@ -63,11 +64,14 @@ export default function Header({
       setLangOpen(false);
       return;
     }
-
-    const newPath = '/' + nextLocale + (basePath === '/' ? '' : basePath);
+  
+    // copia tutti i query param esistenti (es: level=A1)
+    const queryString = searchParams.toString();
+    const base = '/' + nextLocale + (basePath === '/' ? '' : basePath);
+    const newPath = queryString ? `${base}?${queryString}` : base;
+  
     setLangOpen(false);
     router.push(newPath);
-    router.refresh();
   }
 
   // ------- SESSION SUPABASE -------
@@ -145,7 +149,7 @@ export default function Header({
         <Link href={linkHref('/')} className={isActive('/') ? 'active' : ''}>
           {t.nav.home}
         </Link>
-        <Link href={linkHref('/learn')} className={isActive('/learn') ? 'active' : ''}>
+        <Link href={linkHref('/learn?level=A0')} className={isActive('/learn') ? 'active' : ''}>
           {t.nav.learn}
         </Link>
         <Link href={linkHref('/vocabulary')} className={isActive('/vocabulary') ? 'active' : ''}>

@@ -360,13 +360,26 @@ export const messages = {
   },
 
   learn_page: {
-    title: 'Learn (Sursilvan)',
-    subtitle: 'Level A0',
-    empty: 'No lessons available for this level yet.',
-    checkpoints_section_title: 'Level {level} checkpoints',
+    title: 'Learning path',
+    subtitle:
+      'Follow the lessons in order and pass the checkpoints to progress to the next level.',
+  
+    empty: 'There are no lessons available for this level yet.',
+  
+    // Levels
+    current_level_label: 'Level {level}',
+  
+    prev_level_button: 'Previous level',
+    next_level_button: 'Next level',
+  
+    level_lock_text:
+      'Complete the checkpoint of the previous level to unlock these lessons.',
+  
+    // Checkpoints
+    checkpoints_section_title: 'Checkpoint level {level}',
     checkpoints_todo_label: 'To do',
     checkpoints_best_score_label: 'Best score',
-    checkpoints_pass_mark: 'Pass mark: {score}%',
+    checkpoints_pass_mark: 'Passing score: {score}%',
     checkpoints_lock_text:
       'Complete the previous checkpoint to unlock this one.',
   },
@@ -414,6 +427,8 @@ export const messages = {
     modal_next_lesson: 'Next lesson',
     modal_stay_here: 'Stay on this lesson',
     back_to_list_inline: 'Back to list',
+    start_quiz_intro: 'When you\'re ready, press the button to start the exercises for this lesson.',
+    start_quiz: 'Start the quiz'
   },
   checkpoint_runner: {
     label: 'CHECKPOINT',

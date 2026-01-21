@@ -265,3 +265,124 @@
     padding: 12px 14px;
   }
 }
+
+/* ===== NAVIGAZIONE LIVELLI (A0 / A1 / A2 / ...) ===== */
+
+.learn-level-nav {
+  margin: 18px 0 8px;
+  padding: 10px 16px;
+  border-radius: 999px;
+  background: rgba(244, 241, 236, 0.9);
+  border: 1px solid rgba(148, 163, 184, 0.6);
+  display: flex;
+  justify-content: center;
+}
+
+.learn-level-nav-buttons {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Bottoni livello (usano className="learn-level-nav-btn …") */
+
+.learn-level-nav-btn {
+  appearance: none;
+  border-radius: 999px;
+  border: 1px solid rgba(148, 163, 184, 0.9);
+  padding: 7px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  background: #ffffff;
+  color: var(--rv-rock);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  text-decoration: none;
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease,
+    box-shadow 0.15s ease,
+    transform 0.12s ease;
+}
+
+.learn-level-nav-btn:hover {
+  transform: translateY(-1px);
+  border-color: var(--rv-forest);
+  background: #f9fafb;
+  box-shadow: 0 6px 14px rgba(15, 23, 42, 0.12);
+}
+
+/* variante "primaria" per il livello successivo */
+
+.learn-level-nav-btn--next {
+  background: var(--rv-forest);
+  color: var(--rv-snow);
+  border-color: rgba(47, 79, 62, 0.95);
+}
+
+.learn-level-nav-btn--next:hover {
+  background: rgba(47, 79, 62, 0.95);
+}
+
+/* variante "ghost" per il livello precedente */
+
+.learn-level-nav-btn--prev {
+  background: #ffffff;
+  color: var(--rv-forest);
+}
+
+/* stato disabled (quando non c'è livello precedente/successivo) */
+
+.learn-level-nav-btn:disabled,
+.learn-level-nav-btn[disabled] {
+  opacity: 0.55;
+  cursor: default;
+  transform: none;
+  box-shadow: none;
+  background: #f3f4f6;
+  border-color: rgba(148, 163, 184, 0.7);
+}
+
+/* ===== LEZIONI BLOCCATE (livello precedente non superato) ===== */
+
+.learn-card--blocked {
+  position: relative;
+  opacity: 0.6;
+  border-style: dashed;
+  background: #f3f4f6;
+}
+
+.learn-card--blocked::after {
+  content: '🔒';
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  font-size: 14px;
+}
+
+.learn-link--blocked {
+  cursor: default;
+  pointer-events: none;
+}
+
+/* Responsive */
+
+@media (max-width: 640px) {
+  .learn-level-nav {
+    border-radius: 16px;
+    padding: 10px 10px;
+  }
+
+  .learn-level-nav-buttons {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .learn-level-nav-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}

@@ -7,12 +7,12 @@ import { groq } from 'next-sanity';
 
 type ListLessonsParams = {
   level: string;
-  locale: Locale;
+  locale: Locale | undefined; // difendiamoci da call storti
 };
 
 type GetLessonParams = {
   slug: string;
-  locale: Locale;
+  locale: Locale | undefined;
 };
 
 export type LessonListItem = {
@@ -23,6 +23,7 @@ export type LessonListItem = {
   variant?: string | null;
   title: string;
   goals: string[];
+  intro: any[];
 };
 
 export type LessonExercise = {
@@ -51,7 +52,6 @@ export type Lesson = {
 // --------------------
 
 // LIST: base + translation per locale
-// Nota: slug nel tuo schema è STRING.
 const lessonsListQuery = groq`
   *[_type == "lessonBase" && level == $level]
   | order(order asc, lessonKey asc) {
@@ -62,6 +62,7 @@ const lessonsListQuery = groq`
     slug,
     title,
     goals,
+    intro,
 
     "tr": *[
       _type == "lessonTranslation" &&
@@ -69,7 +70,8 @@ const lessonsListQuery = groq`
       locale == $locale
     ][0]{
       title,
-      goals
+      goals,
+      intro
     }
   }
 `;
@@ -133,9 +135,12 @@ export async function listLessons({
   level,
   locale,
 }: ListLessonsParams): Promise<LessonListItem[]> {
+  // se qualcuno ti chiama senza locale, non facciamo esplodere Sanity
+  const effectiveLocale: Locale | string = (locale || 'it') as Locale;
+
   const rows = await sanityClient.fetch<any[]>(lessonsListQuery, {
     level,
-    locale, // IMPORTANT: ora serve
+    locale: effectiveLocale,
   });
 
   return safeArray<any>(rows).map((l) => {
@@ -143,6 +148,7 @@ export async function listLessons({
 
     const titleRaw = pick(l.title, tr?.title);
     const goalsRaw = pick(l.goals, tr?.goals);
+    const introRaw = pick(l.intro, tr?.intro);
 
     return {
       id: l._id,
@@ -150,8 +156,9 @@ export async function listLessons({
       slug: safeString(l.slug) ?? '',
       level: safeString(l.level),
       variant: safeString(l.variant),
-      title: resolveLocalizedString(titleRaw, locale) ?? 'Untitled',
+      title: resolveLocalizedString(titleRaw, effectiveLocale as Locale) ?? 'Untitled',
       goals: safeArray<string>(goalsRaw),
+      intro: resolveLocalizedBlocks(introRaw, effectiveLocale as Locale),
     };
   });
 }
@@ -160,9 +167,11 @@ export async function getLesson({
   slug,
   locale,
 }: GetLessonParams): Promise<Lesson | null> {
+  const effectiveLocale: Locale | string = (locale || 'it') as Locale;
+
   const data = await sanityClient.fetch<any>(lessonBySlugQuery, {
     slug,
-    locale, // IMPORTANT: ora serve
+    locale: effectiveLocale,
   });
 
   if (!data?._id) return null;
@@ -181,18 +190,18 @@ export async function getLesson({
     id: data._id,
     slug: safeString(data.slug) ?? slug,
     lessonKey: safeString(data.lessonKey) ?? 'unknown',
-    title: resolveLocalizedString(titleRaw, locale) ?? 'Untitled',
-    intro: resolveLocalizedBlocks(introRaw, locale),
-    body: resolveLocalizedBlocks(bodyRaw, locale),
+    title: resolveLocalizedString(titleRaw, effectiveLocale as Locale) ?? 'Untitled',
+    intro: resolveLocalizedBlocks(introRaw, effectiveLocale as Locale),
+    body: resolveLocalizedBlocks(bodyRaw, effectiveLocale as Locale),
     goals: safeArray<string>(goalsRaw),
     variant: safeString(data.variant),
     level: safeString(data.level),
     exercises: exercisesRaw.map((ex) => ({
       id: ex._id,
       kind: ex.kind === 'mcq' ? 'mcq' : 'open',
-      prompt: resolveLocalizedBlocks(ex.prompt, locale),
+      prompt: resolveLocalizedBlocks(ex.prompt, effectiveLocale as Locale),
       options: safeArray<string>(ex.options),
-      answer: resolveLocalizedString(ex.answer, locale),
+      answer: resolveLocalizedString(ex.answer, effectiveLocale as Locale),
     })),
   };
 }

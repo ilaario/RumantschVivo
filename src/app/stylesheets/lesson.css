@@ -461,3 +461,40 @@
 .lesson-ex-btn--back {
   margin-right: auto;
 }
+
+.lesson-exercises--pre .lesson-ex-body {
+  padding-top: 24px;
+}
+
+.lesson-ex-preintro {
+  margin-top: 12px;
+  margin-bottom: 24px;
+  font-size: 14px;
+  color: var(--rv-rock);
+  line-height: 1.5;
+}
+
+.lesson-ex-preactions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.lesson-ex-btn--primary {
+  min-width: 160px;
+}
+
+.lesson-exercises {
+  animation: fadeIn 400ms ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

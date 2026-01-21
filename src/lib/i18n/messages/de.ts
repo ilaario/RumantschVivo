@@ -366,15 +366,28 @@ export const messages = {
   },
 
   learn_page: {
-    title: 'Lernen (Sursilvan)',
-    subtitle: 'Niveau A0',
-    empty: 'Für dieses Niveau sind noch keine Lektionen verfügbar.',
-    checkpoints_section_title: 'Level-{level}-Checkpoints',
-    checkpoints_todo_label: 'Zu erledigen',
-    checkpoints_best_score_label: 'Bestes Ergebnis',
-    checkpoints_pass_mark: 'Bestanden ab {score} %',
+    title: "Lernpfad",
+    subtitle:
+      "Folge den Lektionen in Reihenfolge und bestehe die Checkpoints, um zum nächsten Niveau zu gelangen.",
+  
+    empty: "Für dieses Niveau sind noch keine Lektionen verfügbar.",
+  
+    // Niveaus
+    current_level_label: "Niveau {level}",
+  
+    prev_level_button: "Vorheriges Niveau",
+    next_level_button: "Nächstes Niveau",
+  
+    level_lock_text:
+      "Schließe den Checkpoint des vorherigen Niveaus ab, um diese Lektionen freizuschalten.",
+  
+    // Checkpoints
+    checkpoints_section_title: "Checkpoint Niveau {level}",
+    checkpoints_todo_label: "Offen",
+    checkpoints_best_score_label: "Bestes Ergebnis",
+    checkpoints_pass_mark: "Bestehensgrenze: {score} %",
     checkpoints_lock_text:
-      'Schließe den vorherigen Checkpoint ab, um diesen freizuschalten.',
+      "Schließe den vorherigen Checkpoint ab, um diesen freizuschalten.",
   },
 
   reset_password: {

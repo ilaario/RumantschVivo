@@ -74,6 +74,8 @@ export function LessonExercises({
     Math.min(initialIndex ?? 0, Math.max(exercises.length - 1, 0)),
   );
 
+  // se hai un initialIndex > 0 (ripresa da metà), consideriamo il quiz già "iniziato"
+  const [started, setStarted] = useState(safeInitialIndex > 0);
   const [index, setIndex] = useState(safeInitialIndex);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [openAnswer, setOpenAnswer] = useState('');
@@ -131,7 +133,7 @@ export function LessonExercises({
           {
             user_id: user.id,
             lesson_key: lessonKey,
-            // locale la teniamo come “ultimo usato”, ma NON fa parte della chiave
+            // locale come info, non nella chiave
             locale,
             current_index: newIndex,
             completed: isCompleted,
@@ -165,7 +167,7 @@ export function LessonExercises({
       : null;
 
   const canConfirm = (() => {
-    if (completed) return false;
+    if (!started || completed) return false;
 
     if (isMcq) return selectedId !== null && status === 'idle';
     if (isOpen) return openAnswer.trim().length > 0 && status === 'idle';
@@ -173,18 +175,18 @@ export function LessonExercises({
     return status === 'idle';
   })();
 
-  const canNextOrFinish = !completed && status !== 'idle';
+  const canNextOrFinish = started && !completed && status !== 'idle';
 
   function handleSelect(choiceId: string) {
     if (!isMcq) return;
-    if (completed) return;
+    if (!started || completed) return;
 
     setSelectedId(choiceId);
-    if (status !== 'idle') setStatus('idle'); // se cambi scelta dopo un tentativo
+    if (status !== 'idle') setStatus('idle');
   }
 
   async function handleConfirm() {
-    if (completed) return;
+    if (!started || completed) return;
 
     if (isMcq) {
       if (!selectedChoice) return;
@@ -230,24 +232,72 @@ export function LessonExercises({
   }
 
   async function handleExitToList() {
-    if (!hasSavedExit && !completed) {
+    if (!hasSavedExit && started && !completed) {
       await saveProgress(index, false);
       setHasSavedExit(true);
     }
     router.push(`/${locale}/learn`);
   }
 
+  function handleStartQuiz() {
+    setStarted(true);
+    // opzionale: puoi salvare che l'utente ha iniziato il quiz
+    void saveProgress(index, false);
+  }
+
   useEffect(() => {
     const handler = () => {
-      if (!completed) {
+      if (started && !completed) {
         void saveProgress(index, false);
       }
     };
 
     window.addEventListener('beforeunload', handler);
     return () => window.removeEventListener('beforeunload', handler);
-  }, [index, completed, saveProgress]);
+  }, [index, completed, started, saveProgress]);
 
+  const startLabel = L.start_quiz ?? 'Inizia il quiz';
+  const startIntro =
+    L.start_quiz_intro ??
+    'Quando ti senti prontə, premi il pulsante per iniziare gli esercizi di questa lezione.';
+
+  // ===== SCHERMATA PRIMA DEL QUIZ =====
+  if (!started) {
+    return (
+      <section className="lesson-exercises lesson-exercises--pre">
+        <header className="lesson-ex-header">
+          <div className="lesson-ex-label">{L.exercises_label}</div>
+        </header>
+
+        <div className="lesson-ex-body">
+          <p className="lesson-ex-prompt-title">
+            <strong>{L.exercises_label}</strong>
+          </p>
+          <p className="lesson-ex-preintro">{startIntro}</p>
+
+          <div className="lesson-ex-preactions">
+            <button
+              type="button"
+              className="lesson-ex-btn lesson-ex-btn--ghost lesson-ex-btn--back"
+              onClick={handleExitToList}
+            >
+              {L.back_to_list_inline}
+            </button>
+
+            <button
+              type="button"
+              className="lesson-ex-btn lesson-ex-btn--primary"
+              onClick={handleStartQuiz}
+            >
+              {startLabel}
+            </button>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  // ===== QUIZ VERO E PROPRIO =====
   return (
     <>
       <section className="lesson-exercises">
@@ -331,7 +381,10 @@ export function LessonExercises({
 
                   {current.solutionBlocks?.length > 0 && (
                     <div className="lesson-ex-answer-text">
-                      <PortableText value={current.solutionBlocks} components={components} />
+                      <PortableText
+                        value={current.solutionBlocks}
+                        components={components}
+                      />
                     </div>
                   )}
 
@@ -352,12 +405,16 @@ export function LessonExercises({
             <div className="lesson-ex-answer">
               {status === 'correct' ? (
                 <>
-                  <span className="lesson-ex-answer-label">{L.mcq_correct_title}</span>
+                  <span className="lesson-ex-answer-label">
+                    {L.mcq_correct_title}
+                  </span>
                   <span> {L.mcq_correct_body}</span>
                 </>
               ) : (
                 <>
-                  <span className="lesson-ex-answer-label">{L.mcq_wrong_title}</span>
+                  <span className="lesson-ex-answer-label">
+                    {L.mcq_wrong_title}
+                  </span>
                   <span> {L.mcq_wrong_body}</span>
                 </>
               )}

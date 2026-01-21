@@ -361,15 +361,29 @@ export const messages = {
   },
 
   learn_page: {
-    title: 'Impara (Sursilvan)',
-    subtitle: 'Livello A0',
-    empty: 'Nessuna lezione ancora disponibile per questo livello.',
+    title: 'Percorso di apprendimento',
+    subtitle: 'Segui le lezioni in ordine e supera i checkpoint per avanzare di livello.',
+  
+    empty: 'Non ci sono ancora lezioni disponibili per questo livello.',
+  
+    // Livelli
+    current_level_label: 'Livello {level}',
+  
+    prev_level_button: 'Livello precedente',
+    next_level_button: 'Livello successivo',
+  
+    level_lock_text:
+      'Completa il checkpoint del livello precedente per sbloccare queste lezioni.',
+  
+    // Checkpoints
     checkpoints_section_title: 'Checkpoint livello {level}',
     checkpoints_todo_label: 'Da svolgere',
-    checkpoints_best_score_label: 'Miglior voto',
-    checkpoints_pass_mark: 'Soglia: {score}%',
-    checkpoints_lock_text:
-      'Completa il checkpoint precedente per sbloccare questo.',
+    checkpoints_best_score_label: 'Miglior risultato',
+    checkpoints_pass_mark: 'Soglia di superamento: {score}%',
+    checkpoints_lock_text: 'Completa il checkpoint precedente per sbloccare questo.',
+    level_nav_prev: '← Livello precedente',
+    level_nav_next:' Livello successivo →',
+    level_locked_lessons: 'Per sbloccare queste lezioni, completa il checkpoint del livello precedente.'
   },
 
   reset_password: {
@@ -414,6 +428,8 @@ export const messages = {
     modal_next_lesson: 'Prossima lezione',
     modal_stay_here: 'Rimani su questa lezione',
     back_to_list_inline: 'Torna alla lista',
+    start_quiz_intro: 'Quando ti senti pront*, premi il pulsante per iniziare gli esercizi di questa lezione.',
+    start_quiz: 'Inizia il quiz'
   },
   checkpoint_runner: {
     label: 'CHECKPOINT',

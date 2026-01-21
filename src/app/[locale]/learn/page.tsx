@@ -8,16 +8,20 @@ import {
   listCheckpointsForLevel,
   type CheckpointListItem,
 } from '@/lib/content/checkpoints';
+import { PortableBlocks } from '@/lib/content/portableComponents';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
 import { getMessages } from '@/lib/i18n/messages';
 import '../../stylesheets/learn.css';
 
 type LearnPageParams = {
   locale: Locale;
+  variant?: string;
 };
 
 type Props = {
+  // in Next 16 questi due sono *Promises* in un server component async
   params: Promise<LearnPageParams>;
+  searchParams?: Promise<{ level?: string }>;
 };
 
 type LessonStatus = 'new' | 'started' | 'completed';
@@ -33,9 +37,24 @@ function format(template: string, vars: Record<string, string | number>) {
   return template.replace(/\{(\w+)\}/g, (_, k) => String(vars[k] ?? ''));
 }
 
-export default async function LearnPage({ params }: Props) {
+// ordine logico dei livelli
+const LEVEL_ORDER = ['A0', 'A1', 'A2', 'B1'];
+
+export default async function LearnPage({ params, searchParams }: Props) {
   const { locale } = await params;
-  const level = 'A0';
+  const sp = (await searchParams) ?? {};
+
+  // livello corrente da query ?level=A1, fallback A0
+  const requestedLevel =
+    typeof sp.level === 'string' ? sp.level.toUpperCase() : 'A0';
+  const level = LEVEL_ORDER.includes(requestedLevel) ? requestedLevel : 'A0';
+
+  const currentIdx = LEVEL_ORDER.indexOf(level);
+  const prevLevel = currentIdx > 0 ? LEVEL_ORDER[currentIdx - 1] : null;
+  const nextLevel =
+    currentIdx >= 0 && currentIdx < LEVEL_ORDER.length - 1
+      ? LEVEL_ORDER[currentIdx + 1]
+      : null;
 
   // i18n
   const t = getMessages(locale);
@@ -48,13 +67,14 @@ export default async function LearnPage({ params }: Props) {
   } = await supabase.auth.getUser();
 
   if (!user) {
-    redirect(`/${locale}/login?redirectTo=/${locale}/learn`);
+    const redirectQuery = level && level !== 'A0' ? `?level=${level}` : '';
+    redirect(`/${locale}/login?redirectTo=/${locale}/learn${redirectQuery}`);
   }
 
-  // ====== LEZIONI (da Sanity) ======
+  // ====== LEZIONI (da Sanity) per il livello corrente ======
   const lessons: LessonListItem[] = await listLessons({ level, locale });
 
-  // ====== CHECKPOINTS (da Sanity) ======
+  // ====== CHECKPOINTS (da Sanity) per il livello corrente ======
   const checkpoints: CheckpointListItem[] = await listCheckpointsForLevel({
     level,
     locale,
@@ -85,7 +105,7 @@ export default async function LearnPage({ params }: Props) {
     }
   }
 
-  // ====== PROGRESSO CHECKPOINTS DA SUPABASE ======
+  // ====== PROGRESSO CHECKPOINTS DEL LIVELLO CORRENTE DA SUPABASE ======
   const checkpointKeys = checkpoints.map((c) => c.checkpointKey).filter(Boolean);
 
   let checkpointResultsByKey = new Map<
@@ -117,7 +137,7 @@ export default async function LearnPage({ params }: Props) {
     }
   }
 
-  // ====== GATING LINEARE TRA CHECKPOINTS ======
+  // ====== GATING LINEARE TRA CHECKPOINTS (NEL LIVELLO CORRENTE) ======
   const sortedCheckpoints = [...checkpoints].sort(
     (a, b) => (a.order ?? 0) - (b.order ?? 0),
   );
@@ -150,6 +170,50 @@ export default async function LearnPage({ params }: Props) {
     });
   }
 
+  // ====== GATING PER LIVELLO: SERVE CHECKPOINT LIVELLO PRECEDENTE ======
+  let previousLevelCompleted = true;
+
+  if (prevLevel) {
+    try {
+      const prevCheckpoints: CheckpointListItem[] = await listCheckpointsForLevel({
+        level: prevLevel,
+        locale,
+      });
+
+      const prevKeys = prevCheckpoints.map((c) => c.checkpointKey).filter(Boolean);
+
+      if (prevKeys.length > 0) {
+        const { data: prevRows, error: prevErr } = await supabase
+          .from('checkpoint_results')
+          .select('checkpoint_key, passed')
+          .eq('user_id', user.id)
+          .in('checkpoint_key', prevKeys);
+
+        if (prevErr) {
+          console.error('Errore caricando checkpoint_results livello precedente:', prevErr);
+        }
+
+        if (Array.isArray(prevRows)) {
+          const passedSet = new Set(
+            prevRows.filter((r: any) => r.passed).map((r: any) => r.checkpoint_key),
+          );
+          // consideriamo "completato" se TUTTI i checkpoint del livello precedente sono passati
+          previousLevelCompleted = prevKeys.every((k) => passedSet.has(k));
+        } else {
+          previousLevelCompleted = false;
+        }
+      } else {
+        // nessun checkpoint nel livello precedente => nessun blocco
+        previousLevelCompleted = true;
+      }
+    } catch (e) {
+      console.error('Errore nel gating livello precedente:', e);
+      previousLevelCompleted = false;
+    }
+  }
+
+  const lessonsLocked = !!prevLevel && !previousLevelCompleted;
+
   // ====== LABELS DA i18n ======
   const labelCheckpoint = text.checkpoints_section_title
     ? format(text.checkpoints_section_title, { level })
@@ -168,11 +232,34 @@ export default async function LearnPage({ params }: Props) {
     text.checkpoints_lock_text ??
     'Completa il checkpoint precedente per sbloccare questo.';
 
+  const levelLockText =
+    text.level_lock_text ??
+    (prevLevel
+      ? `Completa il checkpoint del livello ${prevLevel} per sbloccare queste lezioni.`
+      : 'Completa il livello precedente per sbloccare queste lezioni.');
+
+  const currentLevelLabel =
+    text.current_level_label ??
+    (locale === 'it' ? 'Livello {level}' : 'Level {level}');
+
+  const prevLevelLabel =
+    text.prev_level_button ??
+    (locale === 'it' ? 'Livello precedente' : 'Previous level');
+
+  const nextLevelLabel =
+    text.next_level_button ??
+    (locale === 'it' ? 'Livello successivo' : 'Next level');
+
   return (
     <main className="learn-page">
       <header className="learn-header">
         <h1>{text.title}</h1>
         <p>{text.subtitle}</p>
+
+        {/* livello corrente visualizzato */}
+        <p className="learn-subtitle-level">
+          {format(currentLevelLabel, { level })}
+        </p>
       </header>
 
       {/* ====== LISTA LEZIONI ====== */}
@@ -191,26 +278,42 @@ export default async function LearnPage({ params }: Props) {
                   ? 'learn-card--started'
                   : 'learn-card--new';
 
+            const content = (
+              <div className={`learn-card ${statusClass}`}>
+                <p className="learn-card-title">{l.title}</p>
+                <PortableBlocks value={l.intro} />
+                <p className="learn-lock-text">{l.variant?.toUpperCase()}</p>
+
+                {Array.isArray(l.goals) && l.goals.length > 0 && (
+                  <div className="learn-meta">{l.goals.join(' · ')}</div>
+                )}
+
+                {lessonsLocked && (
+                  <p className="learn-lock-text">{levelLockText}</p>
+                )}
+              </div>
+            );
+
             return (
               <li key={l.id}>
-                <Link
-                  href={`/${locale}/learn/${l.slug}`}
-                  className={`learn-card learn-link ${statusClass}`}
-                >
-                  <p className="learn-card-title">{l.title}</p>
-
-                  {Array.isArray(l.goals) && l.goals.length > 0 && (
-                    <div className="learn-meta">{l.goals.join(' · ')}</div>
-                  )}
-                </Link>
+                {lessonsLocked ? (
+                  <div className="learn-link learn-link--disabled">{content}</div>
+                ) : (
+                  <Link
+                    href={`/${locale}/learn/${l.slug}`}
+                    className="learn-link"
+                  >
+                    {content}
+                  </Link>
+                )}
               </li>
             );
           })}
         </ul>
       )}
 
-      {/* ====== CHECKPOINTS ====== */}
-      {checkpointViews.length > 0 && (
+            {/* ====== CHECKPOINTS ====== */}
+            {checkpointViews.length > 0 && (
         <section className="learn-checkpoints">
           <h2 className="learn-checkpoints-title">{labelCheckpoint}</h2>
 
@@ -311,6 +414,47 @@ export default async function LearnPage({ params }: Props) {
           </ul>
         </section>
       )}
+
+      {/* ====== NAVIGAZIONE LIVELLI (SEMPRE VISIBILE) ====== */}
+      <section className="learn-level-nav">
+        <div className="learn-level-nav-buttons">
+          {/* Indietro */}
+          {prevLevel ? (
+            <Link
+              href={`/${locale}/learn?level=${prevLevel}`}
+              className="learn-level-nav-btn learn-level-nav-btn--prev"
+            >
+              ← {prevLevelLabel} ({prevLevel})
+            </Link>
+          ) : (
+            <button
+              type="button"
+              className="learn-level-nav-btn learn-level-nav-btn--prev"
+              disabled
+            >
+              ← {prevLevelLabel}
+            </button>
+          )}
+
+          {/* Avanti */}
+          {nextLevel ? (
+            <Link
+              href={`/${locale}/learn?level=${nextLevel}`}
+              className="learn-level-nav-btn learn-level-nav-btn--next"
+            >
+              {nextLevelLabel} ({nextLevel}) →
+            </Link>
+          ) : (
+            <button
+              type="button"
+              className="learn-level-nav-btn learn-level-nav-btn--next"
+              disabled
+            >
+              {nextLevelLabel} →
+            </button>
+          )}
+        </div>
+      </section>
     </main>
   );
 }
