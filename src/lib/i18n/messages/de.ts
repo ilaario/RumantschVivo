@@ -495,5 +495,35 @@ export const messages = {
   },
   hero_wip_text:
   'RumantschVivo befindet sich noch im Aufbau. Die aktuellen Lektionen sind Platzhalter, und Feedback aus der Community ist entscheidend.',
-  hero_wip_button: 'Projektstatus'
+  hero_wip_button: 'Projektstatus',
+  vocabulary_page: {
+    title: 'Persönliches Vokabular',
+    subtitle:
+      'Hier kannst du Wörter und Ausdrücke sammeln, die dir beim Lernen begegnen.',
+  
+    add_title: 'Eintrag hinzufügen',
+    term_label: 'Wort oder Ausdruck',
+    translation_label: 'Übersetzung',
+    notes_label: 'Notizen (optional)',
+    add_button: 'Zum Vokabular hinzufügen',
+  
+    import_title: 'Wörter importieren',
+    import_help:
+      'Du kannst eine CSV-Datei (term,translation,notes) oder eine JSON-Datei mit einem Objekt-Array importieren.',
+    import_button: 'Datei importieren',
+    import_success: 'Import erfolgreich abgeschlossen.',
+    import_error: 'Fehler beim Import.',
+  
+    tab_all: 'Alle Einträge',
+    tab_recent: 'Kürzlich hinzugefügt',
+  
+    empty: 'Du hast noch keine Wörter hinzugefügt.',
+    loading: 'Laden…',
+  
+    table_term: 'Wort',
+    table_translation: 'Übersetzung',
+    table_notes: 'Notizen',
+    table_added: 'Hinzugefügt am',
+    training_button: 'Mit dem Vocabulary trainieren',
+  }
 } as const;

@@ -482,7 +482,38 @@ export const messages = {
     loading: 'Caricamento…',
     no_comments: 'Ancora nessun commento.',
   },
-  hero_wip_text:
-  'RumantschVivo è un progetto in costruzione. Le lezioni attuali sono provvisorie e il contributo della community è fondamentale.',
-  hero_wip_button: 'Stato del progetto'
+
+  hero_wip_text: 'RumantschVivo è un progetto in costruzione. Le lezioni attuali sono provvisorie e il contributo della community è fondamentale.',
+  hero_wip_button: 'Stato del progetto',
+
+  vocabulary_page: {
+    title: 'Vocabolario personale',
+    subtitle:
+      'Qui puoi raccogliere parole ed espressioni che incontri durante lo studio.',
+  
+    add_title: 'Aggiungi una voce',
+    term_label: 'Parola o espressione',
+    translation_label: 'Traduzione',
+    notes_label: 'Note (opzionali)',
+    add_button: 'Aggiungi al vocabolario',
+  
+    import_title: 'Importa parole',
+    import_help:
+      'Puoi importare un file CSV (term,translation,notes) oppure un file JSON con un array di oggetti.',
+    import_button: 'Importa file',
+    import_success: 'Import completato con successo.',
+    import_error: 'Errore durante l’importazione.',
+  
+    tab_all: 'Tutte le voci',
+    tab_recent: 'Aggiunte di recente',
+  
+    empty: 'Non hai ancora aggiunto nessuna parola.',
+    loading: 'Caricamento…',
+  
+    table_term: 'Parola',
+    table_translation: 'Traduzione',
+    table_notes: 'Note',
+    table_added: 'Aggiunta il',
+    training_button: 'Allenati con il vocabolario',
+  }
 } as const;

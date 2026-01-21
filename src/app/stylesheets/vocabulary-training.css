@@ -1,0 +1,280 @@
+/* ===== VOCABULARY TRAINING ===== */
+
+.vt-page {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 48px 20px 80px;
+  }
+  
+  .vt-header {
+    margin-bottom: 20px;
+  }
+  
+  .vt-title {
+    margin: 0 0 4px;
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--rv-forest);
+  }
+  
+  .vt-subtitle {
+    margin: 0;
+    font-size: 14px;
+    color: var(--rv-rock);
+  }
+  
+  .vt-empty {
+    margin-top: 20px;
+    padding: 20px 18px;
+    border-radius: 16px;
+    background: var(--rv-stone);
+    font-size: 14px;
+    color: var(--rv-rock);
+  }
+  
+  /* box principale */
+  
+  .vt-box {
+    margin-top: 20px;
+    padding: 20px 18px;
+    border-radius: 18px;
+    background: var(--rv-snow);
+    border: 1px solid rgba(148, 163, 184, 0.55);
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+  }
+  
+  .vt-box--centered {
+    text-align: center;
+  }
+  
+  /* header progress */
+  
+  .vt-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+    font-size: 13px;
+    color: var(--rv-rock);
+  }
+  
+  .vt-progress {
+    font-weight: 600;
+  }
+  
+  .vt-kind {
+    font-size: 12px;
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: rgba(244, 241, 236, 0.9);
+  }
+  
+  /* prompt */
+  
+  .vt-prompt {
+    text-align: center;
+    margin: 16px 0;
+  }
+  
+  .vt-prompt-word {
+    font-size: 26px;
+    font-weight: 800;
+    color: var(--rv-forest);
+  }
+  
+  /* flashcard */
+  
+  .vt-flashcard-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .vt-flash-answer {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--rv-rock);
+  }
+  
+  /* MCQ */
+  
+  .vt-mcq-list {
+    list-style: none;
+    padding: 0;
+    margin: 16px 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .vt-mcq-option {
+    border-radius: 999px;
+    padding: 8px 14px;
+    border: 1px solid rgba(148, 163, 184, 0.8);
+    background: #ffffff;
+    font-size: 14px;
+    cursor: pointer;
+    transition:
+      background 0.15s ease,
+      border-color 0.15s ease,
+      transform 0.1s ease;
+  }
+  
+  .vt-mcq-option:hover {
+    transform: translateY(-0.5px);
+    background: #f9fafb;
+  }
+  
+  .vt-mcq-option--selected {
+    border-color: var(--rv-forest);
+  }
+  
+  .vt-mcq-option--correct {
+    background: #ecfdf3;
+    border-color: #22c55e;
+  }
+  
+  .vt-mcq-option--wrong {
+    background: #fef2f2;
+    border-color: #f97373;
+  }
+  
+  /* open */
+  
+  .vt-open-area {
+    margin-top: 14px;
+  }
+  
+  .vt-open-input {
+    width: 100%;
+    border-radius: 12px;
+    border: 1px solid rgba(148, 163, 184, 0.8);
+    padding: 8px 10px;
+    font-size: 14px;
+    resize: vertical;
+  }
+  
+  /* feedback */
+  
+  .vt-feedback {
+    margin-top: 10px;
+    font-size: 14px;
+  }
+  
+  .vt-feedback-line {
+    margin: 0 0 4px;
+    font-weight: 600;
+  }
+  
+  .vt-expected {
+    margin: 0;
+    font-size: 13px;
+    color: var(--rv-rock);
+  }
+  
+  .vt-expected-label {
+    font-weight: 600;
+  }
+  
+  /* footer bottoni */
+  
+  .vt-footer {
+    margin-top: 18px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+  }
+  
+  /* bottoni generici */
+  
+  .vt-btn {
+    border-radius: 999px;
+    border: 1px solid transparent;
+    padding: 7px 14px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition:
+      background 0.15s ease,
+      border-color 0.15s ease,
+      color 0.15s ease,
+      transform 0.1s ease;
+  }
+  
+  .vt-btn:disabled {
+    opacity: 0.5;
+    cursor: default;
+    transform: none;
+  }
+  
+  .vt-btn--primary {
+    background: var(--rv-forest);
+    color: var(--rv-snow);
+    border-color: rgba(47, 79, 62, 0.9);
+  }
+  
+  .vt-btn--primary:hover:not(:disabled) {
+    background: rgba(47, 79, 62, 0.95);
+  }
+  
+  .vt-btn--ghost {
+    background: #ffffff;
+    color: var(--rv-forest);
+    border-color: rgba(148, 163, 184, 0.8);
+  }
+  
+  .vt-btn--ghost:hover:not(:disabled) {
+    background: #f9fafb;
+  }
+  
+  /* intro / result */
+  
+  .vt-intro {
+    margin: 0 0 14px;
+    font-size: 14px;
+    color: var(--rv-rock);
+  }
+  
+  .vt-result-title {
+    margin: 0 0 6px;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--rv-forest);
+  }
+  
+  .vt-result-body {
+    margin: 0 0 10px;
+    font-size: 14px;
+    color: var(--rv-rock);
+  }
+  
+  .vt-result-score {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 600;
+  }
+  
+  /* responsive */
+  
+  @media (max-width: 640px) {
+    .vt-page {
+      padding-top: 32px;
+    }
+  
+    .vt-title {
+      font-size: 24px;
+    }
+  
+    .vt-box {
+      padding: 16px 14px;
+    }
+  
+    .vt-prompt-word {
+      font-size: 22px;
+    }
+  }
