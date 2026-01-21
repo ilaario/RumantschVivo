@@ -8,6 +8,8 @@ import { I18nProvider } from '@/lib/i18n/i18nprovider';
 import { getMessages } from '@/lib/i18n/messages';
 import { isLocale, DEFAULT_LOCALE, type Locale } from '@/lib/i18n/config';
 
+import { SpeedInsights } from "@vercel/speed-insights/next"
+
 export default async function LocaleLayout({
   children,
   params,
@@ -25,6 +27,7 @@ export default async function LocaleLayout({
       <div className="app-shell">
         <AppShell>
           <main className="app-main">{children}</main>
+          <SpeedInsights/>
         </AppShell>
         <Footer />
       </div>
