@@ -469,5 +469,31 @@ export const messages = {
     next_button: 'Weiter',
     finish_button: 'Checkpoint abschließen',
     loading_label: 'Wird gespeichert…',
-  }
+  },
+  status_page_ideas: {
+    need_login:
+      'Du musst eingeloggt sein, um Ideen vorzuschlagen, abzustimmen und zu kommentieren.',
+    placeholder_title: 'Titel der Idee',
+    placeholder_desc: 'Beschreibe deine Idee kurz…',
+    add_idea: 'Idee senden',
+    ideas_empty:
+      'Noch keine Ideen. Sei der Erste, der eine vorschlägt!',
+    upvote: 'Positiv bewerten',
+    downvote: 'Negativ bewerten',
+    comments_label: 'Kommentare',
+    placeholder_comment: 'Schreibe einen Kommentar…',
+    add_comment: 'Kommentar senden',
+    loading: 'Laden…',
+    no_comments: 'Noch keine Kommentare.',
+  },
+  status_page: {
+    title: 'Projektstatus',
+    subtitle:
+      'RumantschVivo befindet sich noch im Aufbau. Hier findest du einen Überblick darüber, wo wir gerade stehen und was als Nächstes kommt.',
+    section_status_title: 'Wo wir gerade stehen',
+    section_ideas_title: 'Ideen aus der Community',
+  },
+  hero_wip_text:
+  'RumantschVivo befindet sich noch im Aufbau. Die aktuellen Lektionen sind Platzhalter, und Feedback aus der Community ist entscheidend.',
+  hero_wip_button: 'Projektstatus'
 } as const;

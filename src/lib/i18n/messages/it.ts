@@ -461,5 +461,28 @@ export const messages = {
     next_button: 'Avanti',
     finish_button: 'Finisci checkpoint',
     loading_label: 'Salvo…',
-  }
+  },
+  status_page: {
+    title: 'Stato del progetto',
+    subtitle: 'RumantschVivo è un progetto ancora in costruzione. Qui trovi una panoramica di dove siamo e cosa arriva dopo.',
+    section_status_title: 'Dove siamo ora',
+    section_ideas_title: 'Idee dalla community'
+  },
+  status_page_ideas: {
+    need_login: 'Devi essere loggato per proporre idee, votare e commentare.',
+    placeholder_title: 'Titolo dell’idea',
+    placeholder_desc: 'Descrivi brevemente la tua idea…',
+    add_idea: 'Invia idea',
+    ideas_empty: 'Ancora nessuna idea. Sii il primo a proporne una!',
+    upvote: 'Voto positivo',
+    downvote: 'Voto negativo',
+    comments_label: 'Commenti',
+    placeholder_comment: 'Scrivi un commento…',
+    add_comment: 'Invia commento',
+    loading: 'Caricamento…',
+    no_comments: 'Ancora nessun commento.',
+  },
+  hero_wip_text:
+  'RumantschVivo è un progetto in costruzione. Le lezioni attuali sono provvisorie e il contributo della community è fondamentale.',
+  hero_wip_button: 'Stato del progetto'
 } as const;

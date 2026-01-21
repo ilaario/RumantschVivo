@@ -38,6 +38,17 @@ export default function Home() {
               {t.home.hero_b2}
             </Link>
           </div>
+
+          {/* ===== WIP / STATUS ===== */}
+          <div className="hero__wip">
+            <span className="hero__wip-badge">WIP</span>
+            <p className="hero__wip-text">
+              {t.hero_wip_text}
+            </p>
+            <Link href="/status" className="hero__bnt hero__wip-btn">
+              {t.hero_wip_button}
+            </Link>
+          </div>
         </div>
 
         <div className="hero__right" aria-hidden="true">

@@ -251,3 +251,50 @@
     order: 2;
   }
 }
+
+/* ===== WIP / STATUS BANNER ===== */
+
+.hero__wip {
+  margin-top: 22px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: linear-gradient(
+    135deg,
+    rgba(47, 79, 62, 0.08),
+    rgba(47, 79, 62, 0.02)
+  );
+  border: 1px dashed rgba(47, 79, 62, 0.4);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.hero__wip-badge {
+  background: var(--rv-forest);
+  color: var(--rv-snow);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 8px;
+  border-radius: 999px;
+  letter-spacing: 0.04em;
+}
+
+.hero__wip-text {
+  flex: 1;
+  font-size: 14px;
+  color: var(--rv-rock);
+  margin: 0;
+}
+
+.hero__wip-btn {
+  background: transparent;
+  border: 1px solid var(--rv-forest);
+  color: var(--rv-forest);
+  font-weight: 700;
+}
+
+.hero__wip-btn:hover {
+  background: var(--rv-forest);
+  color: var(--rv-snow);
+}

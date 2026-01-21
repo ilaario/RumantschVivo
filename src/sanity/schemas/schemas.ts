@@ -5,6 +5,8 @@ import { exerciseBase } from './exerciseBase';
 import { exerciseTranslation } from './exerciseTranslation';
 import { checkpointBase } from './checkpointBase';
 import { checkpointTranslation } from './checkpointTranslation';
+import { task } from './task';
+
 
 // aggiungi tutto il resto...
 
@@ -14,6 +16,7 @@ export const schemaTypes = [
   exerciseBase,
   exerciseTranslation,
   checkpointBase,
-  checkpointTranslation
+  checkpointTranslation,
+  task
   // ...altri tipi
 ];

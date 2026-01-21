@@ -464,5 +464,29 @@ export const messages = {
     next_button: 'Next',
     finish_button: 'Finish checkpoint',
     loading_label: 'Saving…',
-  }
+  },
+  status_page_ideas: {
+    need_login: 'You need to be logged in to submit ideas, vote, and comment.',
+    placeholder_title: 'Idea title',
+    placeholder_desc: 'Briefly describe your idea…',
+    add_idea: 'Submit idea',
+    ideas_empty: 'No ideas yet. Be the first to suggest one!',
+    upvote: 'Upvote',
+    downvote: 'Downvote',
+    comments_label: 'Comments',
+    placeholder_comment: 'Write a comment…',
+    add_comment: 'Post comment',
+    loading: 'Loading…',
+    no_comments: 'No comments yet.',
+  },
+  status_page: {
+    title: 'Project status',
+    subtitle:
+      'RumantschVivo is still a work in progress. Here you can see an overview of where we are now and what is coming next.',
+    section_status_title: 'Where we are now',
+    section_ideas_title: 'Ideas from the community',
+  },
+  hero_wip_text:
+  'RumantschVivo is a work in progress. Current lessons are placeholders and community feedback is essential.',
+  hero_wip_button: 'Project status'
 } as const;
