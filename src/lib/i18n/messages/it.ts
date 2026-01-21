@@ -381,9 +381,6 @@ export const messages = {
     checkpoints_best_score_label: 'Miglior risultato',
     checkpoints_pass_mark: 'Soglia di superamento: {score}%',
     checkpoints_lock_text: 'Completa il checkpoint precedente per sbloccare questo.',
-    level_nav_prev: '← Livello precedente',
-    level_nav_next:' Livello successivo →',
-    level_locked_lessons: 'Per sbloccare queste lezioni, completa il checkpoint del livello precedente.'
   },
 
   reset_password: {
